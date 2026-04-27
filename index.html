@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Banana Tracker</title>
+    <title>Banana Tracker Pro</title>
     
     <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" type="image/png" href="icon-192.png">
-    <link rel="manifest" href="manifest.json">
-    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#FFE135">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,40 +18,51 @@
             --old-red: #dc3545;
             --banana-yellow: #FFE135;
             --error-grey: #6c757d;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+        }
+
+        /* Dark Mode Optimization */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --banana-yellow: #1a1a1a;
+                --card-bg: #2d2d2d;
+                --text-main: #f0f0f0;
+            }
         }
 
         body { 
             background-color: var(--banana-yellow);
-            background-image: radial-gradient(#FFEC85 20%, transparent 20%), radial-gradient(#FFEC85 20%, transparent 20%);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.4s ease;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         .app-card {
-            background: white;
-            padding: 2rem 1.5rem;
-            border-radius: 35px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            background: var(--card-bg);
+            color: var(--text-main);
+            padding: 2.5rem 1.5rem;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             width: 92%;
             max-width: 360px;
             text-align: center;
             border: 3px solid #333;
         }
 
-        h2 { font-weight: 900; color: #333; text-transform: uppercase; margin-bottom: 15px; }
+        h2 { font-weight: 900; text-transform: uppercase; margin-bottom: 20px; letter-spacing: -1px; }
 
         .input-wrapper {
-            background: #f8f9fa;
+            background: rgba(0,0,0,0.05);
             border: 2px solid #333;
             border-radius: 20px;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
 
         input {
@@ -60,83 +70,98 @@
             text-align: center;
             letter-spacing: 8px;
             font-weight: 900;
-            font-size: 2.2rem !important;
+            font-size: 2.8rem !important;
             background: transparent !important;
-            color: #333;
+            color: var(--text-main);
             width: 100%;
+            outline: none;
+            text-transform: uppercase;
         }
 
         .btn-main {
             background: #333;
-            color: white;
+            color: #fff;
             border-radius: 50px;
-            padding: 14px;
+            padding: 16px;
             font-weight: 800;
             width: 100%;
             border: none;
+            box-shadow: 0 4px 0 #000;
+            transition: all 0.1s;
         }
+        
+        .btn-main:active { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
 
         .result-display {
-            margin-top: 15px;
+            margin-top: 25px;
             padding: 20px;
-            border-radius: 25px;
-            background: #f1f1f1;
-            transition: all 0.4s ease;
-            color: #333;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.04);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-main);
         }
 
-        #emojiDisplay { font-size: 3.5rem; display: block; }
-        #daysValue { font-size: 4.5rem; font-weight: 900; line-height: 1; margin: 5px 0; }
+        #daysValue { font-size: 5rem; font-weight: 900; line-height: 1; margin: 5px 0; }
         
         .status-pill {
             display: inline-block;
-            padding: 4px 16px;
-            border-radius: 12px;
+            padding: 6px 20px;
+            border-radius: 15px;
             font-weight: 800;
             text-transform: uppercase;
-            margin-bottom: 8px;
-            background: #ddd;
+            margin-bottom: 10px;
+            background: rgba(0,0,0,0.1);
         }
 
-        /* Logic Colors */
+        /* Logic Color Classes */
         .bg-perfect { background-color: var(--perfect-green) !important; color: white !important; }
         .bg-perfect .status-pill { background: white; color: var(--perfect-green); }
-
+        
         .bg-acceptable { background-color: var(--acceptable-orange) !important; color: white !important; }
         .bg-acceptable .status-pill { background: white; color: var(--acceptable-orange); }
-
+        
         .bg-old { background-color: var(--old-red) !important; color: white !important; }
         .bg-old .status-pill { background: white; color: var(--old-red); }
-
+        
         .bg-error { background-color: var(--error-grey) !important; color: white !important; }
-        .bg-error .status-pill { background: white; color: var(--error-grey); }
 
         .harvest-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            margin-top: 10px;
+            margin-top: 15px;
             border-top: 1px solid rgba(0,0,0,0.1);
-            padding-top: 10px;
+            padding-top: 15px;
+            opacity: 0.8;
+        }
+
+        .clear-link {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            opacity: 0.5;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 
 <div class="app-card">
-    <div style="font-size: 2.5rem; margin-bottom: 5px;">🍌</div>
+    <div style="font-size: 3rem; margin-bottom: 5px;">🍌</div>
     <h2>Age Tracker</h2>
     
     <div class="input-wrapper">
-        <input type="text" id="codeIn" placeholder="ABC" maxlength="3" autofocus autocomplete="off">
+        <input type="text" id="codeIn" placeholder="ABC" maxlength="3" 
+               inputmode="text" autocapitalize="characters" autofocus autocomplete="off">
     </div>
     
     <button onclick="checkBanana()" class="btn-main">CALCULATE</button>
 
     <div id="resBox" class="result-display">
-        <span id="emojiDisplay"></span>
-        <div id="statusLabel" class="status-pill">Enter Code</div>
+        <div id="statusLabel" class="status-pill">Ready</div>
         <div id="daysValue">--</div>
-        <div style="font-weight: 800; font-size: 0.8rem;">DAYS FROM HARVEST</div>
+        <div style="font-weight: 800; font-size: 0.75rem;">DAYS FROM HARVEST</div>
         
         <div class="harvest-label">
             Harvest Date:<br>
@@ -144,12 +169,16 @@
         </div>
     </div>
     
-    <button onclick="clearAll()" class="btn btn-sm btn-link text-muted mt-3 text-decoration-none fw-bold">CLEAR</button>
+    <a href="#" onclick="clearAll()" class="clear-link">RESET CALCULATOR</a>
 </div>
 
 <script>
     const inputField = document.getElementById('codeIn');
-    inputField.addEventListener('input', () => { if (inputField.value.length === 3) checkBanana(); });
+
+    // Auto-trigger when 3rd character is typed
+    inputField.addEventListener('input', () => { 
+        if (inputField.value.length === 3) checkBanana(); 
+    });
 
     function checkBanana() {
         const val = inputField.value.toUpperCase();
@@ -157,36 +186,30 @@
 
         const box = document.getElementById('resBox');
         const label = document.getElementById('statusLabel');
-        const days = document.getElementById('daysValue');
-        const dateText = document.getElementById('dateText');
-        const emoji = document.getElementById('emojiDisplay');
+        const daysVal = document.getElementById('daysValue');
+        const dateTxt = document.getElementById('dateText');
 
-        // VALIDATION CHECK
-        const monthChar = val.charCodeAt(0);
-        const dayChar = val.charCodeAt(1);
-        const yearDigit = val.charAt(2);
+        // Logic check: A-L, A-Z, 1-2
+        const mChar = val.charCodeAt(0);
+        const dChar = val.charCodeAt(1);
+        const yDigit = val.charAt(2);
+        
+        const isValid = (mChar >= 65 && mChar <= 76) && (dChar >= 65 && dChar <= 90) && (yDigit === '1' || yDigit === '2');
 
-        // Check if month is A-L, day is A-Z, and last digit is 1 or 2
-        const isMonthValid = (monthChar >= 65 && monthChar <= 76); // A through L
-        const isDayValid = (dayChar >= 65 && dayChar <= 90);      // A through Z
-        const isYearValid = (yearDigit === '1' || yearDigit === '2');
-
-        if (!isMonthValid || !isDayValid || !isYearValid) {
+        if (!isValid) {
+            hapticFeedback([100, 50, 100]); // Error double-thump
             box.className = 'result-display bg-error';
             label.innerText = "Invalid Code";
-            emoji.innerText = "❓";
-            days.innerText = "ERR";
-            dateText.innerText = "Check Input";
+            daysVal.innerText = "ERR";
+            dateTxt.innerText = "Check Sticker";
             return;
         }
 
-        // Calculation logic
         const now = new Date();
         now.setHours(0,0,0,0);
-
-        const m = monthChar - 65;
-        let d = dayChar - 64;
-        if (yearDigit === '2') d += 26;
+        const m = mChar - 65;
+        let d = dChar - 64;
+        if (yDigit === '2') d += 26;
 
         let hDate = new Date(now.getFullYear(), m, d);
         if (hDate > now) hDate.setFullYear(now.getFullYear() - 1);
@@ -194,21 +217,28 @@
         const diff = Math.floor((now - hDate) / (1000*60*60*24));
 
         box.className = 'result-display';
-        days.innerText = diff;
-        dateText.innerText = hDate.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+        daysVal.innerText = diff;
+        dateTxt.innerText = hDate.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
 
         if (diff >= 0 && diff <= 21) {
+            hapticFeedback(40); // Soft success
             label.innerText = "Perfect";
-            emoji.innerText = "😃";
             box.classList.add('bg-perfect');
         } else if (diff > 21 && diff <= 31) {
+            hapticFeedback(40); // Soft success
             label.innerText = "Acceptable";
-            emoji.innerText = "😐";
             box.classList.add('bg-acceptable');
         } else {
+            // ALERT: Vibrate - Pause - Vibrate
+            hapticFeedback([300, 100, 300]); 
             label.innerText = "Too Old";
-            emoji.innerText = "☹️";
             box.classList.add('bg-old');
+        }
+    }
+
+    function hapticFeedback(pattern) {
+        if ("vibrate" in navigator) {
+            navigator.vibrate(pattern);
         }
     }
 
@@ -216,10 +246,9 @@
         inputField.value = '';
         const box = document.getElementById('resBox');
         box.className = 'result-display';
-        document.getElementById('statusLabel').innerText = "Enter Code";
+        document.getElementById('statusLabel').innerText = "Ready";
         document.getElementById('daysValue').innerText = "--";
         document.getElementById('dateText').innerText = "-- -- ----";
-        document.getElementById('emojiDisplay').innerText = "";
         inputField.focus();
     }
 </script>
