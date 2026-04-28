@@ -6,7 +6,7 @@
     <title>Banana Tracker Pro</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,27 +15,32 @@
             --perfect-green: #28a745;
             --acceptable-orange: #fd7e14;
             --old-red: #dc3545;
-            --banana-yellow: #FFE135;
-            --card-bg: #ffffff;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root { --banana-yellow: #1a1a1a; --card-bg: #2d2d2d; }
+            --bg-black: #000000;
+            --card-grey: #1c1c1e; /* Apple System Grey */
+            --text-white: #ffffff;
+            --border-grey: #3a3a3c;
         }
 
         body { 
-            background-color: var(--banana-yellow);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;
+            background-color: var(--bg-black);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0;
+            color: var(--text-white);
         }
 
         .app-card {
-            background: var(--card-bg);
+            background: var(--card-grey);
             padding: 2.5rem 1.5rem;
             border-radius: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            width: 92%; max-width: 360px;
-            text-align: center; border: 3px solid #333;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            width: 92%; 
+            max-width: 360px;
+            text-align: center; 
+            border: 1px solid var(--border-grey);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -52,39 +57,82 @@
         }
 
         .input-wrapper {
-            background: rgba(0,0,0,0.05); border: 2px solid #333;
-            border-radius: 20px; padding: 15px; margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid var(--border-grey);
+            border-radius: 20px; 
+            padding: 15px; 
+            margin-bottom: 20px;
         }
 
         input {
-            border: none !important; text-align: center; letter-spacing: 8px;
-            font-weight: 900; font-size: 2.8rem !important; background: transparent !important;
-            color: inherit; width: 100%; outline: none; text-transform: uppercase;
+            border: none !important; 
+            text-align: center; 
+            letter-spacing: 8px;
+            font-weight: 900; 
+            font-size: 2.8rem !important; 
+            background: transparent !important;
+            color: var(--text-white); 
+            width: 100%; 
+            outline: none; 
+            text-transform: uppercase;
+        }
+
+        input::placeholder {
+            color: #48484a;
         }
 
         .result-display {
-            margin-top: 25px; padding: 20px; border-radius: 30px;
-            background: rgba(0,0,0,0.04); transition: all 0.4s ease;
+            margin-top: 25px; 
+            padding: 20px; 
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05); 
+            transition: all 0.4s ease;
+            min-height: 160px;
         }
 
         #daysValue { font-size: 5rem; font-weight: 900; line-height: 1; }
         
+        /* Result States */
         .bg-perfect { background-color: var(--perfect-green) !important; color: white !important; }
+        .bg-acceptable { background-color: var(--acceptable-orange) !important; color: white !important; }
         .bg-old { background-color: var(--old-red) !important; color: white !important; }
-        .bg-error { background-color: #6c757d !important; color: white !important; }
+        .bg-error { background-color: #3a3a3c !important; color: #ff453a !important; }
 
         .btn-main {
-            background: #333; color: #fff; border-radius: 50px;
-            padding: 16px; font-weight: 800; width: 100%; border: none;
-            box-shadow: 0 4px 0 #000;
+            background: #ffffff; 
+            color: #000000; 
+            border-radius: 50px;
+            padding: 16px; 
+            font-weight: 800; 
+            width: 100%; 
+            border: none;
+            transition: transform 0.1s ease;
+        }
+        
+        .btn-main:active { transform: scale(0.96); }
+
+        .status-label {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .harvest-info {
+            font-size: 0.85rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
         }
     </style>
 </head>
 <body>
 
 <div class="app-card" id="appCard">
-    <div style="font-size: 3rem;">🍌</div>
-    <h2 style="font-weight:900;">Age Tracker</h2>
+    <div style="font-size: 3rem; margin-bottom: 5px;">🍌</div>
+    <h2 style="font-weight:900; letter-spacing: -1px;">BANANA TRACKER</h2>
     
     <div class="input-wrapper">
         <input type="text" id="codeIn" placeholder="ABC" maxlength="3" 
@@ -94,10 +142,10 @@
     <button onclick="checkBanana()" class="btn-main">CALCULATE</button>
 
     <div id="resBox" class="result-display">
-        <div id="statusLabel" style="font-weight:800; text-transform:uppercase;">Ready</div>
+        <div id="statusLabel" class="status-label">READY</div>
         <div id="daysValue">--</div>
-        <div style="font-size: 0.75rem; font-weight:800;">DAYS FROM HARVEST</div>
-        <div id="dateText" style="font-size: 0.9rem; margin-top:10px; opacity:0.8;">-- -- ----</div>
+        <div style="font-size: 0.7rem; font-weight:800; opacity: 0.8;">DAYS FROM HARVEST</div>
+        <div id="dateText" class="harvest-info">-- -- ----</div>
     </div>
 </div>
 
@@ -126,8 +174,9 @@
         if (!isValid) {
             triggerFeedback('error');
             box.className = 'result-display bg-error';
-            label.innerText = "Invalid Code";
+            label.innerText = "INVALID CODE";
             daysVal.innerText = "ERR";
+            dateTxt.innerText = "Check stickers";
             return;
         }
 
@@ -143,33 +192,33 @@
 
         box.className = 'result-display';
         daysVal.innerText = diff;
-        dateTxt.innerText = hDate.toLocaleDateString();
+        dateTxt.innerText = "Harvested: " + hDate.toLocaleDateString();
 
         if (diff > 31) {
             triggerFeedback('error');
-            label.innerText = "Too Old";
+            label.innerText = "TOO OLD";
             box.classList.add('bg-old');
         } else if (diff <= 21) {
             triggerFeedback('success');
-            label.innerText = "Perfect";
+            label.innerText = "PERFECT";
             box.classList.add('bg-perfect');
         } else {
-            label.innerText = "Acceptable";
-            box.style.backgroundColor = "var(--acceptable-orange)";
-            box.style.color = "white";
+            triggerFeedback('success');
+            label.innerText = "ACCEPTABLE";
+            box.classList.add('bg-acceptable');
         }
     }
 
     function triggerFeedback(type) {
-        // iPhone Visual Feedback
+        // Visual Shake (iPhone Optimized)
         card.classList.remove('shake');
-        void card.offsetWidth; // Trigger reflow
+        void card.offsetWidth; 
         
         if (type === 'error') {
-            card.classList.add('shake'); // Visual shake for iPhone
+            card.classList.add('shake');
         }
         
-        // Android/Future-proof Vibration
+        // Physical Vibration (Android / Future iOS Support)
         if ("vibrate" in navigator) {
             navigator.vibrate(type === 'error' ? [200, 100, 200] : 40);
         }
