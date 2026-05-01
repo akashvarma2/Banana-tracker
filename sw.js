@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pulp-pro-v3'; // Changed to v3 to force update
+const CACHE_NAME = 'pulp-pro-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -8,18 +8,22 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Forces the new service worker to take over immediately
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
   );
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim()); // Immediate control
+  event.waitUntil(clients.claim());
 });
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
   );
 });
