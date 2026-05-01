@@ -225,6 +225,7 @@
                 <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
+                <div class="selection-card" onclick="openMiddleHub('defects')"><img src="rotten.png" alt="defects"><div class="commodity-name-section"><span>Defect Hub</span></div></div>
             </div>
         </div>
         <div id="favorites-section" class="hidden">
@@ -290,7 +291,6 @@
         renderFavorites();
         setTimeout(() => {
             document.body.classList.add('loaded');
-            // Fixed initial focus for desktop
             document.getElementById('codeIn').focus();
         }, 2600);
     });
@@ -329,7 +329,6 @@
         document.getElementById('appInterface').style.display = 'none';
         if(targetId === 'appInterface') {
             document.getElementById('appInterface').style.display = 'flex';
-            // Fixed focus when entering calculator
             setTimeout(() => document.getElementById('codeIn').focus(), 100);
         } else {
             document.getElementById(targetId).classList.remove('hidden');
@@ -342,8 +341,15 @@
         activeFruit = fruit;
         switchView('middle-hub');
         const title = fruit.charAt(0).toUpperCase() + fruit.slice(1);
-        document.getElementById('middleHubTitle').innerText = `${title} Menu`;
-        document.getElementById('brandsBtn').innerText = `${title} Brands`;
+        document.getElementById('middleHubTitle').innerText = fruit === 'defects' ? 'Defect Hub Menu' : `${title} Menu`;
+        document.getElementById('brandsBtn').innerText = fruit === 'defects' ? 'Defect Types' : `${title} Brands`;
+        
+        // Custom logic for Defect Hub middle menu if needed
+        if (fruit === 'defects') {
+            document.getElementById('brandsBtn').onclick = () => alert('Defect identification logic coming soon.');
+        } else {
+            document.getElementById('brandsBtn').onclick = () => openBrands(activeFruit);
+        }
     }
 
     function openBrands(fruit) {
@@ -409,7 +415,6 @@
         }
     });
 
-    // Modified handlePostCalculation to better handle Desktop vs Mobile
     function handlePostCalculation() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
@@ -421,7 +426,6 @@
                 inputField.setAttribute('type', currentType);
             }, 100);
         } else {
-            // On desktop, keep input ready for next scan
             inputField.select(); 
             inputField.focus();
         }
@@ -467,7 +471,7 @@
 
         if (!historicalCode) {
             saveToHistory(val, diff, statusColor);
-            handlePostCalculation(); // Fixed interactivity here
+            handlePostCalculation(); 
         }
         renderHistory();
     }
