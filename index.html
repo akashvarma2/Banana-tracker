@@ -85,6 +85,11 @@
             top: 0; left: 0; box-shadow: 0 0 20px var(--pulp-lime);
             animation: scanAnim 2.5s linear infinite; display: none; z-index: 10;
         }
+        .focus-ring {
+            position: absolute; width: 180px; height: 180px;
+            border: 2px dashed rgba(166, 226, 46, 0.5);
+            border-radius: 20px; pointer-events: none; z-index: 5;
+        }
         @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
 
         #detection-bar {
@@ -160,6 +165,7 @@
         <div class="camera-box">
             <video id="videoFeed" autoplay playsinline muted></video>
             <div class="scan-line" id="scanEffect"></div>
+            <div class="focus-ring" id="focusRing"></div>
             <i id="placeholderIcon" class="bi bi-upc-scan" style="font-size:4rem; opacity:0.1;"></i>
         </div>
         
@@ -215,7 +221,6 @@
     // Splash Timeout
     window.addEventListener('load', () => { setTimeout(() => document.body.classList.add('loaded'), 2600); });
 
-    // View Management
     function switchView(id) {
         document.querySelectorAll('.nav-view, .app-container').forEach(v => v.classList.add('hidden'));
         const target = document.getElementById(id);
@@ -229,7 +234,6 @@
         switchView('age-checker-view');
     }
 
-    // Scanner Logic
     async function startScanner(fruit) {
         activeFruit = fruit;
         switchView('scanner-view');
@@ -239,48 +243,82 @@
             v.srcObject = stream;
             v.style.display = 'block';
             document.getElementById('placeholderIcon').style.display = 'none';
-        } catch (e) { alert("Camera Error: Please enable HTTPS and grant permissions."); switchView('defect-hub-menu'); }
+        } catch (e) { alert("Camera Error: Please enable HTTPS."); switchView('defect-hub-menu'); }
     }
 
     async function runAI() {
+        const video = document.getElementById('videoFeed');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         const line = document.getElementById('scanEffect');
         const btn = document.getElementById('actionBtn');
         const bar = document.getElementById('detection-bar');
-        
+
         line.style.display = 'block';
-        btn.innerText = "PIXEL ANALYSIS...";
+        btn.innerText = "SAMPLING PIXELS...";
         bar.classList.add('hidden');
+
+        // 1. Precise Image Capture
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Analyze the exact center (150x150 pixels)
+        const areaSize = 150;
+        const centerX = (canvas.width / 2) - (areaSize / 2);
+        const centerY = (canvas.height / 2) - (areaSize / 2);
+        const pixels = ctx.getImageData(centerX, centerY, areaSize, areaSize).data;
+        
+        let r=0, g=0, b=0;
+        for (let i = 0; i < pixels.length; i += 4) {
+            r += pixels[i]; g += pixels[i+1]; b += pixels[i+2];
+        }
+        const avgR = r / (pixels.length/4);
+        const avgG = g / (pixels.length/4);
 
         try {
             const resp = await fetch('defects.json');
             const data = await resp.json();
             const fruitData = data[activeFruit];
-            
             const external = fruitData.external_surface;
             const internal = fruitData.internal_pathology;
             const allDefects = { ...external, ...internal };
-            const keys = Object.keys(allDefects);
-
-            setTimeout(() => { btn.innerText = "MOLECULAR DENSITY..."; }, 1500);
 
             setTimeout(() => {
                 line.style.display = 'none';
                 btn.innerText = "Re-Scan Surface";
+
+                // 2. High-Precision Logic Gates
+                let key = "";
+
+                if (activeFruit === 'banana') {
+                    if (avgR < 65 && avgG < 65) key = "anthracnose"; // Dark/Black
+                    else if (avgR > 115 && avgG < 95) key = "thrips_scarring"; // Rusty Red
+                    else key = "mechanical_bruising";
+                } 
+                else if (activeFruit === 'mango') {
+                    if (avgR < 75 && avgG < 75) key = "sap_burn"; // Dark Streaks
+                    else if (avgG > avgR + 10) key = "bacterial_canker"; // Scabby Green
+                    else key = "stem_end_rot";
+                }
+                else { // Avocado
+                    if (avgR > 125 && avgG > 120) key = "sunburn_corking"; // Yellow/Pale
+                    else if (avgR < 55) key = "anthracnose_rot"; // Black Decay
+                    else key = "thrips_ridging";
+                }
+
+                activeDefect = allDefects[key] || allDefects[Object.keys(allDefects)[0]];
                 
-                const randomKey = keys[Math.floor(Math.random() * keys.length)];
-                activeDefect = allDefects[randomKey];
-
-                const isInternal = internal.hasOwnProperty(randomKey);
-
+                const isInternal = internal.hasOwnProperty(key);
                 const alertCat = document.getElementById('alert-category');
-                alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY" : "EXTERNAL DEFECT";
+                alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY" : "EXTERNAL SURFACE DEFECT";
                 alertCat.style.color = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
-                
                 document.getElementById('alert-title').innerText = activeDefect.title;
                 bar.style.borderColor = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 bar.classList.remove('hidden');
-            }, 3000);
-        } catch (e) { btn.innerText = "Data Error"; console.error(e); }
+
+            }, 2500);
+        } catch (e) { console.error(e); }
     }
 
     function openTechnicalReport() {
@@ -298,10 +336,9 @@
     function closeReport() { document.getElementById('report-overlay').style.display = 'none'; }
     function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
 
-    // Service Worker Registration
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => console.log('Pulp Pro Registered'));
+        navigator.serviceWorker.register('./sw.js').then(reg => console.log('Pulp Pro Active'));
       });
     }
 </script>
