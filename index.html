@@ -144,6 +144,20 @@
         .list-btn:hover:not(.disabled) { border-color: var(--pulp-lime); background: rgba(166, 226, 46, 0.05); color: var(--pulp-lime); }
         .list-btn.disabled { opacity: 0.4; cursor: default; }
 
+        /* DEFECT HUB SPECIALIZED STYLES */
+        .defect-camera-placeholder {
+            width: 100%; aspect-ratio: 1/1; background: #111; border-radius: 30px;
+            border: 2px dashed var(--border-glass); margin-bottom: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .defect-scan-line {
+            position: absolute; width: 100%; height: 2px; background: var(--pulp-lime);
+            top: 0; left: 0; box-shadow: 0 0 15px var(--pulp-lime);
+            animation: scanAnim 3s linear infinite; display: none;
+        }
+        @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
+
         #favorites-section { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--border-glass); }
         .fav-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
         .fav-card {
@@ -225,7 +239,7 @@
                 <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
-                <!-- Defect Hub Option with Image -->
+                <!-- Defect Hub Option -->
                 <div class="selection-card" onclick="switchView('defect-hub')">
                     <img src="rotten.png" alt="Defect Hub">
                     <div class="commodity-name-section">
@@ -240,13 +254,39 @@
         </div>
     </div>
 
+    <!-- DEFECT HUB VIEW (STRICT SCOPE) -->
     <div id="defect-hub" class="nav-view hidden">
-        <div class="hub-title">Defect Hub</div>
-        <div class="list-container">
-            <div class="list-btn" onclick="alert('Banana Defect Logic Coming Soon')">Banana</div>
-            <div class="list-btn" onclick="alert('Mango Defect Logic Coming Soon')">Mango</div>
+        <div class="hub-title">Defect Analysis Hub</div>
+        
+        <!-- HIGH-END UI: PRE-ANALYSIS MODULE -->
+        <div class="list-container" id="defect-initial-list">
+            <p style="font-size:0.7rem; opacity:0.6; margin-bottom:10px;">SELECT TARGET FOR SCAN</p>
+            <div class="list-btn" onclick="startDefectScan('Banana')">Banana (AI Scan)</div>
+            <div class="list-btn" onclick="startDefectScan('Mango')">Mango (AI Scan)</div>
+            <div class="list-btn" onclick="startDefectScan('Avocado')">Avocado (AI Scan)</div>
         </div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
+
+        <!-- HIGH-END UI: AI SCANNING MODULE (Initially Hidden) -->
+        <div id="defect-scanner-ui" class="hidden" style="max-width:400px; margin: 0 auto;">
+            <div class="defect-camera-placeholder" id="cameraBox">
+                <div class="defect-scan-line" id="scanLine"></div>
+                <i class="bi bi-camera" style="font-size:3rem; opacity:0.2;"></i>
+                <p id="scanStatus" style="margin-top:15px; font-weight:900; font-size:0.8rem; color:var(--pulp-lime);">INITIALIZING AI...</p>
+            </div>
+            
+            <div id="defect-results" class="hidden" style="text-align:left; background:var(--input-bg); padding:20px; border-radius:20px; border:1px solid var(--border-glass);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span id="detectedDefect" style="font-weight:900; color:var(--pulp-red);">ANTHRACNOSE</span>
+                    <span id="defectSeverity" style="background:var(--pulp-red); padding:2px 8px; border-radius:5px; font-size:0.6rem; font-weight:900;">HIGH RISK</span>
+                </div>
+                <p style="font-size:0.65rem; margin-top:10px; opacity:0.7;">Recommended Action: Do not ship. Reject at intake if >10% of surface area is affected.</p>
+            </div>
+
+            <button class="btn-main" id="scanTriggerBtn" style="margin-top:20px;" onclick="runAiAnalysis()">Run AI Analysis</button>
+            <button class="btn-main" style="margin-top:10px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="resetDefectHub()">Reset Hub</button>
+        </div>
+
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:none; opacity:0.4; font-size:0.7rem; color:var(--text-main);" onclick="showHub()">← Back to Main</button>
     </div>
 
     <div id="middle-hub" class="nav-view hidden">
@@ -285,6 +325,42 @@
     </div>
 
 <script>
+    /* DEFECT HUB LOGIC (HIGH-END PROTOTYPE) */
+    function startDefectScan(commodity) {
+        document.getElementById('defect-initial-list').classList.add('hidden');
+        document.getElementById('defect-scanner-ui').classList.remove('hidden');
+        document.getElementById('scanStatus').innerText = `READY FOR ${commodity.toUpperCase()} SCAN`;
+    }
+
+    function runAiAnalysis() {
+        const line = document.getElementById('scanLine');
+        const status = document.getElementById('scanStatus');
+        const results = document.getElementById('defect-results');
+        const trigger = document.getElementById('scanTriggerBtn');
+
+        line.style.display = 'block';
+        status.innerText = "ANALYZING TISSUE...";
+        trigger.classList.add('disabled');
+        trigger.innerText = "AI THINKING...";
+
+        // Simulate "High-End" AI Delay
+        setTimeout(() => {
+            line.style.display = 'none';
+            status.innerText = "ANALYSIS COMPLETE";
+            results.classList.remove('hidden');
+            trigger.innerText = "Re-Scan Surface";
+            trigger.classList.remove('disabled');
+        }, 3000);
+    }
+
+    function resetDefectHub() {
+        document.getElementById('defect-initial-list').classList.remove('hidden');
+        document.getElementById('defect-scanner-ui').classList.add('hidden');
+        document.getElementById('defect-results').classList.add('hidden');
+        document.getElementById('scanTriggerBtn').innerText = "Run AI Analysis";
+    }
+
+    /* GLOBAL CORE LOGIC */
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
