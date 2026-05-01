@@ -65,3 +65,36 @@ function shake() {
 
 // init
 renderHistory();
+const ageBtn = document.getElementById('ageBtn');
+const defectsBtn = document.getElementById('defectsBtn');
+const backToMiddle = document.getElementById('backToMiddle');
+const backHome = document.getElementById('backHome');
+
+const middleHub = document.getElementById('middle-hub');
+const defectsHub = document.getElementById('defects-hub');
+const appInterface = document.getElementById('appInterface');
+
+function show(view) {
+  middleHub.classList.add('hidden');
+  defectsHub.classList.add('hidden');
+  appInterface.classList.add('hidden');
+
+  document.getElementById(view).classList.remove('hidden');
+}
+
+// NAVIGATION
+ageBtn.addEventListener('click', () => show('appInterface'));
+
+defectsBtn.addEventListener('click', () => show('defects-hub'));
+
+backToMiddle.addEventListener('click', () => show('middle-hub'));
+
+backHome.addEventListener('click', () => show('middle-hub'));
+
+// DEFECTS SELECTION
+document.querySelectorAll('.selection-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const fruit = card.dataset.fruit;
+    alert(`Defects opened for: ${fruit}`);
+  });
+});
