@@ -56,6 +56,8 @@
             font-size: 0.7rem; text-transform: uppercase; margin-bottom: 40px; opacity: 0.8;
         }
 
+        .hub-title { font-weight: 900; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; color: var(--pulp-lime); }
+
         /* Grid */
         .selection-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
         .selection-card {
@@ -227,8 +229,9 @@
         switchView('scanner-view');
         try {
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            document.getElementById('videoFeed').srcObject = stream;
-            document.getElementById('videoFeed').style.display = 'block';
+            const v = document.getElementById('videoFeed');
+            v.srcObject = stream;
+            v.style.display = 'block';
             document.getElementById('placeholderIcon').style.display = 'none';
         } catch (e) { alert("Camera Access Required."); switchView('defect-hub-menu'); }
     }
@@ -246,20 +249,23 @@
             const resp = await fetch('defects.json');
             const data = await resp.json();
             const fruitData = data[activeFruit];
-            const keys = Object.keys(fruitData);
             
-            // Simulation logic
-            setTimeout(() => { btn.innerText = "LAYER 2: INTERNAL MOISTURE..."; }, 1500);
+            // Combine External and Internal categories for detection
+            const external = fruitData.external_surface;
+            const internal = fruitData.internal_pathology;
+            const allDefects = { ...external, ...internal };
+            const keys = Object.keys(allDefects);
+
+            setTimeout(() => { btn.innerText = "LAYER 2: MOLECULAR DENSITY..."; }, 1500);
 
             setTimeout(() => {
                 line.style.display = 'none';
                 btn.innerText = "Re-Scan Surface";
-                activeDefect = fruitData[keys[Math.floor(Math.random() * keys.length)]];
+                
+                const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                activeDefect = allDefects[randomKey];
 
-                // Logic: Determine if Internal or External
-                const isInternal = activeDefect.title.toLowerCase().includes('internal') || 
-                                 activeDefect.title.toLowerCase().includes('rot') || 
-                                 activeDefect.title.toLowerCase().includes('flesh');
+                const isInternal = internal.hasOwnProperty(randomKey);
 
                 const alertCat = document.getElementById('alert-category');
                 alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY DETECTED" : "EXTERNAL SURFACE DEFECT";
@@ -269,7 +275,7 @@
                 bar.style.borderColor = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 bar.classList.remove('hidden');
             }, 3000);
-        } catch (e) { btn.innerText = "Database Error"; }
+        } catch (e) { btn.innerText = "Database Error"; console.error(e); }
     }
 
     function openTechnicalReport() {
