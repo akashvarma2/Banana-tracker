@@ -66,7 +66,6 @@
                         <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
                     </div>
                 </div>
-                <!-- Addition: Defect Detection Tile -->
                 <div class="selection-card" onclick="openDefectDetection()">
                     <img src="rotten.png" alt="defect detection">
                     <div class="commodity-name-section">
@@ -96,6 +95,17 @@
         <div class="hub-title" id="brandHubTitle">Select Brand</div>
         <div class="list-container" id="brandGrid"></div>
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
+    </div>
+
+    <!-- New Addition: Defect Detection Hub -->
+    <div id="defect-hub" class="nav-view hidden">
+        <div class="hub-title">AI Defect Detection Analysis</div>
+        <div class="list-container">
+            <div class="list-btn" onclick="startScan('banana')">1. Scan Banana</div>
+            <div class="list-btn" onclick="startScan('mango')">2. Scan Mango</div>
+            <div class="list-btn" onclick="startScan('avocado')">3. Scan Avocado</div>
+        </div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
     <div class="app-container" id="appInterface">
