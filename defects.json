@@ -1,0 +1,62 @@
+{
+  "mango": [
+    {
+      "id": "sapburn",
+      "name": "Sapburn",
+      "severity_levels": ["Low", "Medium", "High"],
+      "cause": "Chemical injury from sap (exudate) leaking from the stem after harvest and burning the skin.",
+      "symptoms": "Dark-brown to black spots and blotches, often appearing as streaks or 'runs' down the side of the fruit.",
+      "photo_guide": "Look for glossy, dark streaks starting from the stem end. Unlike rot, the skin remains firm.",
+      "action": "Downgrade if area exceeds 2 cm²."
+    },
+    {
+      "id": "anthracnose",
+      "name": "Anthracnose",
+      "severity_levels": ["Minor", "Major"],
+      "cause": "Fungal infection (Colletotrichum) that stays hidden in unripe fruit and develops as the fruit ripens.",
+      "symptoms": "Small, irregular black spots that can merge into large sunken lesions. May show pink spores in advanced stages.",
+      "photo_guide": "Small 'pepper spots' on green fruit that turn into large, black sunken pits on ripe fruit.",
+      "action": "Fruit with deep lesions should be discarded; minor spots are edible but reduce shelf life."
+    }
+  ],
+  "banana": [
+    {
+      "id": "bruising",
+      "name": "Mechanical Bruising",
+      "severity_levels": ["Slight", "Moderate", "Severe"],
+      "cause": "Impact or compression during transport or poor post-harvest handling.",
+      "symptoms": "Flat, sunken, or partially broken areas of the peel that darken as the fruit ripens.",
+      "photo_guide": "Large, dull brown/black patches that feel soft to the touch.",
+      "action": "Major defect if bruising exceeds 6 cm² per cluster."
+    },
+    {
+      "id": "crown_rot",
+      "name": "Crown Rot",
+      "severity_levels": ["Minor", "Major"],
+      "cause": "Fungal complex infecting the cut surface of the banana hand during packing.",
+      "symptoms": "Blackening and softening of the crown tissue, often with white or grey mold growth.",
+      "photo_guide": "Look at the 'neck' where the bananas join. White fuzzy growth is a clear indicator.",
+      "action": "Any visible mold or rot on the crown is classified as a major defect."
+    }
+  ],
+  "avocado": [
+    {
+      "id": "chilling_injury",
+      "name": "Chilling Injury",
+      "severity_levels": ["Mild", "Severe"],
+      "cause": "Storage at temperatures below 5°C (41°F) for extended periods.",
+      "symptoms": "Greyish-brown skin discoloration (scald), surface pitting, and internal browning of the flesh.",
+      "photo_guide": "The skin looks 'dusty' or greyish rather than a rich green or black. Internal flesh will have grey streaks.",
+      "action": "High risk of uneven ripening; monitor closely."
+    },
+    {
+      "id": "lenticel_damage",
+      "name": "Lenticel Damage",
+      "severity_levels": ["Minor", "Major"],
+      "cause": "Physiological response to water absorption (rain/soaking) combined with mechanical stress.",
+      "symptoms": "Small, pinpoint brown or black spots centered on the fruit's breathing pores (lenticels).",
+      "photo_guide": "Hundreds of tiny, uniform dark dots across the skin. Often mistaken for a disease.",
+      "action": "Purely cosmetic if limited to the skin; does not affect eating quality."
+    }
+  ]
+}
