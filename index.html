@@ -12,164 +12,172 @@
             --pulp-amber: #ffcc00;
             --pulp-red: #ff4d4d;
             --border-glass: rgba(255, 255, 255, 0.08);
-            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --shadow: 0 20px 40px rgba(0,0,0,0.6);
             --pulp-gradient: linear-gradient(135deg, #d4ff00 0%, #a2c400 100%);
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--bg-black); color: white; margin: 0; padding: 20px; text-align: center; overflow-x: hidden; min-height: 100vh; }
-
-        /* Branding & Logo Area */
-        .header-section { margin-bottom: 40px; padding-top: 20px; }
-        .logo-container { 
-            width: 80px; height: 80px; background: var(--pulp-gradient); 
-            border-radius: 22px; margin: 0 auto 15px; display: flex; 
-            align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(212, 255, 0, 0.2);
+        
+        body { 
+            background: var(--bg-black); 
+            color: white; 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            overflow: hidden; 
         }
-        .logo-icon { width: 45px; height: 45px; fill: black; }
-        h1 { font-weight: 900; letter-spacing: -1px; margin: 0; color: white; font-size: 1.8rem; }
-        .subtitle { font-size: 0.65rem; letter-spacing: 3px; opacity: 0.4; margin-top: 5px; text-transform: uppercase; }
 
-        /* Layout Grid */
-        .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        /* Desktop Container Mimicking Mobile App */
+        .app-shell {
+            width: 100%;
+            max-width: 420px;
+            height: 90vh;
+            background: #000;
+            border: 8px solid #1a1a1a;
+            border-radius: 50px;
+            position: relative;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+            scrollbar-width: none;
+            padding: 40px 25px;
+        }
+        .app-shell::-webkit-scrollbar { display: none; }
+
+        /* Branding */
+        .logo-container { 
+            width: 90px; height: 90px; background: var(--pulp-gradient); 
+            border-radius: 24px; margin: 0 auto 20px; display: flex; 
+            align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(212, 255, 0, 0.15);
+        }
+        .logo-icon { width: 50px; height: 50px; fill: black; }
+        h1 { font-weight: 900; letter-spacing: -1.5px; margin: 0; font-size: 2rem; }
+        .subtitle { font-size: 0.65rem; letter-spacing: 4px; opacity: 0.4; margin-top: 8px; text-transform: uppercase; }
+
+        /* Main Menu Grid */
+        .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 35px 0; }
+        
         .list-btn { 
             background: var(--glass-card); border: 1px solid var(--border-glass); 
-            padding: 22px 15px; border-radius: 24px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 800; font-size: 0.85rem; letter-spacing: 0.5px; position: relative; overflow: hidden;
+            padding: 24px 10px; border-radius: 26px; cursor: pointer; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;
         }
-        .list-btn:active { transform: scale(0.96); background: rgba(255,255,255,0.08); }
+        .list-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.08); }
         .list-btn.active { border-color: var(--pulp-lime); color: var(--pulp-lime); background: rgba(212, 255, 0, 0.05); }
-        .list-btn.defect-btn { background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.2); color: var(--pulp-red); }
+        .list-btn.defect-btn { background: rgba(255, 77, 77, 0.08); border-color: rgba(255, 77, 77, 0.2); color: var(--pulp-red); }
 
-        /* Input Styles */
-        #logic-area { margin-top: 30px; animation: fadeInUp 0.5s ease; }
+        /* Inputs */
+        .input-group { margin-top: 20px; animation: fadeInUp 0.4s ease; }
         .input-code { 
             background: transparent; border: none; border-bottom: 2px solid var(--border-glass); 
-            color: white; font-size: 1.6rem; text-align: center; width: 85%; padding: 15px; 
-            font-weight: 900; outline: none; transition: 0.3s; margin-bottom: 20px;
+            color: white; font-size: 1.8rem; text-align: center; width: 100%; padding: 15px; 
+            font-weight: 900; outline: none; transition: 0.3s; margin-bottom: 25px;
         }
         .input-code:focus { border-color: var(--pulp-lime); }
 
         .btn-main {
-            background: var(--pulp-gradient); color: black; border: none; padding: 20px 40px;
+            background: var(--pulp-gradient); color: black; border: none; padding: 22px;
             border-radius: 24px; font-weight: 900; font-size: 1rem; width: 100%; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.2s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: 0.2s;
         }
-        .btn-main:active { transform: translateY(2px); }
+        .btn-main:active { transform: translateY(2px); opacity: 0.9; }
 
-        /* Modals & Views */
+        /* Alert and Modal */
         .hidden { display: none !important; }
         .nav-view { animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        #defect-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--bg-black); z-index: 10000; overflow-y: auto; padding: 30px 20px;
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         #defect-alert {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; background: var(--pulp-red); color: white;
-            padding: 24px; border-radius: 28px; box-shadow: var(--shadow); z-index: 9999;
+            position: absolute; bottom: 30px; left: 5%; width: 90%; 
+            background: var(--pulp-red); color: white; padding: 25px; 
+            border-radius: 30px; box-shadow: var(--shadow); z-index: 100;
         }
 
-        /* Photo Gallery */
-        .photo-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
-        .photo-gallery::-webkit-scrollbar { display: none; }
-        .photo-placeholder {
-            min-width: 160px; height: 160px; background: #151515; border-radius: 20px;
-            border: 1px dashed #333; display: flex; align-items: center; justify-content: center;
-            color: #555; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+        #defect-modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg-black); z-index: 1000; overflow-y: auto; padding: 40px 25px;
         }
 
+        .photo-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; }
+        .photo-card {
+            min-width: 140px; height: 140px; background: #111; border-radius: 20px;
+            border: 1px solid #222; display: flex; align-items: center; justify-content: center;
+            color: #444; font-size: 0.6rem; font-weight: 900; text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header-section">
-        <div class="logo-container">
-            <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-        </div>
-        <h1>PULP PRO</h1>
-        <div class="subtitle">Information & Tracking Hub</div>
-    </div>
-
-    <!-- MAIN MENU -->
-    <div class="hub-grid" id="fruit-selector">
-        <div class="list-btn active" onclick="setFruit('banana', this)">BANANA</div>
-        <div class="list-btn" onclick="setFruit('mango', this)">MANGO</div>
-        <div class="list-btn" onclick="setFruit('avocado', this)">AVOCADO</div>
-        <div class="list-btn defect-btn" onclick="startDefectScan()">DEFECTS</div>
-    </div>
-
-    <div id="brand-selection-view">
-        <h3 style="font-size: 0.7rem; opacity: 0.4; letter-spacing: 1px; margin: 30px 0 15px;">SELECT BRAND</h3>
-        <div class="hub-grid" id="brand-grid">
-            <div class="list-btn" onclick="setBrand('chiquita', this)">CHIQUITA</div>
-            <div class="list-btn" onclick="setBrand('fyffes', this)">FYFFES</div>
-            <div class="list-btn" onclick="setBrand('dole', this)">DOLE</div>
-        </div>
-    </div>
-
-    <!-- CODE INPUT AREA -->
-    <div id="logic-area" class="hidden">
-        <input type="text" id="fruitCode" class="input-code" placeholder="ENTER CODE">
-        <button class="btn-main" onclick="checkFruit()">CHECK AGE</button>
-    </div>
-
-    <!-- RESULT VIEW -->
-    <div id="result-view" class="hidden nav-view" style="margin-top: 20px; background: var(--glass-card); padding: 40px 20px; border-radius: 30px; border: 1px solid var(--border-glass);">
-        <div style="font-size: 0.7rem; opacity: 0.4; margin-bottom: 10px; letter-spacing: 1px;">ESTIMATED PACK DATE</div>
-        <div id="result-text" style="font-size: 2.8rem; font-weight: 900; color: var(--pulp-lime);">-- ---</div>
-        <button class="btn-main" style="background:transparent; color:white; border: 1px solid rgba(255,255,255,0.1); margin-top:30px;" onclick="resetApp()">SCAN ANOTHER</button>
-    </div>
-
-    <!-- DEFECT INFO MODAL -->
-    <div id="defect-modal" class="hidden nav-view">
-        <div style="max-width:500px; margin:0 auto;">
-            <div style="text-align: left; margin-bottom: 30px;">
-                <button onclick="closeDefectModal()" style="background:none; border:none; color:var(--pulp-lime); font-weight:900; cursor:pointer; padding:0;">← BACK</button>
+    <div class="app-shell">
+        <div id="main-hub">
+            <div class="logo-container">
+                <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
             </div>
-            
-            <h2 id="modal-defect-name" style="font-weight:900; color:var(--pulp-lime); text-transform:uppercase; letter-spacing:1px; margin: 10px 0; text-align: left;"></h2>
-            <div id="modal-severity" style="display:inline-block; padding:6px 16px; border-radius:50px; font-size:0.65rem; font-weight:900; margin-bottom:25px; text-align: left;"></div>
-            
-            <div style="text-align:left; background:var(--glass-card); padding:25px; border-radius:28px; border:1px solid var(--border-glass); margin-bottom:25px;">
-                <h5 style="color:var(--pulp-amber); font-size:0.75rem; font-weight:900; margin: 0 0 10px;">PRIMARY CAUSE</h5>
-                <p id="modal-cause" style="font-size:0.9rem; opacity:0.7; margin:0 0 25px; line-height:1.5;"></p>
-                
-                <h5 style="color:var(--pulp-amber); font-size:0.75rem; font-weight:900; margin: 0 0 10px;">KEY SYMPTOMS</h5>
-                <p id="modal-symptoms" style="font-size:0.9rem; opacity:0.7; margin:0; line-height:1.5;"></p>
+            <h1>PULP PRO</h1>
+            <div class="subtitle">Information & Tracking Hub</div>
+
+            <div class="hub-grid" id="fruit-selector">
+                <div class="list-btn active" onclick="setFruit('banana', this)">BANANA</div>
+                <div class="list-btn" onclick="setFruit('mango', this)">MANGO</div>
+                <div class="list-btn" onclick="setFruit('avocado', this)">AVOCADO</div>
+                <div class="list-btn defect-btn" onclick="startDefectScan()">DEFECTS</div>
             </div>
 
-            <div style="text-align: left;">
-                <h5 style="color:var(--pulp-lime); font-size:0.75rem; font-weight:900; margin-bottom:15px;">REFERENCE EXAMPLES</h5>
+            <div id="brand-area">
+                <h3 style="font-size: 0.7rem; opacity: 0.4; letter-spacing: 2px; margin-bottom: 20px;">CHOOSE BRAND</h3>
+                <div class="hub-grid">
+                    <div class="list-btn" onclick="setBrand('chiquita', this)">CHIQUITA</div>
+                    <div class="list-btn" onclick="setBrand('fyffes', this)">FYFFES</div>
+                    <div class="list-btn" onclick="setBrand('dole', this)">DOLE</div>
+                </div>
+            </div>
+
+            <div id="logic-area" class="hidden input-group">
+                <input type="text" id="fruitCode" class="input-code" placeholder="ENTER CODE">
+                <button class="btn-main" onclick="checkFruit()">CHECK AGE</button>
+            </div>
+
+            <div id="result-view" class="hidden nav-view" style="background: var(--glass-card); padding: 40px 20px; border-radius: 35px; border: 1px solid var(--border-glass);">
+                <div style="font-size: 0.7rem; opacity: 0.4; margin-bottom: 10px; letter-spacing: 1px;">HARVEST DATE</div>
+                <div id="result-text" style="font-size: 3rem; font-weight: 900; color: var(--pulp-lime);">12 MAY</div>
+                <button class="btn-main" style="background:transparent; color:white; border: 1px solid rgba(255,255,255,0.1); margin-top:30px;" onclick="resetApp()">SCAN ANOTHER</button>
+            </div>
+        </div>
+
+        <!-- DEFECT MODAL -->
+        <div id="defect-modal" class="hidden">
+            <button onclick="closeDefectModal()" style="background:none; border:none; color:var(--pulp-lime); font-weight:900; margin-bottom:20px; cursor:pointer;">← EXIT INFO</button>
+            <h2 id="modal-defect-name" style="font-weight:900; color:var(--pulp-lime); margin:0;"></h2>
+            <div id="modal-severity" style="display:inline-block; padding:6px 14px; border-radius:50px; font-size:0.6rem; font-weight:900; margin:15px 0; background:rgba(255,77,77,0.15); color:var(--pulp-red);"></div>
+            
+            <div style="text-align:left; background:var(--glass-card); padding:25px; border-radius:30px; border:1px solid var(--border-glass); margin-bottom:25px;">
+                <h5 style="color:var(--pulp-amber); font-size:0.7rem; margin-bottom:10px;">CAUSE</h5>
+                <p id="modal-cause" style="font-size:0.85rem; opacity:0.7; margin-bottom:25px; line-height:1.5;"></p>
+                <h5 style="color:var(--pulp-amber); font-size:0.7rem; margin-bottom:10px;">SYMPTOMS</h5>
+                <p id="modal-symptoms" style="font-size:0.85rem; opacity:0.7; margin:0; line-height:1.5;"></p>
+            </div>
+
+            <div style="text-align:left;">
+                <h5 style="color:var(--pulp-lime); font-size:0.7rem; margin-bottom:15px;">REF PHOTOS</h5>
                 <div class="photo-gallery" id="photo-gallery"></div>
             </div>
-
-            <button class="btn-main" style="margin-top:40px;" onclick="closeDefectModal()">DISMISS</button>
         </div>
-    </div>
 
-    <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
+        <!-- HIDDEN INPUT -->
+        <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
+    </div>
 
     <script>
         let currentFruit = 'banana';
         let currentBrand = '';
 
         const defectData = {
-            "mango": [
-                { "id": "sapburn", "name": "Sapburn", "severity_levels": ["Minor", "Major"], "cause": "Chemical injury from sap leaking from the stem end during harvest.", "symptoms": "Dark streaks or blotches starting from the stem. Skin remains firm initially." },
-                { "id": "anthracnose", "name": "Anthracnose", "severity_levels": ["Moderate", "Severe"], "cause": "Latent fungal infection triggered during the ripening process.", "symptoms": "Small black 'pepper spots' that expand into large sunken lesions." }
-            ],
-            "banana": [
-                { "id": "bruising", "name": "Mechanical Bruising", "severity_levels": ["Slight", "Severe"], "cause": "Physical impact or high pressure during packing/transport.", "symptoms": "Darkened, sunken areas of the peel that turn soft and blacken over time." },
-                { "id": "crown_rot", "name": "Crown Rot", "severity_levels": ["Critical"], "cause": "Fungal pathogens colonizing the cut surface of the hand.", "symptoms": "Softening and blackening of the crown tissue, often with visible mold." }
-            ],
-            "avocado": [
-                { "id": "chilling_injury", "name": "Chilling Injury", "severity_levels": ["Mild", "Severe"], "cause": "Storage at temperatures below 5°C causing cell collapse.", "symptoms": "Greyish skin discoloration (scald) and internal grey-brown flesh streaks." }
-            ]
+            "mango": [{ "id": "sapburn", "name": "Sapburn", "severity_levels": ["Minor", "Major"], "cause": "Sap leaking from stem during harvest.", "symptoms": "Dark streaks down fruit. Skin stays firm." }],
+            "banana": [{ "id": "bruising", "name": "Mechanical Bruising", "severity_levels": ["Moderate", "Severe"], "cause": "Impact during transport.", "symptoms": "Sunken dark areas, soft texture." }],
+            "avocado": [{ "id": "chilling_injury", "name": "Chilling Injury", "severity_levels": ["Critical"], "cause": "Cold storage below 5°C.", "symptoms": "Greyish skin scald and grey flesh." }]
         };
 
         function setFruit(fruit, el) {
@@ -180,13 +188,13 @@
 
         function setBrand(brand, el) {
             currentBrand = brand;
-            document.querySelectorAll('#brand-grid .list-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#brand-area .list-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('logic-area').classList.remove('hidden');
         }
 
         function startDefectScan() {
-            const choice = confirm("Choose Image Source:\n\nOK: Camera Capture\nCANCEL: Photo Library");
+            const choice = confirm("SELECT SOURCE\n\nOK: Camera\nCANCEL: Album");
             if (choice) {
                 const cam = document.createElement('input');
                 cam.type = 'file'; cam.accept = 'image/*'; cam.capture = 'environment';
@@ -198,25 +206,19 @@
         }
 
         function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            // Simulation: Detect first item for chosen fruit
             const randomDefect = defectData[currentFruit][0];
             showDetectionAlert(randomDefect.id, currentFruit);
         }
 
         function showDetectionAlert(defectId, fruit) {
             if(document.getElementById('defect-alert')) document.getElementById('defect-alert').remove();
-            
             const alertDiv = document.createElement('div');
             alertDiv.id = "defect-alert";
             alertDiv.innerHTML = `
-                <div style="font-weight:900; font-size:1.1rem; letter-spacing:1px; margin-bottom:5px;">${defectId.toUpperCase()} DETECTED</div>
-                <div style="font-size:0.75rem; opacity:0.8; margin-bottom:15px;">Anomaly detected in surface pixel analysis.</div>
-                <button onclick="openDefectModal('${defectId}', '${fruit}')" style="background:white; color:black; border:none; padding:12px; border-radius:16px; font-weight:900; width:100%; cursor:pointer;">VIEW ANALYSIS</button>
+                <div style="font-weight:900; font-size:1.1rem; margin-bottom:5px;">${defectId.toUpperCase()} DETECTED</div>
+                <button onclick="openDefectModal('${defectId}', '${fruit}')" style="background:white; color:black; border:none; padding:12px; border-radius:18px; font-weight:900; width:100%; margin-top:10px;">GET INFO</button>
             `;
-            document.body.appendChild(alertDiv);
+            document.querySelector('.app-shell').appendChild(alertDiv);
         }
 
         function openDefectModal(id, fruit) {
@@ -225,14 +227,7 @@
             document.getElementById('modal-cause').innerText = data.cause;
             document.getElementById('modal-symptoms').innerText = data.symptoms;
             document.getElementById('modal-severity').innerText = `RATING: ${data.severity_levels.join(' / ')}`;
-            
-            const gallery = document.getElementById('photo-gallery');
-            gallery.innerHTML = `
-                <div class="photo-placeholder">Reference A</div>
-                <div class="photo-placeholder">Reference B</div>
-                <div class="photo-placeholder">Reference C</div>
-            `;
-
+            document.getElementById('photo-gallery').innerHTML = `<div class="photo-card">Example A</div><div class="photo-card">Example B</div>`;
             document.getElementById('defect-modal').classList.remove('hidden');
         }
 
@@ -242,17 +237,12 @@
         }
 
         function checkFruit() {
-            const code = document.getElementById('fruitCode').value;
-            if(!code) return;
-            document.getElementById('brand-selection-view').classList.add('hidden');
+            document.getElementById('brand-area').classList.add('hidden');
             document.getElementById('logic-area').classList.add('hidden');
             document.getElementById('result-view').classList.remove('hidden');
-            document.getElementById('result-text').innerText = "22 MAY"; 
         }
 
-        function resetApp() {
-            location.reload();
-        }
+        function resetApp() { location.reload(); }
     </script>
 </body>
 </html>
