@@ -225,12 +225,28 @@
                 <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
+                <!-- Defect Hub Option with Image -->
+                <div class="selection-card" onclick="switchView('defect-hub')">
+                    <img src="rotten.png" alt="Defect Hub">
+                    <div class="commodity-name-section">
+                        <span style="color:var(--pulp-amber);">Defect Hub</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="favorites-section" class="hidden">
             <div class="hub-title" style="color: var(--pulp-amber); font-size: 0.8rem; margin-top:20px;">Saved Favorites</div>
             <div class="fav-grid" id="fav-grid"></div>
         </div>
+    </div>
+
+    <div id="defect-hub" class="nav-view hidden">
+        <div class="hub-title">Defect Hub</div>
+        <div class="list-container">
+            <div class="list-btn" onclick="alert('Banana Defect Logic Coming Soon')">Banana</div>
+            <div class="list-btn" onclick="alert('Mango Defect Logic Coming Soon')">Mango</div>
+        </div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
     <div id="middle-hub" class="nav-view hidden">
@@ -290,7 +306,6 @@
         renderFavorites();
         setTimeout(() => {
             document.body.classList.add('loaded');
-            // Fixed initial focus for desktop
             document.getElementById('codeIn').focus();
         }, 2600);
     });
@@ -329,7 +344,6 @@
         document.getElementById('appInterface').style.display = 'none';
         if(targetId === 'appInterface') {
             document.getElementById('appInterface').style.display = 'flex';
-            // Fixed focus when entering calculator
             setTimeout(() => document.getElementById('codeIn').focus(), 100);
         } else {
             document.getElementById(targetId).classList.remove('hidden');
@@ -409,7 +423,6 @@
         }
     });
 
-    // Modified handlePostCalculation to better handle Desktop vs Mobile
     function handlePostCalculation() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
@@ -421,7 +434,6 @@
                 inputField.setAttribute('type', currentType);
             }, 100);
         } else {
-            // On desktop, keep input ready for next scan
             inputField.select(); 
             inputField.focus();
         }
@@ -467,7 +479,7 @@
 
         if (!historicalCode) {
             saveToHistory(val, diff, statusColor);
-            handlePostCalculation(); // Fixed interactivity here
+            handlePostCalculation();
         }
         renderHistory();
     }
