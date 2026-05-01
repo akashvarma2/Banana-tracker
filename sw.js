@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pulp-pro-v1';
+const CACHE_NAME = 'pulp-pro-v3'; // Changed to v3 to force update
 const ASSETS = [
   './',
   './index.html',
@@ -7,20 +7,19 @@ const ASSETS = [
   './edited-image.png'
 ];
 
-// Install event: Caches basic files
 self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Forces the new service worker to take over immediately
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
 });
 
-// Fetch event: Required by Chrome for the "Install" button to appear
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim()); // Immediate control
+});
+
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
