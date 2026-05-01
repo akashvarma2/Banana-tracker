@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pulp Pro Intelligence</title>
+    <title>Pulp Pro</title>
+    
+    <!-- PWA Requirements -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#a6e22e">
+    <link rel="apple-touch-icon" href="edited-image.png">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
@@ -44,7 +49,6 @@
         .nav-view { max-width: 900px; margin: 80px auto 0; text-align: center; opacity: 0; transition: 0.5s; }
         .loaded .nav-view { opacity: 1; }
         
-        /* AI Heading Styles */
         .ai-heading {
             font-size: 2.8rem; font-weight: 900; letter-spacing: -1px;
             background: linear-gradient(to bottom, #ffffff, var(--pulp-lime));
@@ -69,7 +73,7 @@
         .selection-card img { width: 100%; height: 80%; object-fit: cover; }
         .commodity-label { height: 20%; display: flex; align-items: center; justify-content: center; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Scanner Module */
+        /* Scanner */
         .camera-box {
             width: 100%; aspect-ratio: 1/1; background: #0a0a0a; border-radius: 30px;
             border: 2px solid var(--border-glass); margin-bottom: 20px;
@@ -83,7 +87,6 @@
         }
         @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
 
-        /* Detection Alert Bar */
         #detection-bar {
             background: var(--glass-card); padding: 25px; border-radius: 30px; 
             border: 1px solid var(--pulp-red); text-align: left; margin-bottom: 25px;
@@ -126,7 +129,7 @@
         <div class="splash-text">PULP PRO</div>
     </div>
 
-    <!-- MAIN HUB -->
+    <!-- FRUIT HUB -->
     <div id="fruit-hub" class="nav-view">
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid">
@@ -140,10 +143,10 @@
         </div>
     </div>
 
-    <!-- AI ANALYSIS MENU -->
+    <!-- DEFECT MENU -->
     <div id="defect-hub-menu" class="nav-view hidden">
-        <div class="ai-heading">AI Analysis</div>
-        <div class="ai-sub-heading">Visual Diagnostics Hub</div>
+        <div class="ai-heading">Pulp Pro</div>
+        <div class="ai-sub-heading">AI Visual Diagnostics</div>
         <div class="list-container">
             <div class="list-btn" onclick="startScanner('banana')">Scan Banana</div>
             <div class="list-btn" onclick="startScanner('mango')">Scan Mango</div>
@@ -152,7 +155,7 @@
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:white;" onclick="switchView('fruit-hub')">← Back to Main</button>
     </div>
 
-    <!-- SCANNER VIEW -->
+    <!-- SCANNER -->
     <div id="scanner-view" class="nav-view hidden">
         <div class="camera-box">
             <video id="videoFeed" autoplay playsinline muted></video>
@@ -170,7 +173,7 @@
         <button class="btn-main" style="background:transparent; border:none; color:white; opacity:0.4; margin-top:20px;" onclick="stopCamera(); switchView('defect-hub-menu')">← Back</button>
     </div>
 
-    <!-- TECHNICAL REPORT -->
+    <!-- REPORT -->
     <div id="report-overlay">
         <span class="report-tag" id="repSeverity">--</span>
         <div class="report-title" id="repTitle">--</div>
@@ -209,8 +212,10 @@
     let stream = null;
     let activeDefect = null;
 
+    // Splash Timeout
     window.addEventListener('load', () => { setTimeout(() => document.body.classList.add('loaded'), 2600); });
 
+    // View Management
     function switchView(id) {
         document.querySelectorAll('.nav-view, .app-container').forEach(v => v.classList.add('hidden'));
         const target = document.getElementById(id);
@@ -224,6 +229,7 @@
         switchView('age-checker-view');
     }
 
+    // Scanner Logic
     async function startScanner(fruit) {
         activeFruit = fruit;
         switchView('scanner-view');
@@ -233,7 +239,7 @@
             v.srcObject = stream;
             v.style.display = 'block';
             document.getElementById('placeholderIcon').style.display = 'none';
-        } catch (e) { alert("Camera Access Required."); switchView('defect-hub-menu'); }
+        } catch (e) { alert("Camera Error: Please enable HTTPS and grant permissions."); switchView('defect-hub-menu'); }
     }
 
     async function runAI() {
@@ -242,7 +248,7 @@
         const bar = document.getElementById('detection-bar');
         
         line.style.display = 'block';
-        btn.innerText = "LAYER 1: PIXEL ANALYSIS...";
+        btn.innerText = "PIXEL ANALYSIS...";
         bar.classList.add('hidden');
 
         try {
@@ -250,13 +256,12 @@
             const data = await resp.json();
             const fruitData = data[activeFruit];
             
-            // Combine External and Internal categories for detection
             const external = fruitData.external_surface;
             const internal = fruitData.internal_pathology;
             const allDefects = { ...external, ...internal };
             const keys = Object.keys(allDefects);
 
-            setTimeout(() => { btn.innerText = "LAYER 2: MOLECULAR DENSITY..."; }, 1500);
+            setTimeout(() => { btn.innerText = "MOLECULAR DENSITY..."; }, 1500);
 
             setTimeout(() => {
                 line.style.display = 'none';
@@ -268,14 +273,14 @@
                 const isInternal = internal.hasOwnProperty(randomKey);
 
                 const alertCat = document.getElementById('alert-category');
-                alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY DETECTED" : "EXTERNAL SURFACE DEFECT";
+                alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY" : "EXTERNAL DEFECT";
                 alertCat.style.color = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 
                 document.getElementById('alert-title').innerText = activeDefect.title;
                 bar.style.borderColor = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 bar.classList.remove('hidden');
             }, 3000);
-        } catch (e) { btn.innerText = "Database Error"; console.error(e); }
+        } catch (e) { btn.innerText = "Data Error"; console.error(e); }
     }
 
     function openTechnicalReport() {
@@ -292,6 +297,13 @@
 
     function closeReport() { document.getElementById('report-overlay').style.display = 'none'; }
     function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => console.log('Pulp Pro Registered'));
+      });
+    }
 </script>
 </body>
 </html>
