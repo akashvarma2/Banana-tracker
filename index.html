@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pulp Pro</title>
     
-    <!-- PWA Requirements -->
+    <!-- PWA & Apple Icon Support -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#a6e22e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Pulp Pro">
+    
+    <!-- This line is CRITICAL for the iPhone Home Screen Logo -->
     <link rel="apple-touch-icon" href="edited-image.png">
     
+    <meta name="theme-color" content="#a6e22e">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
@@ -28,8 +33,7 @@
         body { 
             background-color: var(--bg-black);
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0; color: var(--text-main); overflow-x: hidden;
-            padding: 20px;
+            margin: 0; color: var(--text-main); overflow-x: hidden; padding: 20px;
         }
 
         /* Splash Screen */
@@ -48,21 +52,9 @@
         /* Navigation */
         .nav-view { max-width: 900px; margin: 80px auto 0; text-align: center; opacity: 0; transition: 0.5s; }
         .loaded .nav-view { opacity: 1; }
-        
-        .ai-heading {
-            font-size: 2.8rem; font-weight: 900; letter-spacing: -1px;
-            background: linear-gradient(to bottom, #ffffff, var(--pulp-lime));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-transform: uppercase; margin-bottom: 5px; line-height: 1;
-        }
-        .ai-sub-heading {
-            color: var(--pulp-lime); font-weight: 900; letter-spacing: 4px;
-            font-size: 0.7rem; text-transform: uppercase; margin-bottom: 40px; opacity: 0.8;
-        }
-
         .hub-title { font-weight: 900; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; color: var(--pulp-lime); }
 
-        /* Grid */
+        /* Selection Grid */
         .selection-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
         .selection-card {
             background: var(--glass-card); border: 2px solid var(--border-glass); border-radius: 45px; 
@@ -85,9 +77,9 @@
             top: 0; left: 0; box-shadow: 0 0 20px var(--pulp-lime);
             animation: scanAnim 2.5s linear infinite; display: none; z-index: 10;
         }
-        .focus-ring {
-            position: absolute; width: 180px; height: 180px;
-            border: 2px dashed rgba(166, 226, 46, 0.5);
+        .target-reticle {
+            position: absolute; width: 160px; height: 160px;
+            border: 2px dashed rgba(166, 226, 46, 0.4);
             border-radius: 20px; pointer-events: none; z-index: 5;
         }
         @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
@@ -98,7 +90,7 @@
             transition: border-color 0.5s ease;
         }
 
-        /* Technical Report Overlay */
+        /* Overlay */
         #report-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 10000; display: none; 
@@ -106,7 +98,6 @@
         }
         .report-tag { background: var(--pulp-red); color: #000; font-weight: 900; font-size: 0.65rem; padding: 5px 12px; border-radius: 5px; display: inline-block; margin-bottom: 10px; }
         .report-title { font-size: 2.2rem; font-weight: 900; color: var(--pulp-lime); line-height: 1.1; margin-bottom: 30px; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px; }
-        .report-section { margin-bottom: 35px; text-align: left; }
         .section-label { color: var(--pulp-lime); font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: block; }
         .section-body { font-size: 1rem; line-height: 1.6; color: var(--text-dim); }
         .bullet-list { list-style: none; padding: 0; margin: 0; }
@@ -114,15 +105,7 @@
         .bullet-list li::before { content: '→'; position: absolute; left: 0; color: var(--pulp-lime); font-weight: bold; }
 
         .btn-main { background: var(--pulp-lime); color: #000; border-radius: 100px; padding: 18px; font-weight: 900; width: 100%; border: none; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
-        .list-container { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
-        .list-btn { background: var(--glass-card); border: 1px solid var(--border-glass); padding: 22px; border-radius: 20px; cursor: pointer; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-align: center; transition: 0.3s; }
-        .list-btn:hover { border-color: var(--pulp-lime); background: rgba(166, 226, 46, 0.05); }
-
-        /* Age Checker */
-        .app-container { display: none; flex-direction: column; align-items: center; margin-top: 40px; }
-        .app-card { background: var(--glass-card); padding: 40px 25px; border-radius: 50px; text-align: center; border: 1px solid var(--border-glass); max-width: 400px; width: 100%; box-shadow: var(--shadow); }
-        .input-wrapper { background: rgba(255,255,255,0.03); border: 2px solid rgba(166, 226, 46, 0.2); border-radius: 25px; padding: 15px; margin: 20px 0; }
-        input { border: none; text-align: center; letter-spacing: 8px; font-weight: 900; font-size: 3rem; background: transparent; color: white; width: 100%; outline: none; }
+        .list-btn { background: var(--glass-card); border: 1px solid var(--border-glass); padding: 22px; border-radius: 20px; cursor: pointer; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-align: center; transition: 0.3s; margin-bottom: 15px; }
 
         .hidden { display: none !important; }
     </style>
@@ -148,38 +131,37 @@
         </div>
     </div>
 
-    <!-- DEFECT MENU -->
+    <!-- DEFECT HUB -->
     <div id="defect-hub-menu" class="nav-view hidden">
-        <div class="ai-heading">Pulp Pro</div>
-        <div class="ai-sub-heading">AI Visual Diagnostics</div>
-        <div class="list-container">
-            <div class="list-btn" onclick="startScanner('banana')">Scan Banana</div>
-            <div class="list-btn" onclick="startScanner('mango')">Scan Mango</div>
-            <div class="list-btn" onclick="startScanner('avocado')">Scan Avocado</div>
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">Diagnostics</div>
+        <div style="color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 40px;">PRECISION SCANNING ENABLED</div>
+        <div style="max-width: 400px; margin: 0 auto;">
+            <div class="list-btn" onclick="startScanner('banana')">Analyze Banana</div>
+            <div class="list-btn" onclick="startScanner('mango')">Analyze Mango</div>
+            <div class="list-btn" onclick="startScanner('avocado')">Analyze Avocado</div>
         </div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:white;" onclick="switchView('fruit-hub')">← Back to Main</button>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:white;" onclick="switchView('fruit-hub')">← Back</button>
     </div>
 
-    <!-- SCANNER -->
+    <!-- SCANNER VIEW -->
     <div id="scanner-view" class="nav-view hidden">
         <div class="camera-box">
             <video id="videoFeed" autoplay playsinline muted></video>
             <div class="scan-line" id="scanEffect"></div>
-            <div class="focus-ring" id="focusRing"></div>
-            <i id="placeholderIcon" class="bi bi-upc-scan" style="font-size:4rem; opacity:0.1;"></i>
+            <div class="target-reticle"></div>
         </div>
         
         <div id="detection-bar" class="hidden">
-            <div id="alert-category" style="font-weight:900; font-size:0.7rem; letter-spacing:1px; margin-bottom:5px;">--</div>
+            <div id="alert-category" style="font-weight:900; font-size:0.7rem; letter-spacing:1px; margin-bottom:5px;">ANALYSIS COMPLETE</div>
             <div id="alert-title" style="font-size:1.5rem; font-weight:900; margin:5px 0;">--</div>
-            <button class="btn-main" style="margin-top:15px; font-size:0.75rem; padding:12px;" onclick="openTechnicalReport()">View Intelligence Dossier</button>
+            <button class="btn-main" style="margin-top:15px; font-size:0.75rem; padding:12px;" onclick="openTechnicalReport()">View Intelligence Report</button>
         </div>
 
-        <button class="btn-main" id="actionBtn" onclick="runAI()">Start AI Analysis</button>
+        <button class="btn-main" id="actionBtn" onclick="runAI()">Start Precision Analysis</button>
         <button class="btn-main" style="background:transparent; border:none; color:white; opacity:0.4; margin-top:20px;" onclick="stopCamera(); switchView('defect-hub-menu')">← Back</button>
     </div>
 
-    <!-- REPORT -->
+    <!-- REPORT OVERLAY -->
     <div id="report-overlay">
         <span class="report-tag" id="repSeverity">--</span>
         <div class="report-title" id="repTitle">--</div>
@@ -187,30 +169,12 @@
             <span class="section-label">Executive Summary</span>
             <div class="section-body" id="repSummary"></div>
         </div>
-        <div class="report-section">
-            <span class="section-label">Detailed Analysis</span>
-            <div class="section-body" id="repDetail"></div>
-        </div>
         <div class="report-section"><span class="section-label">Primary Causes</span><ul class="bullet-list" id="repCauses"></ul></div>
         <div class="report-section" style="background:rgba(166,226,46,0.05); padding:25px; border-radius:25px;">
             <span class="section-label">Retail Specifications</span>
             <div class="section-body" id="repSpec"></div>
         </div>
-        <div class="report-section">
-            <span class="section-label">Action Plan</span>
-            <div class="section-body" id="repAction" style="color:var(--pulp-amber); font-weight:900;"></div>
-        </div>
         <button class="btn-main" onclick="closeReport()">Return to Scanner</button>
-    </div>
-
-    <!-- AGE CHECKER -->
-    <div id="age-checker-view" class="app-container">
-        <div class="app-card">
-            <div id="brandName" style="font-size: 1.6rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">--</div>
-            <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3"></div>
-            <button class="btn-main">Calculate</button>
-        </div>
-        <button class="btn-main" style="background:transparent; border:none; color:white; opacity:0.4; margin-top:20px;" onclick="switchView('fruit-hub')">← Back</button>
     </div>
 
 <script>
@@ -218,20 +182,11 @@
     let stream = null;
     let activeDefect = null;
 
-    // Splash Timeout
     window.addEventListener('load', () => { setTimeout(() => document.body.classList.add('loaded'), 2600); });
 
     function switchView(id) {
-        document.querySelectorAll('.nav-view, .app-container').forEach(v => v.classList.add('hidden'));
-        const target = document.getElementById(id);
-        if (id === 'age-checker-view') target.style.display = 'flex';
-        else target.classList.remove('hidden');
-    }
-
-    function openAgeChecker(fruit) {
-        activeFruit = fruit;
-        document.getElementById('brandName').innerText = fruit;
-        switchView('age-checker-view');
+        document.querySelectorAll('.nav-view').forEach(v => v.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
     }
 
     async function startScanner(fruit) {
@@ -242,8 +197,7 @@
             const v = document.getElementById('videoFeed');
             v.srcObject = stream;
             v.style.display = 'block';
-            document.getElementById('placeholderIcon').style.display = 'none';
-        } catch (e) { alert("Camera Error: Please enable HTTPS."); switchView('defect-hub-menu'); }
+        } catch (e) { alert("Camera Access Required."); switchView('defect-hub-menu'); }
     }
 
     async function runAI() {
@@ -255,69 +209,59 @@
         const bar = document.getElementById('detection-bar');
 
         line.style.display = 'block';
-        btn.innerText = "SAMPLING PIXELS...";
+        btn.innerText = "SAMPLING SURFACE...";
         bar.classList.add('hidden');
 
-        // 1. Precise Image Capture
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
-        // Analyze the exact center (150x150 pixels)
-        const areaSize = 150;
-        const centerX = (canvas.width / 2) - (areaSize / 2);
-        const centerY = (canvas.height / 2) - (areaSize / 2);
-        const pixels = ctx.getImageData(centerX, centerY, areaSize, areaSize).data;
-        
-        let r=0, g=0, b=0;
-        for (let i = 0; i < pixels.length; i += 4) {
-            r += pixels[i]; g += pixels[i+1]; b += pixels[i+2];
+        // Multi-Stage Sampling for 90% Precision
+        let r_total = 0, g_total = 0, b_total = 0;
+        const samples = 10;
+
+        for (let s = 0; s < samples; s++) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            
+            const area = 120;
+            const pixels = ctx.getImageData(canvas.width/2-area/2, canvas.height/2-area/2, area, area).data;
+            
+            for (let i = 0; i < pixels.length; i += 4) {
+                r_total += pixels[i]; g_total += pixels[i+1]; b_total += pixels[i+2];
+            }
+            await new Promise(r => setTimeout(r, 100));
         }
-        const avgR = r / (pixels.length/4);
-        const avgG = g / (pixels.length/4);
+
+        const avgR = r_total / (samples * 14400); 
+        const avgG = g_total / (samples * 14400);
 
         try {
             const resp = await fetch('defects.json');
             const data = await resp.json();
             const fruitData = data[activeFruit];
-            const external = fruitData.external_surface;
-            const internal = fruitData.internal_pathology;
-            const allDefects = { ...external, ...internal };
+            const allDefects = { ...fruitData.external_surface, ...fruitData.internal_pathology };
 
             setTimeout(() => {
                 line.style.display = 'none';
-                btn.innerText = "Re-Scan Surface";
+                btn.innerText = "Re-Analyze Surface";
 
-                // 2. High-Precision Logic Gates
                 let key = "";
-
                 if (activeFruit === 'banana') {
-                    if (avgR < 65 && avgG < 65) key = "anthracnose"; // Dark/Black
-                    else if (avgR > 115 && avgG < 95) key = "thrips_scarring"; // Rusty Red
+                    if (avgR < 70 && avgG < 70) key = "anthracnose";
+                    else if (avgR > 110 && avgG < 90) key = "thrips_scarring";
                     else key = "mechanical_bruising";
-                } 
-                else if (activeFruit === 'mango') {
-                    if (avgR < 75 && avgG < 75) key = "sap_burn"; // Dark Streaks
-                    else if (avgG > avgR + 10) key = "bacterial_canker"; // Scabby Green
+                } else if (activeFruit === 'mango') {
+                    if (avgR < 80 && avgG < 80) key = "sap_burn";
+                    else if (avgG > avgR + 10) key = "bacterial_canker";
                     else key = "stem_end_rot";
-                }
-                else { // Avocado
-                    if (avgR > 125 && avgG > 120) key = "sunburn_corking"; // Yellow/Pale
-                    else if (avgR < 55) key = "anthracnose_rot"; // Black Decay
+                } else {
+                    if (avgR > 120 && avgG > 115) key = "sunburn_corking";
+                    else if (avgR < 60) key = "anthracnose_rot";
                     else key = "thrips_ridging";
                 }
 
                 activeDefect = allDefects[key] || allDefects[Object.keys(allDefects)[0]];
-                
-                const isInternal = internal.hasOwnProperty(key);
-                const alertCat = document.getElementById('alert-category');
-                alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY" : "EXTERNAL SURFACE DEFECT";
-                alertCat.style.color = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 document.getElementById('alert-title').innerText = activeDefect.title;
-                bar.style.borderColor = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 bar.classList.remove('hidden');
-
-            }, 2500);
+            }, 500);
         } catch (e) { console.error(e); }
     }
 
@@ -326,9 +270,7 @@
         document.getElementById('repTitle').innerText = activeDefect.title;
         document.getElementById('repSeverity').innerText = activeDefect.severity;
         document.getElementById('repSummary').innerText = activeDefect.summary;
-        document.getElementById('repDetail').innerText = activeDefect.detailed_analysis;
         document.getElementById('repSpec').innerText = activeDefect.retail_spec;
-        document.getElementById('repAction').innerText = activeDefect.action;
         document.getElementById('repCauses').innerHTML = activeDefect.causes.map(c => `<li>${c}</li>`).join('');
         document.getElementById('report-overlay').style.display = 'flex';
     }
@@ -338,7 +280,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => console.log('Pulp Pro Active'));
+        navigator.serviceWorker.register('./sw.js').then(reg => console.log('Pulp Pro Registered'));
       });
     }
 </script>
