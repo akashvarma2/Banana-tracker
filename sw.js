@@ -1,29 +1,9 @@
-const CACHE_NAME = 'pulp-pro-v5';
 const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './defects.json',
-  './edited-image.png'
+  'index.html',
+  'style.css',
+  'js/master-logic.js',
+  'edited-image.png',
+  'banana.png',
+  'mango.png',      // Added this
+  'avocado.png'     // Added this
 ];
-
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
-  );
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
-});
