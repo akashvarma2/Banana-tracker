@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pulp Pro</title>
     
-    <!-- PWA & Apple Icon Support -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Pulp Pro">
     
-    <!-- This line is CRITICAL for the iPhone Home Screen Logo -->
+    <!-- This controls the name on the iPhone home screen -->
+    <meta name="apple-mobile-web-app-title" content="Pulp Pro">
     <link rel="apple-touch-icon" href="edited-image.png">
     
     <meta name="theme-color" content="#a6e22e">
@@ -36,7 +35,6 @@
             margin: 0; color: var(--text-main); overflow-x: hidden; padding: 20px;
         }
 
-        /* Splash Screen */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
@@ -49,23 +47,19 @@
         @keyframes textFade { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0; } }
         .loaded #splash-screen { opacity: 0; visibility: hidden; }
 
-        /* Navigation */
         .nav-view { max-width: 900px; margin: 80px auto 0; text-align: center; opacity: 0; transition: 0.5s; }
         .loaded .nav-view { opacity: 1; }
         .hub-title { font-weight: 900; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; color: var(--pulp-lime); }
 
-        /* Selection Grid */
         .selection-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
         .selection-card {
             background: var(--glass-card); border: 2px solid var(--border-glass); border-radius: 45px; 
             width: 240px; height: 320px; overflow: hidden; position: relative; cursor: pointer; transition: 0.3s;
             box-shadow: var(--shadow);
         }
-        .selection-card:hover { border-color: var(--pulp-lime); transform: translateY(-5px); }
         .selection-card img { width: 100%; height: 80%; object-fit: cover; }
         .commodity-label { height: 20%; display: flex; align-items: center; justify-content: center; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Scanner */
         .camera-box {
             width: 100%; aspect-ratio: 1/1; background: #0a0a0a; border-radius: 30px;
             border: 2px solid var(--border-glass); margin-bottom: 20px;
@@ -87,10 +81,8 @@
         #detection-bar {
             background: var(--glass-card); padding: 25px; border-radius: 30px; 
             border: 1px solid var(--pulp-red); text-align: left; margin-bottom: 25px;
-            transition: border-color 0.5s ease;
         }
 
-        /* Overlay */
         #report-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 10000; display: none; 
@@ -100,12 +92,9 @@
         .report-title { font-size: 2.2rem; font-weight: 900; color: var(--pulp-lime); line-height: 1.1; margin-bottom: 30px; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px; }
         .section-label { color: var(--pulp-lime); font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: block; }
         .section-body { font-size: 1rem; line-height: 1.6; color: var(--text-dim); }
-        .bullet-list { list-style: none; padding: 0; margin: 0; }
-        .bullet-list li { margin-bottom: 12px; padding-left: 25px; position: relative; color: var(--text-dim); }
-        .bullet-list li::before { content: '→'; position: absolute; left: 0; color: var(--pulp-lime); font-weight: bold; }
 
-        .btn-main { background: var(--pulp-lime); color: #000; border-radius: 100px; padding: 18px; font-weight: 900; width: 100%; border: none; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
-        .list-btn { background: var(--glass-card); border: 1px solid var(--border-glass); padding: 22px; border-radius: 20px; cursor: pointer; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-align: center; transition: 0.3s; margin-bottom: 15px; }
+        .btn-main { background: var(--pulp-lime); color: #000; border-radius: 100px; padding: 18px; font-weight: 900; width: 100%; border: none; text-transform: uppercase; cursor: pointer; }
+        .list-btn { background: var(--glass-card); border: 1px solid var(--border-glass); padding: 22px; border-radius: 20px; cursor: pointer; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-align: center; margin-bottom: 15px; }
 
         .hidden { display: none !important; }
     </style>
@@ -170,10 +159,6 @@
             <div class="section-body" id="repSummary"></div>
         </div>
         <div class="report-section"><span class="section-label">Primary Causes</span><ul class="bullet-list" id="repCauses"></ul></div>
-        <div class="report-section" style="background:rgba(166,226,46,0.05); padding:25px; border-radius:25px;">
-            <span class="section-label">Retail Specifications</span>
-            <div class="section-body" id="repSpec"></div>
-        </div>
         <button class="btn-main" onclick="closeReport()">Return to Scanner</button>
     </div>
 
@@ -212,7 +197,7 @@
         btn.innerText = "SAMPLING SURFACE...";
         bar.classList.add('hidden');
 
-        // Multi-Stage Sampling for 90% Precision
+        // Multi-Stage Logic for Precision
         let r_total = 0, g_total = 0, b_total = 0;
         const samples = 10;
 
@@ -220,10 +205,8 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0);
-            
             const area = 120;
             const pixels = ctx.getImageData(canvas.width/2-area/2, canvas.height/2-area/2, area, area).data;
-            
             for (let i = 0; i < pixels.length; i += 4) {
                 r_total += pixels[i]; g_total += pixels[i+1]; b_total += pixels[i+2];
             }
@@ -242,22 +225,8 @@
             setTimeout(() => {
                 line.style.display = 'none';
                 btn.innerText = "Re-Analyze Surface";
-
-                let key = "";
-                if (activeFruit === 'banana') {
-                    if (avgR < 70 && avgG < 70) key = "anthracnose";
-                    else if (avgR > 110 && avgG < 90) key = "thrips_scarring";
-                    else key = "mechanical_bruising";
-                } else if (activeFruit === 'mango') {
-                    if (avgR < 80 && avgG < 80) key = "sap_burn";
-                    else if (avgG > avgR + 10) key = "bacterial_canker";
-                    else key = "stem_end_rot";
-                } else {
-                    if (avgR > 120 && avgG > 115) key = "sunburn_corking";
-                    else if (avgR < 60) key = "anthracnose_rot";
-                    else key = "thrips_ridging";
-                }
-
+                let key = "anthracnose"; 
+                if (activeFruit === 'banana' && avgR > 110) key = "thrips_scarring";
                 activeDefect = allDefects[key] || allDefects[Object.keys(allDefects)[0]];
                 document.getElementById('alert-title').innerText = activeDefect.title;
                 bar.classList.remove('hidden');
@@ -270,19 +239,12 @@
         document.getElementById('repTitle').innerText = activeDefect.title;
         document.getElementById('repSeverity').innerText = activeDefect.severity;
         document.getElementById('repSummary').innerText = activeDefect.summary;
-        document.getElementById('repSpec').innerText = activeDefect.retail_spec;
         document.getElementById('repCauses').innerHTML = activeDefect.causes.map(c => `<li>${c}</li>`).join('');
         document.getElementById('report-overlay').style.display = 'flex';
     }
 
     function closeReport() { document.getElementById('report-overlay').style.display = 'none'; }
     function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => console.log('Pulp Pro Registered'));
-      });
-    }
 </script>
 </body>
 </html>
