@@ -1,62 +1,38 @@
 {
-  "mango": [
-    {
-      "id": "sapburn",
-      "name": "Sapburn",
-      "severity_levels": ["Low", "Medium", "High"],
-      "cause": "Chemical injury from sap (exudate) leaking from the stem after harvest and burning the skin.",
-      "symptoms": "Dark-brown to black spots and blotches, often appearing as streaks or 'runs' down the side of the fruit.",
-      "photo_guide": "Look for glossy, dark streaks starting from the stem end. Unlike rot, the skin remains firm.",
-      "action": "Downgrade if area exceeds 2 cm²."
+  "banana": {
+    "external": {
+      "crown_rot": { "title": "Crown Rot", "severity": "CRITICAL", "description": "Fungal decay of the cushion.", "retail_spec": "Reject if >10mm into neck." },
+      "anthracnose": { "title": "Anthracnose", "severity": "MAJOR", "description": "Sunken black spots on peel.", "retail_spec": "Max 5% surface area." },
+      "latex_stain": { "title": "Latex Stain", "severity": "MINOR", "description": "Brown/black sticky streaks.", "retail_spec": "Acceptable <2cm²." },
+      "thrips_scarring": { "title": "Thrips Scarring", "severity": "MINOR", "description": "Rough, silvery/brown texture.", "retail_spec": "Acceptable if <10% surface." }
     },
-    {
-      "id": "anthracnose",
-      "name": "Anthracnose",
-      "severity_levels": ["Minor", "Major"],
-      "cause": "Fungal infection (Colletotrichum) that stays hidden in unripe fruit and develops as the fruit ripens.",
-      "symptoms": "Small, irregular black spots that can merge into large sunken lesions. May show pink spores in advanced stages.",
-      "photo_guide": "Small 'pepper spots' on green fruit that turn into large, black sunken pits on ripe fruit.",
-      "action": "Fruit with deep lesions should be discarded; minor spots are edible but reduce shelf life."
+    "internal": {
+      "chilling_injury": { "title": "Chilling Injury", "severity": "MAJOR", "description": "Smoky peel; internal vascular browning.", "retail_spec": "Fail if pulp is discolored." },
+      "ripe_and_soft": { "title": "Ripe & Soft", "severity": "CRITICAL", "description": "Fruit is soft/yellow in a green box.", "retail_spec": "Zero tolerance in green shipments." }
     }
-  ],
-  "banana": [
-    {
-      "id": "bruising",
-      "name": "Mechanical Bruising",
-      "severity_levels": ["Slight", "Moderate", "Severe"],
-      "cause": "Impact or compression during transport or poor post-harvest handling.",
-      "symptoms": "Flat, sunken, or partially broken areas of the peel that darken as the fruit ripens.",
-      "photo_guide": "Large, dull brown/black patches that feel soft to the touch.",
-      "action": "Major defect if bruising exceeds 6 cm² per cluster."
+  },
+  "mango": {
+    "external": {
+      "anthracnose": { "title": "Anthracnose", "severity": "CRITICAL", "description": "Tear-shaped black lesions.", "retail_spec": "Zero tolerance for lesions." },
+      "sap_burn": { "title": "Sap Burn", "severity": "MAJOR", "description": "Black streaking from caustic sap.", "retail_spec": "Reject if >10% surface." },
+      "lenticel_spotting": { "title": "Lenticel Spotting", "severity": "MINOR", "description": "Darkened skin pores.", "retail_spec": "Acceptable <15% surface." }
     },
-    {
-      "id": "crown_rot",
-      "name": "Crown Rot",
-      "severity_levels": ["Minor", "Major"],
-      "cause": "Fungal complex infecting the cut surface of the banana hand during packing.",
-      "symptoms": "Blackening and softening of the crown tissue, often with white or grey mold growth.",
-      "photo_guide": "Look at the 'neck' where the bananas join. White fuzzy growth is a clear indicator.",
-      "action": "Any visible mold or rot on the crown is classified as a major defect."
+    "internal": {
+      "stem_end_rot": { "title": "Stem End Rot", "severity": "CRITICAL", "description": "Internal decay starting at stem.", "retail_spec": "Zero tolerance for flesh rot." },
+      "internal_breakdown": { "title": "Internal Breakdown", "severity": "CRITICAL", "description": "Spongy, jelly-like flesh near pit.", "retail_spec": "Reject if fermented or translucent." },
+      "seed_infestation": { "title": "Seed Weevil", "severity": "CRITICAL", "description": "Larvae/tunnels inside the stone/flesh.", "retail_spec": "Zero tolerance (Quarantine)." }
     }
-  ],
-  "avocado": [
-    {
-      "id": "chilling_injury",
-      "name": "Chilling Injury",
-      "severity_levels": ["Mild", "Severe"],
-      "cause": "Storage at temperatures below 5°C (41°F) for extended periods.",
-      "symptoms": "Greyish-brown skin discoloration (scald), surface pitting, and internal browning of the flesh.",
-      "photo_guide": "The skin looks 'dusty' or greyish rather than a rich green or black. Internal flesh will have grey streaks.",
-      "action": "High risk of uneven ripening; monitor closely."
+  },
+  "avocado": {
+    "external": {
+      "anthracnose": { "title": "Anthracnose", "severity": "MAJOR", "description": "Circular black spots on skin.", "retail_spec": "Reject if >5mm diameter." },
+      "corky_scabbing": { "title": "Corky Scabbing", "severity": "MINOR", "description": "Rough brown patches (wind rub).", "retail_spec": "Acceptable if cosmetic only." },
+      "sunburn": { "title": "Sunburn", "severity": "MAJOR", "description": "Yellow/bleached patch on skin.", "retail_spec": "Reject if skin is cracked." }
     },
-    {
-      "id": "lenticel_damage",
-      "name": "Lenticel Damage",
-      "severity_levels": ["Minor", "Major"],
-      "cause": "Physiological response to water absorption (rain/soaking) combined with mechanical stress.",
-      "symptoms": "Small, pinpoint brown or black spots centered on the fruit's breathing pores (lenticels).",
-      "photo_guide": "Hundreds of tiny, uniform dark dots across the skin. Often mistaken for a disease.",
-      "action": "Purely cosmetic if limited to the skin; does not affect eating quality."
+    "internal": {
+      "body_rot": { "title": "Body Rot", "severity": "CRITICAL", "description": "Decay penetrating from skin to flesh.", "retail_spec": "Zero tolerance." },
+      "vascular_browning": { "title": "Vascular Browning", "severity": "MAJOR", "description": "Brown fibers in flesh.", "retail_spec": "Reject if >5 fibers discolored." },
+      "internal_bruising": { "title": "Internal Bruising", "severity": "MAJOR", "description": "Grey/black flesh smudges.", "retail_spec": "Reject if >10% flesh affected." }
     }
-  ]
+  }
 }
