@@ -48,9 +48,32 @@
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid-container">
             <div class="selection-grid">
-                <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
-                <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
-                <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
+                <div class="selection-card" onclick="openMiddleHub('banana')">
+                    <img src="banana.png" alt="banana">
+                    <div class="commodity-name-section"><span>Banana</span></div>
+                </div>
+                <div class="selection-card" onclick="openMiddleHub('mango')">
+                    <img src="mango.png" alt="mango">
+                    <div class="commodity-name-section">
+                        <span>Mango</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
+                </div>
+                <div class="selection-card" onclick="openMiddleHub('avocado')">
+                    <img src="avocado.png" alt="avocado">
+                    <div class="commodity-name-section">
+                        <span>Avocado</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
+                </div>
+                <!-- Addition: Defect Detection Tile -->
+                <div class="selection-card" onclick="openDefectDetection()">
+                    <img src="rotten.png" alt="defect detection">
+                    <div class="commodity-name-section">
+                        <span>Defect Detection</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(NEW)</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="favorites-section" class="hidden">
@@ -96,6 +119,7 @@
 
     <!-- External Logic Files -->
     <script src="js/master-logic.js"></script>
+    <script src="js/additions.js"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
