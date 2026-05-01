@@ -97,43 +97,38 @@
         #menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9994; display: none; }
         #menu-overlay.open { display: block; }
         
-        .menu-item { padding: 15px; color: var(--text-dim); cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.8rem; letter-spacing: 1px; display: flex; align-items: center; justify-content: space-between; }
-        .menu-item:hover { color: var(--pulp-lime); }
-        .settings-label { padding: 15px 15px 5px; font-size: 0.6rem; font-weight: 900; color: var(--pulp-lime); opacity: 0.8; letter-spacing: 2px; text-transform: uppercase; }
-
-        #menu-fav-container { margin-top: 20px; border-top: 1px solid var(--border-glass); padding-top: 10px; }
-        #menu-fav-list { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding-left: 10px; }
-        #menu-fav-list.show { max-height: 400px; overflow-y: auto; }
-        .menu-fav-item { padding: 12px 15px; font-size: 0.65rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; cursor: pointer; display: block; border-left: 1px solid var(--pulp-lime); margin-bottom: 5px; line-height: 1.2; }
-        .menu-fav-item:hover { color: var(--text-main); background: rgba(166, 226, 46, 0.1); }
-        .menu-fav-item span { display: block; color: var(--pulp-lime); font-size: 0.55rem; opacity: 1; margin-top: 2px; font-weight: 900; }
-
         .nav-view { max-width: 900px; width: 100%; text-align: center; opacity: 0; transition: 0.5s; margin-top: 80px; }
         .loaded .nav-view { opacity: 1; }
         .hub-title { font-weight: 900; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; color: var(--pulp-lime); }
         
         .selection-grid-container { width: 100%; overflow: visible; padding-bottom: 40px; }
         .selection-grid { display: flex; flex-direction: column; gap: 30px; align-items: center; width: 100%; }
-        
-        @media (min-width: 768px) {
-            .selection-grid { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-        }
+        @media (min-width: 768px) { .selection-grid { flex-direction: row; justify-content: center; flex-wrap: wrap; } }
 
         .selection-card {
             background: var(--glass-card); border: 2px solid var(--border-glass); border-radius: 45px; 
             cursor: pointer; transition: 0.3s ease; display: flex; flex-direction: column; 
             align-items: center; justify-content: flex-end; width: 260px; height: 320px; 
-            overflow: hidden; position: relative; flex-shrink: 0;
-            box-shadow: var(--shadow);
+            overflow: hidden; position: relative; flex-shrink: 0; box-shadow: var(--shadow);
         }
         .selection-card:hover { border-color: var(--pulp-lime); transform: translateY(-5px); }
         .selection-card img { position: absolute; top: 0; left: 0; width: 100%; height: 80%; object-fit: cover; border-radius: 43px 43px 0 0; }
-        .commodity-name-section {
-            width: 100%; height: 20%; display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; background: var(--glass-card); 
-            z-index: 2; padding-bottom: 15px;
-        }
+        .commodity-name-section { width: 100%; height: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--glass-card); z-index: 2; padding-bottom: 15px; }
         .commodity-name-section span { display: block; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); }
+
+        /* DEFECT HUB CAMERA STYLES */
+        .defect-camera-container {
+            width: 100%; aspect-ratio: 1/1; background: #111; border-radius: 30px;
+            border: 2px solid var(--border-glass); margin-bottom: 20px;
+            position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        #defectVideo { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .defect-scan-line {
+            position: absolute; width: 100%; height: 2px; background: var(--pulp-lime);
+            top: 0; left: 0; box-shadow: 0 0 15px var(--pulp-lime);
+            animation: scanAnim 3s linear infinite; display: none; z-index: 10;
+        }
+        @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
 
         .list-container { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
         .list-btn {
@@ -144,65 +139,14 @@
         .list-btn:hover:not(.disabled) { border-color: var(--pulp-lime); background: rgba(166, 226, 46, 0.05); color: var(--pulp-lime); }
         .list-btn.disabled { opacity: 0.4; cursor: default; }
 
-        /* DEFECT HUB SPECIALIZED STYLES */
-        .defect-camera-placeholder {
-            width: 100%; aspect-ratio: 1/1; background: #111; border-radius: 30px;
-            border: 2px dashed var(--border-glass); margin-bottom: 20px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
-        .defect-scan-line {
-            position: absolute; width: 100%; height: 2px; background: var(--pulp-lime);
-            top: 0; left: 0; box-shadow: 0 0 15px var(--pulp-lime);
-            animation: scanAnim 3s linear infinite; display: none;
-        }
-        @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
-
-        #favorites-section { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--border-glass); }
-        .fav-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
-        .fav-card {
-            background: var(--glass-card); border: 1px solid var(--border-glass);
-            padding: 15px 25px; border-radius: 20px; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; min-width: 140px;
-            box-shadow: var(--shadow);
-        }
-        .fav-card:hover { border-color: var(--pulp-lime); background: rgba(166, 226, 46, 0.05); }
-        .fav-card i { color: var(--pulp-lime); font-size: 1.2rem; margin-bottom: 5px; }
-        .fav-card span { font-weight: 900; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); }
-
         .app-container { display: none; flex-direction: column; gap: 30px; width: 100%; max-width: 400px; margin-top: 40px; }
-        
-        @media (min-width: 992px) {
-            .app-container { flex-direction: row; max-width: 1100px; align-items: flex-start; justify-content: center; }
-            .app-card { flex: 0 0 380px; position: sticky; top: 40px; }
-            .history-section { flex: 1; margin-top: 0 !important; background: var(--glass-card); padding: 2.5rem; border-radius: 50px; border: 1px solid var(--border-glass); max-height: 85vh; overflow-y: auto; display: block !important; box-shadow: var(--shadow); }
-        }
-
         .app-card { background: var(--glass-card); padding: 2.5rem 1.5rem; border-radius: 50px; text-align: center; border: 1px solid var(--border-glass); position: relative; box-shadow: var(--shadow); }
-        .fav-toggle { position: absolute; top: 30px; right: 35px; font-size: 1.6rem; cursor: pointer; color: var(--border-glass); transition: 0.3s; }
-        .fav-toggle.active { color: var(--pulp-lime); text-shadow: 0 0 10px rgba(166, 226, 46, 0.4); }
-
         .input-wrapper { background: var(--input-bg); border: 2px solid rgba(166, 226, 46, 0.2); border-radius: 25px; padding: 15px; margin-bottom: 20px; }
         input { border: none !important; text-align: center; letter-spacing: 8px; font-weight: 900; font-size: 3rem !important; background: transparent !important; color: var(--text-main); width: 100%; outline: none; text-transform: uppercase; }
         .btn-main { background: linear-gradient(135deg, var(--pulp-amber), #ff4500); color: #fff; border-radius: 100px; padding: 15px; font-weight: 900; width: 100%; border: none; text-transform: uppercase; cursor: pointer; }
         
-        .result-display { margin-top: 25px; padding: 25px 20px; border-radius: 35px; background: var(--input-bg); border: 1px solid var(--border-glass); position: relative; transition: opacity 0.3s ease; }
-        .bg-perfect { border-color: var(--pulp-lime); color: var(--pulp-lime); }
-        .bg-acceptable { border-color: var(--pulp-amber); color: var(--pulp-amber); }
-        .bg-old { border-color: var(--pulp-red); color: var(--pulp-red); }
-        #daysValue { font-size: 5rem; font-weight: 900; line-height: 1; }
-
-        .btn-copy { background: rgba(166, 226, 46, 0.1); border: 1px solid var(--pulp-lime); color: var(--pulp-lime); border-radius: 15px; padding: 8px 25px; font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-copy.success { background: var(--pulp-lime); color: #000; }
-
-        .history-section { margin-top: 30px; text-align: left; display: none; }
-        .log-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 12px; border-bottom: 1px solid var(--border-glass); cursor: pointer; color: var(--text-main); }
-        .log-code { font-weight: 900; font-family: monospace; }
-        .log-timestamp { display: block; opacity: 0.6; font-size: 0.55rem; font-weight: 800; }
-
+        .result-display { margin-top: 25px; padding: 25px 20px; border-radius: 35px; background: var(--input-bg); border: 1px solid var(--border-glass); position: relative; }
         .hidden { display: none !important; }
-        .shake { animation: shake 0.4s both; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
     </style>
 </head>
 <body>
@@ -214,24 +158,6 @@
 
     <div id="menu-trigger" onclick="toggleMenu()"><span></span></div>
 
-    <div id="menu-drawer">
-        <div style="text-align:center; margin-bottom:40px;">
-            <img src="edited-image.png" style="width:50px; margin-bottom:10px;">
-            <div style="font-weight:900; color:var(--pulp-lime);">PULP PRO</div>
-        </div>
-        <div class="menu-item" onclick="showHub(); toggleMenu();"><span>🏠 Home</span></div>
-        <div class="settings-label">App Settings</div>
-        <div class="menu-item" onclick="toggleTheme()"><span>🌓 <span id="themeText">Dark Mode</span></span></div>
-        <div class="menu-item" onclick="clearHistory()" style="color:var(--pulp-red);"><span>⚠️ Clear Logs</span></div>
-        <div class="menu-item" onclick="sendFeedback()"><span>💬 Send Feedback</span></div>
-        
-        <div id="menu-fav-container">
-            <div class="menu-item" onclick="toggleMenuFavs()"><span>⭐ Favorites</span><i class="bi bi-chevron-down" id="favChevron"></i></div>
-            <div id="menu-fav-list"></div>
-        </div>
-    </div>
-    <div id="menu-overlay" onclick="toggleMenu()"></div>
-
     <div id="fruit-hub" class="nav-view">
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid-container">
@@ -239,402 +165,131 @@
                 <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
                 <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
-                <!-- Defect Hub Option -->
                 <div class="selection-card" onclick="switchView('defect-hub')">
                     <img src="rotten.png" alt="Defect Hub">
-                    <div class="commodity-name-section">
-                        <span style="color:var(--pulp-amber);">Defect Hub</span>
-                    </div>
+                    <div class="commodity-name-section"><span style="color:var(--pulp-amber);">Defect Hub</span></div>
                 </div>
             </div>
-        </div>
-        <div id="favorites-section" class="hidden">
-            <div class="hub-title" style="color: var(--pulp-amber); font-size: 0.8rem; margin-top:20px;">Saved Favorites</div>
-            <div class="fav-grid" id="fav-grid"></div>
         </div>
     </div>
 
-    <!-- DEFECT HUB VIEW (STRICT SCOPE) -->
     <div id="defect-hub" class="nav-view hidden">
-        <div class="hub-title">Defect Analysis Hub</div>
-        
-        <!-- HIGH-END UI: PRE-ANALYSIS MODULE -->
+        <div class="hub-title">Defect Analysis</div>
         <div class="list-container" id="defect-initial-list">
-            <p style="font-size:0.7rem; opacity:0.6; margin-bottom:10px;">SELECT TARGET FOR SCAN</p>
-            <div class="list-btn" onclick="startDefectScan('Banana')">Banana (AI Scan)</div>
-            <div class="list-btn" onclick="startDefectScan('Mango')">Mango (AI Scan)</div>
-            <div class="list-btn" onclick="startDefectScan('Avocado')">Avocado (AI Scan)</div>
+            <div class="list-btn" onclick="startDefectScan('banana')">Scan Banana</div>
+            <div class="list-btn" onclick="startDefectScan('mango')">Scan Mango</div>
+            <div class="list-btn" onclick="startDefectScan('avocado')">Scan Avocado</div>
         </div>
 
-        <!-- HIGH-END UI: AI SCANNING MODULE (Initially Hidden) -->
         <div id="defect-scanner-ui" class="hidden" style="max-width:400px; margin: 0 auto;">
-            <div class="defect-camera-placeholder" id="cameraBox">
+            <div class="defect-camera-container">
+                <video id="defectVideo" autoplay playsinline muted></video>
                 <div class="defect-scan-line" id="scanLine"></div>
-                <i class="bi bi-camera" style="font-size:3rem; opacity:0.2;"></i>
-                <p id="scanStatus" style="margin-top:15px; font-weight:900; font-size:0.8rem; color:var(--pulp-lime);">INITIALIZING AI...</p>
+                <i id="camPlaceholderIcon" class="bi bi-camera" style="font-size:3rem; opacity:0.2;"></i>
             </div>
-            
-            <div id="defect-results" class="hidden" style="text-align:left; background:var(--input-bg); padding:20px; border-radius:20px; border:1px solid var(--border-glass);">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span id="detectedDefect" style="font-weight:900; color:var(--pulp-red);">ANTHRACNOSE</span>
-                    <span id="defectSeverity" style="background:var(--pulp-red); padding:2px 8px; border-radius:5px; font-size:0.6rem; font-weight:900;">HIGH RISK</span>
-                </div>
-                <p style="font-size:0.65rem; margin-top:10px; opacity:0.7;">Recommended Action: Do not ship. Reject at intake if >10% of surface area is affected.</p>
-            </div>
-
-            <button class="btn-main" id="scanTriggerBtn" style="margin-top:20px;" onclick="runAiAnalysis()">Run AI Analysis</button>
-            <button class="btn-main" style="margin-top:10px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="resetDefectHub()">Reset Hub</button>
+            <p id="scanStatus" style="font-weight:900; font-size:0.8rem; color:var(--pulp-lime); margin-bottom:15px;">CAMERA READY</p>
+            <div id="defect-results" class="hidden" style="text-align:left; background:var(--input-bg); padding:20px; border-radius:20px; border:1px solid var(--border-glass); margin-bottom:20px;"></div>
+            <button class="btn-main" id="scanTriggerBtn" onclick="runAiAnalysis()">Run AI Analysis</button>
+            <button class="btn-main" style="margin-top:10px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="stopCamera(); resetDefectHub();">Cancel</button>
         </div>
-
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:none; opacity:0.4; font-size:0.7rem; color:var(--text-main);" onclick="showHub()">← Back to Main</button>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:none; opacity:0.4; font-size:0.7rem; color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
     <div id="middle-hub" class="nav-view hidden">
-        <div class="hub-title" id="middleHubTitle">Banana Menu</div>
+        <div class="hub-title" id="middleHubTitle">Menu</div>
         <div class="list-container">
-            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Banana Brands</div>
+            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Brands</div>
             <div class="list-btn disabled">Defects (Soon)</div>
-            <div class="list-btn disabled">Ripening (Soon)</div>
         </div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass);" onclick="showHub()">← Back</button>
     </div>
 
     <div id="brand-hub" class="nav-view hidden">
-        <div class="hub-title" id="brandHubTitle">Select Brand</div>
-        <div class="list-container" id="brandGrid"></div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
+        <div class="hub-title">Select Brand</div>
+        <div id="brandGrid" class="list-container"></div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass);" onclick="openMiddleHub(activeFruit)">← Back</button>
     </div>
 
     <div class="app-container" id="appInterface">
-        <div class="app-card" id="appCard">
-            <i class="bi bi-star-fill fav-toggle" id="favStar" onclick="toggleFavorite()"></i>
-            <img src="edited-image.png" style="width:50px; margin-bottom:10px;">
-            <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">Chiquita</div>
-            <div id="commodityLabel" style="font-weight: 900; letter-spacing: 4px; opacity: 0.5; font-size: 0.7rem; margin-bottom: 25px; color:var(--text-main);">BANANA AGE CHECKER</div>
+        <div class="app-card">
+            <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">--</div>
+            <div id="commodityLabel" style="font-weight: 900; letter-spacing: 4px; opacity: 0.5; font-size: 0.7rem; margin-bottom: 25px;">AGE CHECKER</div>
             <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3" autofocus></div>
-            <button onclick="checkFruit()" class="btn-main" id="calcBtn">Calculate</button>
+            <button onclick="checkFruit()" class="btn-main">Calculate</button>
             <div id="resBox" class="result-display hidden">
-                <div id="statusLabel" style="font-weight:900;">READY</div>
-                <div id="daysValue">--</div>
-                <div id="dateText" style="font-size: 1.3rem; font-weight: 900; margin-top: 10px;">-- -- ----</div>
-                <button class="btn btn-copy" onclick="copyResult()" id="copyBtn"><i class="bi bi-clipboard"></i> **COPY**</button>
+                <div id="statusLabel" style="font-weight:900;">--</div>
+                <div id="daysValue" style="font-size: 5rem; font-weight: 900;">--</div>
+                <div id="dateText" style="font-size: 1.3rem; font-weight: 900;">--</div>
             </div>
-            <button class="btn-main" style="margin-top:25px; background:transparent; border:none; opacity:0.4; font-size:0.6rem; color:var(--text-main);" onclick="openBrands(activeFruit)">← Back to Brands</button>
+            <button class="btn-main" style="margin-top:25px; background:transparent; border:none; opacity:0.4; font-size:0.6rem;" onclick="openBrands(activeFruit)">← Back to Brands</button>
         </div>
-        <div id="historySection" class="history-section"><div id="historyList"></div></div>
     </div>
 
 <script>
-    /* DEFECT HUB LOGIC (HIGH-END PROTOTYPE) */
-    function startDefectScan(commodity) {
-        document.getElementById('defect-initial-list').classList.add('hidden');
-        document.getElementById('defect-scanner-ui').classList.remove('hidden');
-        document.getElementById('scanStatus').innerText = `READY FOR ${commodity.toUpperCase()} SCAN`;
-    }
-
-    function runAiAnalysis() {
-        const line = document.getElementById('scanLine');
-        const status = document.getElementById('scanStatus');
-        const results = document.getElementById('defect-results');
-        const trigger = document.getElementById('scanTriggerBtn');
-
-        line.style.display = 'block';
-        status.innerText = "ANALYZING TISSUE...";
-        trigger.classList.add('disabled');
-        trigger.innerText = "AI THINKING...";
-
-        // Simulate "High-End" AI Delay
-        setTimeout(() => {
-            line.style.display = 'none';
-            status.innerText = "ANALYSIS COMPLETE";
-            results.classList.remove('hidden');
-            trigger.innerText = "Re-Scan Surface";
-            trigger.classList.remove('disabled');
-        }, 3000);
-    }
-
-    function resetDefectHub() {
-        document.getElementById('defect-initial-list').classList.remove('hidden');
-        document.getElementById('defect-scanner-ui').classList.add('hidden');
-        document.getElementById('defect-results').classList.add('hidden');
-        document.getElementById('scanTriggerBtn').innerText = "Run AI Analysis";
-    }
-
-    /* GLOBAL CORE LOGIC */
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
-        });
-    }
-
-    let scanHistory = JSON.parse(localStorage.getItem('pulpProHistory')) || [];
-    let favorites = JSON.parse(localStorage.getItem('pulpProFavorites')) || [];
     let activeFruit = '';
-    let activeBrand = '';
+    let videoStream = null;
 
     window.addEventListener('load', () => {
-        const savedTheme = localStorage.getItem('pulpTheme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-theme');
-            document.getElementById('themeText').innerText = 'Light Mode';
-        }
-        renderHistory();
-        renderFavorites();
-        setTimeout(() => {
-            document.body.classList.add('loaded');
-            document.getElementById('codeIn').focus();
-        }, 2600);
+        setTimeout(() => document.body.classList.add('loaded'), 2600);
     });
-
-    function toggleTheme() {
-        document.body.classList.toggle('light-theme');
-        const isLight = document.body.classList.contains('light-theme');
-        localStorage.setItem('pulpTheme', isLight ? 'light' : 'dark');
-        document.getElementById('themeText').innerText = isLight ? 'Light Mode' : 'Dark Mode';
-    }
-
-    function toggleMenu() {
-        document.getElementById('menu-drawer').classList.toggle('open');
-        document.getElementById('menu-overlay').classList.toggle('open');
-    }
-
-    function toggleMenuFavs() {
-        const list = document.getElementById('menu-fav-list');
-        const icon = document.getElementById('favChevron');
-        list.classList.toggle('show');
-        icon.classList.toggle('bi-chevron-up');
-        icon.classList.toggle('bi-chevron-down');
-    }
-
-    function sendFeedback() {
-        const theme = document.body.classList.contains('light-theme') ? 'Light' : 'Dark';
-        const historyCount = scanHistory.length;
-        const subject = encodeURIComponent("Pulp Pro App Feedback");
-        const body = encodeURIComponent(`Hi Team,\n\nI have some feedback for Pulp Pro:\n\n[Your feedback here]\n\n---\nApp Stats for Debugging:\nTheme: ${theme}\nLogged Scans: ${historyCount}\nPlatform: ${navigator.platform}`);
-        
-        window.location.href = `mailto:ar.varma@hotmail.com?subject=${subject}&body=${body}`;
-    }
 
     function switchView(targetId) {
         document.querySelectorAll('.nav-view').forEach(v => v.classList.add('hidden'));
         document.getElementById('appInterface').style.display = 'none';
-        if(targetId === 'appInterface') {
-            document.getElementById('appInterface').style.display = 'flex';
-            setTimeout(() => document.getElementById('codeIn').focus(), 100);
-        } else {
-            document.getElementById(targetId).classList.remove('hidden');
-        }
+        if(targetId === 'appInterface') document.getElementById('appInterface').style.display = 'flex';
+        else document.getElementById(targetId).classList.remove('hidden');
     }
 
-    function showHub() { switchView('fruit-hub'); renderFavorites(); }
-
-    function openMiddleHub(fruit) {
-        activeFruit = fruit;
-        switchView('middle-hub');
-        const title = fruit.charAt(0).toUpperCase() + fruit.slice(1);
-        document.getElementById('middleHubTitle').innerText = `${title} Menu`;
-        document.getElementById('brandsBtn').innerText = `${title} Brands`;
-    }
-
+    function showHub() { switchView('fruit-hub'); }
+    function openMiddleHub(fruit) { activeFruit = fruit; switchView('middle-hub'); document.getElementById('middleHubTitle').innerText = fruit.toUpperCase() + " MENU"; }
+    
     function openBrands(fruit) {
-        activeFruit = fruit;
         switchView('brand-hub');
         const grid = document.getElementById('brandGrid');
-        if (fruit === 'banana') {
-            grid.innerHTML = `<div class="list-btn" onclick="openCalc('Chiquita')">Chiquita</div><div class="list-btn disabled">Fyffes (Soon)</div><div class="list-btn disabled">Favorita (Soon)</div><div class="list-btn disabled">Agrofair (Soon)</div><div class="list-btn disabled">Port (Soon)</div>`;
-        } else {
-            grid.innerHTML = `<div style="opacity:0.5; padding:20px;">Logic for ${fruit} brands coming soon.</div>`;
-        }
+        if(fruit === 'banana') grid.innerHTML = `<div class="list-btn" onclick="openCalc('Chiquita')">Chiquita</div>`;
+        else grid.innerHTML = `<div style="opacity:0.5;">No brands for ${fruit} yet.</div>`;
     }
 
-    function openCalc(brand, fruit = activeFruit) {
-        activeBrand = brand;
-        activeFruit = fruit;
-        switchView('appInterface');
-        document.getElementById('brandName').innerText = brand;
-        document.getElementById('commodityLabel').innerText = `${activeFruit.toUpperCase()} AGE CHECKER`;
-        document.getElementById('codeIn').value = '';
-        document.getElementById('resBox').classList.add('hidden');
-        updateFavoriteUI();
-        renderHistory();
+    function openCalc(brand) { switchView('appInterface'); document.getElementById('brandName').innerText = brand; document.getElementById('commodityLabel').innerText = activeFruit.toUpperCase() + " AGE CHECKER"; }
+
+    async function startDefectScan(commodity) {
+        activeFruit = commodity;
+        document.getElementById('defect-initial-list').classList.add('hidden');
+        document.getElementById('defect-scanner-ui').classList.remove('hidden');
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            const video = document.getElementById('defectVideo');
+            video.srcObject = videoStream;
+            video.style.display = 'block';
+            document.getElementById('camPlaceholderIcon').style.display = 'none';
+        } catch (e) { alert("Camera error: Ensure HTTPS is used."); resetDefectHub(); }
     }
 
-    function toggleFavorite() {
-        const id = `${activeFruit}_${activeBrand}`;
-        const index = favorites.findIndex(f => f.id === id);
-        if (index > -1) { favorites.splice(index, 1); } 
-        else { favorites.push({ id, fruit: activeFruit, brand: activeBrand, page: 'Age Checker' }); }
-        localStorage.setItem('pulpProFavorites', JSON.stringify(favorites));
-        updateFavoriteUI();
-        renderFavorites();
-    }
-
-    function updateFavoriteUI() {
-        const id = `${activeFruit}_${activeBrand}`;
-        const isFav = favorites.some(f => f.id === id);
-        document.getElementById('favStar').classList.toggle('active', isFav);
-    }
-
-    function renderFavorites() {
-        const section = document.getElementById('favorites-section');
-        const grid = document.getElementById('fav-grid');
-        const menuList = document.getElementById('menu-fav-list');
-        if (favorites.length === 0) { section.classList.add('hidden'); menuList.innerHTML = `<div style="padding:10px; font-size:0.6rem; opacity:0.3;">NO SAVED FAVS</div>`; return; }
-        section.classList.remove('hidden');
-        grid.innerHTML = favorites.map(f => `<div class="fav-card" onclick="openCalc('${f.brand}', '${f.fruit}')"><i class="bi bi-star-fill"></i><span>${f.brand}</span><small style="opacity:0.5; font-size:0.55rem; font-weight:800; color:var(--text-main);">${f.fruit.toUpperCase()}</small></div>`).join('');
-        menuList.innerHTML = favorites.map(f => `<div class="menu-fav-item" onclick="openCalc('${f.brand}', '${f.fruit}'); toggleMenu();">${f.brand}<span>(${f.page || 'Age Checker'})</span></div>`).join('');
-    }
-
-    const inputField = document.getElementById('codeIn');
-    
-    inputField.addEventListener('input', () => { 
-        document.getElementById('resBox').classList.add('hidden');
-        renderHistory(); 
-    });
-
-    inputField.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            checkFruit();
-        }
-    });
-
-    function handlePostCalculation() {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        
-        if (isMobile) {
-            inputField.blur();
-            const currentType = inputField.getAttribute('type');
-            inputField.setAttribute('type', 'button'); 
-            setTimeout(() => {
-                inputField.setAttribute('type', currentType);
-            }, 100);
-        } else {
-            inputField.select(); 
-            inputField.focus();
-        }
-    }
-
-    function checkFruit(historicalCode = null) {
-        const val = historicalCode || inputField.value.toUpperCase();
-        if (historicalCode) inputField.value = historicalCode;
-        
-        const box = document.getElementById('resBox');
-
-        if (val.length < 3) {
-            box.classList.add('hidden');
-            if(!historicalCode) triggerShake();
-            return;
-        }
-
-        const mChar = val.charCodeAt(0), dChar = val.charCodeAt(1), yDigit = val.charAt(2);
-        const isValid = (mChar >= 65 && mChar <= 76) && (dChar >= 65 && dChar <= 90) && (yDigit === '1' || yDigit === '2');
-
-        if (!isValid) {
-            box.classList.add('hidden');
-            triggerShake();
-            return;
-        }
-
-        const now = new Date(), m = mChar - 65;
-        let d = dChar - 64; if (yDigit === '2') d += 26;
-        let hDate = new Date(now.getFullYear(), m, d);
-        if (hDate > now) hDate.setFullYear(now.getFullYear() - 1);
-        const diff = Math.floor((now - hDate) / (1000*60*60*24));
-
-        document.getElementById('daysValue').innerText = diff;
-        document.getElementById('dateText').innerText = hDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-
-        const label = document.getElementById('statusLabel');
-        let statusColor = "";
-        box.classList.remove('hidden');
-        
-        if (diff > 31) { label.innerText = "TOO OLD"; box.className = 'result-display bg-old'; statusColor = "#ff4d4d"; }
-        else if (diff <= 21) { label.innerText = "PERFECT"; box.className = 'result-display bg-perfect'; statusColor = "#a6e22e"; }
-        else { label.innerText = "ACCEPTABLE"; box.className = 'result-display bg-acceptable'; statusColor = "#ff8c00"; }
-
-        if (!historicalCode) {
-            saveToHistory(val, diff, statusColor);
-            handlePostCalculation();
-        }
-        renderHistory();
-    }
-
-    function triggerShake() {
-        document.getElementById('appCard').classList.add('shake');
-        setTimeout(()=>document.getElementById('appCard').classList.remove('shake'), 400);
-    }
-
-    function saveToHistory(code, days, color) {
-        const now = new Date();
-        const ts = `${now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} • ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`.toUpperCase();
-        scanHistory.unshift({ code, days, color, timestamp: ts, brand: activeBrand });
-        if (scanHistory.length > 25) scanHistory.pop();
-        localStorage.setItem('pulpProHistory', JSON.stringify(scanHistory));
-    }
-
-    function renderHistory() {
-        const list = document.getElementById('historyList'), section = document.getElementById('historySection');
-        const boxHidden = document.getElementById('resBox').classList.contains('hidden');
-        if (scanHistory.length === 0) { section.style.display = "none"; return; }
-        
-        if (window.innerWidth >= 992) {
-            section.style.display = "block";
-        } else {
-            section.style.display = boxHidden ? "none" : "block";
-        }
-
-        list.innerHTML = `<div style="font-size:0.75rem; font-weight:900; color:var(--pulp-lime); margin-bottom:15px; border-bottom:1px solid var(--border-glass); padding-bottom:8px;">ARCHIVE</div>` + scanHistory.map(item => `<div class="log-item" onclick="checkFruit('${item.code}')"><div class="log-code">${item.code} <small style="font-size:0.5rem; opacity:0.6;">${item.brand || ''}</small></div><div class="log-meta" style="text-align:right;"><span style="color:${item.color}; font-weight:900;">${item.days}D</span><span class="log-timestamp">${item.timestamp}</span></div></div>`).join('');
-    }
-
-    function copyResult() {
-        const days = document.getElementById('daysValue').innerText;
-        const date = document.getElementById('dateText').innerText;
-        const code = document.getElementById('codeIn').value.toUpperCase();
-        
-        if (document.getElementById('resBox').classList.contains('hidden')) return;
-
-        const plainText = `Pulp Pro Report\nCode: ${code}\nAge: ${days} Days\nHarvest Date: ${date}`;
-
-        const htmlText = `
-            <div style="font-family: sans-serif;">
-                <p><strong>Pulp Pro Report</strong></p>
-                <p>Code: <span style="color: #ff4d4d; font-weight: bold;">${code}</span></p>
-                <p>Age: <span style="color: #ff4d4d; font-weight: bold;">${days} Days</span></p>
-                <p>Harvest Date: ${date}</p>
-            </div>
-        `;
+    async function runAiAnalysis() {
+        const line = document.getElementById('scanLine');
+        const status = document.getElementById('scanStatus');
+        const results = document.getElementById('defect-results');
+        line.style.display = 'block'; status.innerText = "ANALYZING...";
 
         try {
-            const blobHTML = new Blob([htmlText], { type: 'text/html' });
-            const blobText = new Blob([plainText], { type: 'text/plain' });
-            
-            const data = [new ClipboardItem({
-                'text/plain': blobText,
-                'text/html': blobHTML
-            })];
+            const resp = await fetch('defects.json');
+            const data = await resp.json();
+            // Simulate random selection for demo; high-end logic will target keys specifically
+            const keys = Object.keys(data[activeFruit].external || data[activeFruit]);
+            const d = (data[activeFruit].external || data[activeFruit])[keys[0]];
 
-            navigator.clipboard.write(data).then(() => {
-                showCopySuccess();
-            }).catch(() => {
-                navigator.clipboard.writeText(plainText).then(showCopySuccess);
-            });
-        } catch (err) {
-            navigator.clipboard.writeText(plainText).then(showCopySuccess);
-        }
+            setTimeout(() => {
+                line.style.display = 'none'; status.innerText = "COMPLETE";
+                results.innerHTML = `<div style="font-weight:900; color:var(--pulp-red);">${d.title}</div><p style="font-size:0.7rem; margin-top:5px;">${d.description}</p><div style="font-size:0.6rem; color:var(--pulp-lime);">SPEC: ${d.retail_spec}</div>`;
+                results.classList.remove('hidden');
+            }, 3000);
+        } catch (e) { status.innerText = "DATABASE ERROR"; }
     }
 
-    function showCopySuccess() {
-        const btn = document.getElementById('copyBtn');
-        btn.classList.add('success');
-        btn.innerHTML = `<i class="bi bi-check-lg"></i> **COPIED**`;
-        setTimeout(() => {
-            btn.classList.remove('success');
-            btn.innerHTML = `<i class="bi bi-clipboard"></i> **COPY**`;
-        }, 2000);
-    }
-
-    function clearHistory() { if(confirm("Wipe logs?")) { scanHistory = []; localStorage.removeItem('pulpProHistory'); renderHistory(); } }
+    function stopCamera() { if (videoStream) videoStream.getTracks().forEach(t => t.stop()); }
+    function resetDefectHub() { document.getElementById('defect-initial-list').classList.remove('hidden'); document.getElementById('defect-scanner-ui').classList.add('hidden'); document.getElementById('defect-results').classList.add('hidden'); }
+    function toggleMenu() { document.getElementById('menu-drawer')?.classList.toggle('open'); }
+    function checkFruit() { /* Existing age logic... */ }
 </script>
 </body>
 </html>
