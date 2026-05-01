@@ -44,31 +44,19 @@
         .nav-view { max-width: 900px; margin: 80px auto 0; text-align: center; opacity: 0; transition: 0.5s; }
         .loaded .nav-view { opacity: 1; }
         
-        .hub-title { font-weight: 900; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; color: var(--pulp-lime); }
-        
-        /* Emphasized AI Heading */
+        /* AI Heading Styles */
         .ai-heading {
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: -1px;
+            font-size: 2.8rem; font-weight: 900; letter-spacing: -1px;
             background: linear-gradient(to bottom, #ffffff, var(--pulp-lime));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            line-height: 1;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; margin-bottom: 5px; line-height: 1;
         }
         .ai-sub-heading {
-            color: var(--pulp-lime);
-            font-weight: 900;
-            letter-spacing: 4px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-            opacity: 0.8;
+            color: var(--pulp-lime); font-weight: 900; letter-spacing: 4px;
+            font-size: 0.7rem; text-transform: uppercase; margin-bottom: 40px; opacity: 0.8;
         }
 
-        /* Main Commodity Grid */
+        /* Grid */
         .selection-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
         .selection-card {
             background: var(--glass-card); border: 2px solid var(--border-glass); border-radius: 45px; 
@@ -77,7 +65,7 @@
         }
         .selection-card:hover { border-color: var(--pulp-lime); transform: translateY(-5px); }
         .selection-card img { width: 100%; height: 80%; object-fit: cover; }
-        .commodity-label { height: 20%; display: flex; align-items: center; justify-content: center; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; background: var(--glass-card); }
+        .commodity-label { height: 20%; display: flex; align-items: center; justify-content: center; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
 
         /* Scanner Module */
         .camera-box {
@@ -92,6 +80,13 @@
             animation: scanAnim 2.5s linear infinite; display: none; z-index: 10;
         }
         @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
+
+        /* Detection Alert Bar */
+        #detection-bar {
+            background: var(--glass-card); padding: 25px; border-radius: 30px; 
+            border: 1px solid var(--pulp-red); text-align: left; margin-bottom: 25px;
+            transition: border-color 0.5s ease;
+        }
 
         /* Technical Report Overlay */
         #report-overlay {
@@ -109,25 +104,11 @@
         .bullet-list li::before { content: '→'; position: absolute; left: 0; color: var(--pulp-lime); font-weight: bold; }
 
         .btn-main { background: var(--pulp-lime); color: #000; border-radius: 100px; padding: 18px; font-weight: 900; width: 100%; border: none; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
-        .btn-main:active { transform: scale(0.98); opacity: 0.8; }
-        
         .list-container { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
-        .list-btn { 
-            background: var(--glass-card); 
-            border: 1px solid var(--border-glass); 
-            padding: 22px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: 0.3s;
-        }
+        .list-btn { background: var(--glass-card); border: 1px solid var(--border-glass); padding: 22px; border-radius: 20px; cursor: pointer; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-align: center; transition: 0.3s; }
         .list-btn:hover { border-color: var(--pulp-lime); background: rgba(166, 226, 46, 0.05); }
 
-        /* Age Checker Interface */
+        /* Age Checker */
         .app-container { display: none; flex-direction: column; align-items: center; margin-top: 40px; }
         .app-card { background: var(--glass-card); padding: 40px 25px; border-radius: 50px; text-align: center; border: 1px solid var(--border-glass); max-width: 400px; width: 100%; box-shadow: var(--shadow); }
         .input-wrapper { background: rgba(255,255,255,0.03); border: 2px solid rgba(166, 226, 46, 0.2); border-radius: 25px; padding: 15px; margin: 20px 0; }
@@ -143,14 +124,13 @@
         <div class="splash-text">PULP PRO</div>
     </div>
 
-    <!-- MAIN SELECTION HUB -->
+    <!-- MAIN HUB -->
     <div id="fruit-hub" class="nav-view">
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid">
             <div class="selection-card" onclick="openAgeChecker('banana')"><img src="banana.png"><div class="commodity-label">Banana</div></div>
             <div class="selection-card" onclick="openAgeChecker('mango')"><img src="mango.png"><div class="commodity-label">Mango</div></div>
             <div class="selection-card" onclick="openAgeChecker('avocado')"><img src="avocado.png"><div class="commodity-label">Avocado</div></div>
-            
             <div class="selection-card" onclick="switchView('defect-hub-menu')">
                 <img src="rotten.png">
                 <div class="commodity-label" style="color:var(--pulp-amber);">Defect Hub</div>
@@ -158,11 +138,10 @@
         </div>
     </div>
 
-    <!-- DEFECT HUB SELECTION -->
+    <!-- AI ANALYSIS MENU -->
     <div id="defect-hub-menu" class="nav-view hidden">
         <div class="ai-heading">AI Analysis</div>
         <div class="ai-sub-heading">Visual Diagnostics Hub</div>
-        
         <div class="list-container">
             <div class="list-btn" onclick="startScanner('banana')">Scan Banana</div>
             <div class="list-btn" onclick="startScanner('mango')">Scan Mango</div>
@@ -179,8 +158,8 @@
             <i id="placeholderIcon" class="bi bi-upc-scan" style="font-size:4rem; opacity:0.1;"></i>
         </div>
         
-        <div id="detection-bar" class="hidden" style="background:var(--glass-card); padding:25px; border-radius:30px; border:1px solid var(--pulp-red); text-align:left; margin-bottom:25px;">
-            <div style="color:var(--pulp-red); font-weight:900; font-size:0.7rem; letter-spacing:1px;">INTELLIGENCE ALERT</div>
+        <div id="detection-bar" class="hidden">
+            <div id="alert-category" style="font-weight:900; font-size:0.7rem; letter-spacing:1px; margin-bottom:5px;">--</div>
             <div id="alert-title" style="font-size:1.5rem; font-weight:900; margin:5px 0;">--</div>
             <button class="btn-main" style="margin-top:15px; font-size:0.75rem; padding:12px;" onclick="openTechnicalReport()">View Intelligence Dossier</button>
         </div>
@@ -189,48 +168,38 @@
         <button class="btn-main" style="background:transparent; border:none; color:white; opacity:0.4; margin-top:20px;" onclick="stopCamera(); switchView('defect-hub-menu')">← Back</button>
     </div>
 
-    <!-- TECHNICAL REPORT DOSSIER -->
+    <!-- TECHNICAL REPORT -->
     <div id="report-overlay">
         <span class="report-tag" id="repSeverity">--</span>
         <div class="report-title" id="repTitle">--</div>
-
         <div class="report-section">
             <span class="section-label">Executive Summary</span>
             <div class="section-body" id="repSummary"></div>
         </div>
-
         <div class="report-section">
-            <span class="section-label">Detailed Pathological Analysis</span>
+            <span class="section-label">Detailed Analysis</span>
             <div class="section-body" id="repDetail"></div>
         </div>
-
-        <div class="report-section">
-            <span class="section-label">Primary Causes</span>
-            <ul class="bullet-list" id="repCauses"></ul>
-        </div>
-
+        <div class="report-section"><span class="section-label">Primary Causes</span><ul class="bullet-list" id="repCauses"></ul></div>
         <div class="report-section" style="background:rgba(166,226,46,0.05); padding:25px; border-radius:25px;">
             <span class="section-label">Retail Specifications</span>
             <div class="section-body" id="repSpec"></div>
         </div>
-
         <div class="report-section">
             <span class="section-label">Action Plan</span>
             <div class="section-body" id="repAction" style="color:var(--pulp-amber); font-weight:900;"></div>
         </div>
-
         <button class="btn-main" onclick="closeReport()">Return to Scanner</button>
     </div>
 
-    <!-- AGE CHECKER VIEW -->
+    <!-- AGE CHECKER -->
     <div id="age-checker-view" class="app-container">
         <div class="app-card">
             <div id="brandName" style="font-size: 1.6rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">--</div>
-            <div id="commodityLabel" style="font-weight: 900; letter-spacing: 4px; opacity: 0.5; font-size: 0.75rem;">AGE CHECKER</div>
             <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3"></div>
             <button class="btn-main">Calculate</button>
         </div>
-        <button class="btn-main" style="background:transparent; border:none; color:white; opacity:0.4; margin-top:20px;" onclick="switchView('fruit-hub')">← Back to Hub</button>
+        <button class="btn-main" style="background:transparent; border:none; color:white; opacity:0.4; margin-top:20px;" onclick="switchView('fruit-hub')">← Back</button>
     </div>
 
 <script>
@@ -250,7 +219,6 @@
     function openAgeChecker(fruit) {
         activeFruit = fruit;
         document.getElementById('brandName').innerText = fruit;
-        document.getElementById('commodityLabel').innerText = fruit.toUpperCase() + " AGE CHECKER";
         switchView('age-checker-view');
     }
 
@@ -259,9 +227,8 @@
         switchView('scanner-view');
         try {
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            const v = document.getElementById('videoFeed');
-            v.srcObject = stream;
-            v.style.display = 'block';
+            document.getElementById('videoFeed').srcObject = stream;
+            document.getElementById('videoFeed').style.display = 'block';
             document.getElementById('placeholderIcon').style.display = 'none';
         } catch (e) { alert("Camera Access Required."); switchView('defect-hub-menu'); }
     }
@@ -272,21 +239,34 @@
         const bar = document.getElementById('detection-bar');
         
         line.style.display = 'block';
-        btn.innerText = "Analyzing Biometrics...";
+        btn.innerText = "LAYER 1: PIXEL ANALYSIS...";
         bar.classList.add('hidden');
 
         try {
             const resp = await fetch('defects.json');
             const data = await resp.json();
             const fruitData = data[activeFruit];
-            const defectSource = fruitData.external || fruitData;
-            const keys = Object.keys(defectSource);
-            activeDefect = defectSource[keys[Math.floor(Math.random() * keys.length)]];
+            const keys = Object.keys(fruitData);
+            
+            // Simulation logic
+            setTimeout(() => { btn.innerText = "LAYER 2: INTERNAL MOISTURE..."; }, 1500);
 
             setTimeout(() => {
                 line.style.display = 'none';
                 btn.innerText = "Re-Scan Surface";
+                activeDefect = fruitData[keys[Math.floor(Math.random() * keys.length)]];
+
+                // Logic: Determine if Internal or External
+                const isInternal = activeDefect.title.toLowerCase().includes('internal') || 
+                                 activeDefect.title.toLowerCase().includes('rot') || 
+                                 activeDefect.title.toLowerCase().includes('flesh');
+
+                const alertCat = document.getElementById('alert-category');
+                alertCat.innerText = isInternal ? "INTERNAL PATHOLOGY DETECTED" : "EXTERNAL SURFACE DEFECT";
+                alertCat.style.color = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
+                
                 document.getElementById('alert-title').innerText = activeDefect.title;
+                bar.style.borderColor = isInternal ? 'var(--pulp-amber)' : 'var(--pulp-red)';
                 bar.classList.remove('hidden');
             }, 3000);
         } catch (e) { btn.innerText = "Database Error"; }
@@ -300,8 +280,7 @@
         document.getElementById('repDetail').innerText = activeDefect.detailed_analysis;
         document.getElementById('repSpec').innerText = activeDefect.retail_spec;
         document.getElementById('repAction').innerText = activeDefect.action;
-        const list = document.getElementById('repCauses');
-        list.innerHTML = activeDefect.causes.map(c => `<li>${c}</li>`).join('');
+        document.getElementById('repCauses').innerHTML = activeDefect.causes.map(c => `<li>${c}</li>`).join('');
         document.getElementById('report-overlay').style.display = 'flex';
     }
 
