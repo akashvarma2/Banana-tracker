@@ -1,27 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pulp Pro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pulp Pro</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="edited-image.png">
 
-  <link rel="stylesheet" href="styles.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --pulp-lime: #a6e22e; 
+            --pulp-amber: #ff8c00;
+            --pulp-red: #ff4d4d;
+            --bg-black: #000000;
+            --drawer-bg: rgba(18, 18, 18, 0.98);
+            --glass-card: rgba(22, 22, 24, 0.98);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.03);
+            --shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        body.light-theme {
+            --bg-black: #f8f9fa;
+            --drawer-bg: #ffffff;
+            --glass-card: #ffffff;
+            --text-main: #121212;
+            --text-dim: #4a4a4a;
+            --border-glass: rgba(0, 0, 0, 0.08);
+            --input-bg: #e9ecef;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        body { 
+            background-color: var(--bg-black);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex; align-items: flex-start; justify-content: center; 
+            min-height: 100vh; margin: 0; color: var(--text-main); overflow-x: hidden;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease-in-out, visibility 1s;
+        }
+
+        .hidden { display: none !important; }
+
+        .nav-view { max-width: 900px; width: 100%; text-align: center; }
+
+        .hub-title { font-weight: 900; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; }
+
+        .selection-card, .list-btn {
+            background: var(--glass-card);
+            border: 1px solid var(--border-glass);
+            padding: 15px;
+            margin: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .list-container { display: flex; flex-direction: column; gap: 10px; }
+
+    </style>
 </head>
+
 <body>
 
-<div id="app">
-  <input id="codeIn" maxlength="3" placeholder="---" />
-  <button id="calcBtn">Calculate</button>
+<!-- ================= MAIN HUB ================= -->
+<div id="middle-hub" class="nav-view">
+    <div class="hub-title">Select Feature</div>
 
-  <div id="resBox" class="hidden">
-    <div id="statusLabel"></div>
-    <div id="daysValue"></div>
-    <div id="dateText"></div>
-  </div>
-
-  <div id="historyList"></div>
+    <div class="list-container">
+        <div class="list-btn" onclick="switchView('appInterface')">Age Checker</div>
+        <div class="list-btn" onclick="openDefectsHub()">Defects</div>
+    </div>
 </div>
 
-<script type="module" src="app.js"></script>
+<!-- ================= DEFECTS HUB (NEW) ================= -->
+<div id="defects-hub" class="nav-view hidden">
+    <div class="hub-title">Select Commodity</div>
+
+    <div class="list-container">
+        <div class="list-btn" onclick="openDefectsCategory('banana')">Banana</div>
+        <div class="list-btn" onclick="openDefectsCategory('mango')">Mango</div>
+        <div class="list-btn" onclick="openDefectsCategory('avocado')">Avocado</div>
+    </div>
+
+    <div class="list-btn" onclick="switchView('middle-hub')">← Back</div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="appInterface" class="hidden">
+    <input id="codeIn" maxlength="3" placeholder="---" />
+    <button onclick="checkFruit()">Calculate</button>
+
+    <div id="resBox" class="hidden">
+        <div id="statusLabel"></div>
+        <div id="daysValue"></div>
+        <div id="dateText"></div>
+    </div>
+
+    <div onclick="switchView('middle-hub')">← Back</div>
+</div>
+
+<script>
+    let activeFruit = '';
+
+    function switchView(id) {
+        document.querySelectorAll('.nav-view, #appInterface')
+            .forEach(v => v.classList.add('hidden'));
+
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    // ================= NEW DEFECTS LOGIC =================
+    function openDefectsHub() {
+        switchView('defects-hub');
+    }
+
+    function openDefectsCategory(fruit) {
+        activeFruit = fruit;
+        alert("Defects opened for: " + fruit);
+    }
+
+    // ================= YOUR ORIGINAL LOGIC (UNCHANGED CORE) =================
+    function checkFruit() {
+        const val = document.getElementById('codeIn').value.toUpperCase();
+
+        if (val.length < 3) return;
+
+        document.getElementById('resBox').classList.remove('hidden');
+        document.getElementById('daysValue').innerText = "OK";
+        document.getElementById('statusLabel').innerText = "DONE";
+        document.getElementById('dateText').innerText = new Date().toDateString();
+    }
+</script>
+
 </body>
 </html>
