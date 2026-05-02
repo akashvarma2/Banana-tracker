@@ -153,14 +153,14 @@
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
+   <!-- BRAND HUB (Restored to your version) -->
     <div id="brand-hub" class="nav-view hidden">
         <div class="hub-title" id="brandHubTitle">Select Brand</div>
-        <div class="list-container" id="brandGrid"></div>
+        <div class="list-container" id="brandGrid">
+            <!-- master-logic.js will inject the buttons here -->
+        </div>
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
     </div>
 
-    <!-- Linked scripts - Master loads first, then additions -->
+    <!-- Scripts (Only one script for now to stop the errors) -->
     <script src="js/master-logic.js"></script>
-    
-</body>
-</html>
