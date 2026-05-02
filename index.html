@@ -85,6 +85,13 @@
             <div id="scanProgressContainer" style="position:absolute; bottom:0; left:0; width:100%; height:8px; background: rgba(255,255,255,0.2); display:none;">
                 <div id="scanProgressBar" style="width:0%; height:100%; background:var(--pulp-lime); transition: width 0.1s linear;"></div>
             </div>
+
+            <!-- Floating Result UI -->
+            <div id="defectResultPopup" class="hidden" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.9); padding:20px; border-radius:15px; border:1px solid var(--pulp-lime); width:80%; text-align:center; z-index:10;">
+                <div style="color:var(--pulp-lime); font-size:0.6rem; letter-spacing:2px; font-weight:900;">DEFECT DETECTED</div>
+                <div id="detectedDefectName" style="font-size:1.4rem; font-weight:900; margin:10px 0; color:#fff;">---</div>
+                <button class="btn-main" style="margin-top:10px; font-size:0.7rem;" onclick="showDefectDetails()">MORE INFORMATION</button>
+            </div>
             
             <div class="scan-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; border:2px solid rgba(166, 226, 46, 0.3); pointer-events:none;"></div>
         </div>
@@ -97,21 +104,30 @@
         </div>
     </div>
 
-    <!-- OTHER HUBS -->
-    <div id="middle-hub" class="nav-view hidden">
-        <div class="hub-title" id="middleHubTitle">Banana Menu</div>
-        <div class="list-container">
-            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Banana Brands</div>
-            <div class="list-btn disabled">Defects (Soon)</div>
-            <div class="list-btn disabled">Ripening (Soon)</div>
-        </div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
-    </div>
+    <!-- DETAILED DEFECT INFO VIEW -->
+    <div id="defect-detail-view" class="nav-view hidden" style="padding: 20px;">
+        <div class="hub-title" style="color:var(--pulp-lime);">Defect Report</div>
+        <div class="app-card" style="text-align:left; padding:25px; max-width:600px; margin:0 auto;">
+            <h2 id="detailName" style="font-weight:900; color:var(--pulp-lime); text-transform:uppercase;">---</h2>
+            <hr style="border-color:var(--border-glass);">
+            
+            <div style="margin-bottom:15px;">
+                <label style="font-size:0.6rem; font-weight:900; opacity:0.5; display:block;">CAUSE</label>
+                <p id="detailCause" style="font-size:0.9rem;">---</p>
+            </div>
 
-    <div id="brand-hub" class="nav-view hidden">
-        <div class="hub-title" id="brandHubTitle">Select Brand</div>
-        <div class="list-container" id="brandGrid"></div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
+            <div style="margin-bottom:15px;">
+                <label style="font-size:0.6rem; font-weight:900; opacity:0.5; display:block;">STORAGE ADVICE</label>
+                <p id="detailStorage" style="font-size:0.9rem;">---</p>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label style="font-size:0.6rem; font-weight:900; opacity:0.5; display:block;">FURTHER ACTION</label>
+                <p id="detailAction" style="font-size:0.9rem;">---</p>
+            </div>
+
+            <button class="btn-main" style="margin-top:20px; width:100%;" onclick="switchView('scanner-view')">Back to Scanner</button>
+        </div>
     </div>
 
     <!-- AGE CHECKER INTERFACE -->
@@ -129,9 +145,7 @@
                 <div id="dateText" style="font-size: 1.3rem; font-weight: 900; margin-top: 10px;">-- -- ----</div>
                 <button class="btn btn-copy" onclick="copyResult()" id="copyBtn"><i class="bi bi-clipboard"></i> **COPY**</button>
             </div>
-            <button class="btn-main" style="margin-top:25px; background:transparent; border:none; opacity:0.4; font-size:0.6rem; color:var(--text-main);" onclick="openBrands(activeFruit)">← Back to Brands</button>
         </div>
-        <div id="historySection" class="history-section"><div id="historyList"></div></div>
     </div>
 
     <script src="js/master-logic.js"></script>
