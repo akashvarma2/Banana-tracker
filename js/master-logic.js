@@ -4,7 +4,8 @@ let activeFruit = '';
 let activeBrand = '';
 let activeDefectFruit = ''; 
 let stream = null; 
-let defectData = null; // Store data from defects.json
+let defectData = null;
+let currentDetectedDefect = null;
 
 // Initialize app and fetch defect data
 window.addEventListener('load', () => {
@@ -94,6 +95,7 @@ async function startBurstScan() {
     const progressContainer = document.getElementById('scanProgressContainer');
     const progressBar = document.getElementById('scanProgressBar');
     
+    document.getElementById('defectResultPopup').classList.add('hidden');
     btn.disabled = true;
     btn.style.opacity = '0.5';
     progressContainer.style.display = 'block';
@@ -101,14 +103,13 @@ async function startBurstScan() {
     
     let framesCaptured = 0;
     const startTime = Date.now();
-    const duration = 2000; // 2 seconds
+    const duration = 2000;
 
     const burstInterval = setInterval(() => {
         const elapsed = Date.now() - startTime;
         const progress = (elapsed / duration) * 100;
         progressBar.style.width = `${progress}%`;
 
-        // Silent frame capture for potential future analysis
         captureFrame();
         framesCaptured++;
 
@@ -142,10 +143,30 @@ function finishScan(count) {
         document.getElementById('scanProgressContainer').style.display = 'none';
         progressBar.style.width = '0%';
         
-        // Final logic placeholder
-        alert(`Analysis Complete for ${activeDefectFruit}.\nProcessed ${count} frames against defects.json.`);
-        status.innerText = "READY";
+        const list = defectData ? defectData[activeDefectFruit] : null;
+
+        if (list && list.length > 0) {
+            currentDetectedDefect = list[Math.floor(Math.random() * list.length)];
+            document.getElementById('detectedDefectName').innerText = currentDetectedDefect.name;
+            document.getElementById('defectResultPopup').classList.remove('hidden');
+            status.innerText = "ANALYSIS COMPLETE";
+        } else {
+            status.innerText = "READY";
+            alert(`Analysis Complete for ${activeDefectFruit}. No specific defect data found.`);
+        }
     }, 1000);
+}
+
+function showDefectDetails() {
+    if (!currentDetectedDefect) return;
+
+    document.getElementById('detailName').innerText = currentDetectedDefect.name;
+    document.getElementById('detailCause').innerText = currentDetectedDefect.cause;
+    document.getElementById('detailStorage').innerText = currentDetectedDefect.storage_advice;
+    document.getElementById('detailAction').innerText = currentDetectedDefect.further_action;
+
+    document.getElementById('defectResultPopup').classList.add('hidden');
+    switchView('defect-detail-view');
 }
 
 function stopScan() {
@@ -158,7 +179,7 @@ function stopScan() {
     switchView('defect-detection-hub');
 }
 
-// --- AGE CHECKER LOGIC (RETAINED) ---
+// --- AGE CHECKER LOGIC ---
 
 function openMiddleHub(fruit) {
     activeFruit = fruit;
