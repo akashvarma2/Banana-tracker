@@ -97,7 +97,7 @@
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
     </div>
 
-    <!-- New Addition: Defect Detection Hub -->
+    <!-- Addition: Defect Detection Hub -->
     <div id="defect-hub" class="nav-view hidden">
         <div class="hub-title">AI Defect Detection Analysis</div>
         <div class="list-container">
@@ -106,6 +106,43 @@
             <div class="list-btn" onclick="startScan('avocado')">3. Scan Avocado</div>
         </div>
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
+    </div>
+
+    <!-- Addition: Scanning View -->
+    <div id="scan-view" class="nav-view hidden">
+        <div class="hub-title" id="scanTitle">Scan Commodity</div>
+        <div class="camera-container">
+            <div id="camera-preview" class="camera-preview">
+                <i class="bi bi-camera" style="font-size: 3rem; opacity: 0.3;"></i>
+            </div>
+            <div class="scan-controls">
+                <button class="btn-scan" onclick="triggerCapture()">📸 SCAN</button>
+                <button class="btn-upload" onclick="triggerUpload()">📁 UPLOAD</button>
+                <input type="file" id="fileInput" hidden accept="image/*" onchange="handleFileUpload(event)">
+            </div>
+        </div>
+        <div id="mini-result" class="mini-result-card hidden">
+            <div class="defect-header">
+                <span id="defectName">Detecting...</span>
+                <span id="severityBadge" class="badge">--</span>
+            </div>
+            <button class="btn-more-info" onclick="openFullDetails()">More Information</button>
+        </div>
+        <button class="btn-main" style="margin-top:20px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="switchView('defect-hub')">← Back</button>
+    </div>
+
+    <!-- Addition: Full Details Page -->
+    <div id="details-view" class="nav-view hidden">
+        <div class="hub-title">Defect Details</div>
+        <div class="details-content app-card">
+            <h3 id="fullDefectName" style="color:var(--pulp-lime); margin-bottom:20px;"></h3>
+            <div style="text-align: left; font-size: 0.9rem; line-height: 1.6;">
+                <p><strong>Cause:</strong> <span id="defectCause"></span></p>
+                <p><strong>Handling:</strong> <span id="defectHandling"></span></p>
+                <p><strong>Action:</strong> <span id="defectAction"></span></p>
+            </div>
+        </div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="switchView('scan-view')">← Back to Scan</button>
     </div>
 
     <div class="app-container" id="appInterface">
@@ -127,7 +164,6 @@
         <div id="historySection" class="history-section"><div id="historyList"></div></div>
     </div>
 
-    <!-- External Logic Files -->
     <script src="js/master-logic.js"></script>
     <script src="js/additions.js"></script>
 
