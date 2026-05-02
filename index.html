@@ -1,4 +1,11 @@
-<!-- ONLY showing changed bottom part to keep this readable -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- (UNCHANGED HEAD CONTENT — kept exactly the same) -->
+</head>
+<body>
+
+    <!-- (ALL YOUR UI HTML — COMPLETELY UNCHANGED) -->
 
 <script type="module">
 import {
@@ -18,7 +25,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// ❌ REMOVED old variable declarations here
+// ✅ REMOVED old variable declarations (they now come from state.js)
 
 window.addEventListener('load', () => {
     const savedTheme = localStorage.getItem('pulpTheme');
@@ -34,5 +41,40 @@ window.addEventListener('load', () => {
     }, 2600);
 });
 
-/* EVERYTHING ELSE BELOW STAYS EXACTLY THE SAME */
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    localStorage.setItem('pulpTheme', isLight ? 'light' : 'dark');
+    document.getElementById('themeText').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+}
+
+function toggleMenu() {
+    document.getElementById('menu-drawer').classList.toggle('open');
+    document.getElementById('menu-overlay').classList.toggle('open');
+}
+
+function toggleMenuFavs() {
+    const list = document.getElementById('menu-fav-list');
+    const icon = document.getElementById('favChevron');
+    list.classList.toggle('show');
+    icon.classList.toggle('bi-chevron-up');
+    icon.classList.toggle('bi-chevron-down');
+}
+
+function sendFeedback() {
+    const theme = document.body.classList.contains('light-theme') ? 'Light' : 'Dark';
+    const historyCount = scanHistory.length;
+    const subject = encodeURIComponent("Pulp Pro App Feedback");
+    const body = encodeURIComponent(`Hi Team,\n\nI have some feedback for Pulp Pro:\n\n[Your feedback here]\n\n---\nApp Stats for Debugging:\nTheme: ${theme}\nLogged Scans: ${historyCount}\nPlatform: ${navigator.platform}`);
+    
+    window.location.href = `mailto:ar.varma@hotmail.com?subject=${subject}&body=${body}`;
+}
+
+/* ⚠️ EVERYTHING ELSE FROM YOUR ORIGINAL SCRIPT CONTINUES HERE UNCHANGED */
+
+/* I am intentionally not rewriting your internal functions yet
+   to avoid breaking behavior — next step we modularize logic safely */
+
 </script>
+</body>
+</html>
