@@ -32,12 +32,20 @@
     <div id="fruit-hub" class="nav-view">
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid">
-            <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png"><span>Banana</span></div>
-            <div class="selection-card" onclick="openDefectDetection()"><img src="rotten.png"><span>Defect Detection</span></div>
+            <!-- Commodity Selection -->
+            <div class="selection-card" onclick="openMiddleHub('banana')">
+                <img src="banana.png" alt="banana">
+                <span>Banana</span>
+            </div>
+            <!-- Defect Selection -->
+            <div class="selection-card" onclick="openDefectDetection()">
+                <img src="rotten.png" alt="defects">
+                <span>Defect Detection</span>
+            </div>
         </div>
     </div>
 
-    <!-- DEFECT SCANNER -->
+    <!-- SCANNER VIEW -->
     <div id="scanner-view" class="nav-view hidden">
         <div class="hub-title" id="scannerTitle">Scanning...</div>
         <div class="scanner-container" style="position:relative; width:100%; aspect-ratio:4/3; background:#000; border:2px solid var(--pulp-lime); border-radius:15px; overflow:hidden;">
@@ -53,14 +61,13 @@
                 <button class="btn-main" onclick="showDefectDetails()">MORE INFORMATION</button>
             </div>
         </div>
-        <div id="scanStatus" style="margin-top:20px; text-align:center; color:var(--pulp-lime); font-weight:900;">READY</div>
         <div class="button-group" style="display:flex; gap:10px; padding:20px;">
             <button id="captureBtn" class="btn-main" style="flex:2;" onclick="startBurstScan()">START SCAN</button>
             <button class="btn-main" style="flex:1; background:var(--pulp-red);" onclick="showHub()">Exit</button>
         </div>
     </div>
 
-    <!-- DEFECT INFO PAGE -->
+    <!-- DEFECT DETAILS -->
     <div id="defect-detail-view" class="nav-view hidden">
         <div class="hub-title" style="color:var(--pulp-lime);">Defect Report</div>
         <div class="app-card" style="text-align:left; padding:25px;">
@@ -73,19 +80,33 @@
         </div>
     </div>
 
-    <!-- AGE CHECKER (App Interface) -->
+    <!-- AGE CHECKER -->
     <div id="appInterface" class="nav-view hidden">
         <div class="app-card">
             <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime);">BRAND</div>
-            <div id="commodityLabel" style="font-weight:900; letter-spacing:4px; opacity:0.5; font-size:0.7rem;">AGE CHECKER</div>
             <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3"></div>
             <button onclick="checkFruit()" class="btn-main">Calculate</button>
             <div id="resBox" class="result-display hidden">
-                <div id="daysValue">--</div>
+                <div id="daysValue" style="font-size:3rem; font-weight:900;">--</div>
                 <div id="dateText">-- -- ----</div>
             </div>
             <button class="btn-main" style="margin-top:20px; opacity:0.5;" onclick="showHub()">← Back</button>
         </div>
+    </div>
+
+    <!-- MIDDLE HUB -->
+    <div id="middle-hub" class="nav-view hidden">
+        <div class="hub-title" id="middleHubTitle">Menu</div>
+        <div class="list-container">
+            <div class="list-btn" onclick="openBrands(activeFruit)">Brands</div>
+        </div>
+        <button class="btn-main" onclick="showHub()">← Back</button>
+    </div>
+
+    <div id="brand-hub" class="nav-view hidden">
+        <div class="hub-title">Select Brand</div>
+        <div id="brandGrid" class="list-container"></div>
+        <button class="btn-main" onclick="switchView('middle-hub')">← Back</button>
     </div>
 
     <script src="js/master-logic.js"></script>
