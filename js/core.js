@@ -109,3 +109,30 @@ export function checkCode(val) {
         date: hDate
     };
 }
+
+import { setState, getState } from './state.js';
+import * as UI from './ui.js';
+
+export function checkAndProcess(val) {
+    const result = checkCode(val);
+
+    if (!result) {
+        UI.showResult(null);
+        return;
+    }
+
+    UI.showResult(result, val);
+
+    const state = getState();
+
+    state.scanHistory.unshift({
+        code: val,
+        days: result.days,
+        color: "#fff",
+        timestamp: new Date().toISOString()
+    });
+
+    setState({ scanHistory: state.scanHistory });
+
+    UI.renderHistory();
+}
