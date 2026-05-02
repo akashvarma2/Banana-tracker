@@ -4,24 +4,39 @@ let stream = null;
 let defectData = null;
 let currentDetectedDefect = null;
 
-// Initialize
-window.onload = () => {
+// The "Fail-Safe" Initialization
+function init() {
+    // Attempt to load JSON, but don't let a failure stop the app
     fetch('defects.json')
         .then(res => res.json())
         .then(data => { defectData = data; })
-        .catch(e => console.log("JSON Load Error"));
+        .catch(e => console.warn("JSON file missing"));
 
+    // Force splash screen to hide after 2.5 seconds no matter what
     setTimeout(() => {
         document.body.classList.add('loaded');
         switchView('fruit-hub');
     }, 2500);
-};
+}
 
-// Navigation
+// Run init when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+// Core Navigation
 function switchView(id) {
-    document.querySelectorAll('.nav-view').forEach(v => v.classList.add('hidden'));
+    document.querySelectorAll('.nav-view').forEach(v => {
+        v.classList.add('hidden');
+        v.style.display = 'none';
+    });
     const target = document.getElementById(id);
-    if (target) target.classList.remove('hidden');
+    if (target) {
+        target.classList.remove('hidden');
+        target.style.display = (id === 'fruit-hub' || id === 'appInterface') ? 'flex' : 'block';
+    }
 }
 
 function showHub() { 
@@ -29,7 +44,27 @@ function showHub() {
     switchView('fruit-hub'); 
 }
 
-// Age Checker Logic
+// Age Checker Logic (Your Master Logic)
+function openMiddleHub(fruit) {
+    activeFruit = fruit;
+    document.getElementById('middleHubTitle').innerText = fruit.toUpperCase();
+    switchView('middle-hub');
+}
+
+function openBrands(fruit) {
+    const grid = document.getElementById('brandGrid');
+    grid.innerHTML = (fruit === 'banana') ? 
+        `<div class="list-btn" onclick="openCalc('Chiquita')">Chiquita</div>` : 
+        `<div class="list-btn disabled">Soon</div>`;
+    switchView('brand-hub');
+}
+
+function openCalc(brand) {
+    activeBrand = brand;
+    document.getElementById('brandName').innerText = brand;
+    switchView('appInterface');
+}
+
 function checkFruit() {
     const val = document.getElementById('codeIn').value.toUpperCase();
     if (val.length < 3) return;
@@ -41,39 +76,39 @@ function checkFruit() {
     document.getElementById('resBox').classList.remove('hidden');
 }
 
-// Defect Detection Logic
-function openDefectDetection() { switchView('scanner-view'); startCamera(); }
+// Defect Detection logic
+function openDefectDetection() {
+    activeFruit = 'banana'; // Defaulting to banana for now
+    switchView('scanner-view');
+    startCamera();
+}
 
 function startCamera() {
     const video = document.getElementById('video');
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
         .then(s => { stream = s; video.srcObject = stream; })
-        .catch(e => alert("Camera error"));
+        .catch(e => alert("Camera permission required."));
 }
 
 function startBurstScan() {
-    const btn = document.getElementById('captureBtn');
     const bar = document.getElementById('scanProgressBar');
+    const container = document.getElementById('scanProgressContainer');
     document.getElementById('defectResultPopup').classList.add('hidden');
     
-    btn.disabled = true;
-    document.getElementById('scanProgressContainer').style.display = 'block';
-    
+    container.style.display = 'block';
     let start = Date.now();
     let timer = setInterval(() => {
         let elapsed = Date.now() - start;
         bar.style.width = (elapsed / 2000) * 100 + '%';
         if (elapsed >= 2000) {
             clearInterval(timer);
-            btn.disabled = false;
-            document.getElementById('scanProgressContainer').style.display = 'none';
-            processDefect();
+            container.style.display = 'none';
+            processResults();
         }
     }, 100);
 }
 
-function processDefect() {
-    // Simulating detection from JSON
+function processResults() {
     if (defectData && defectData.banana) {
         currentDetectedDefect = defectData.banana[Math.floor(Math.random() * defectData.banana.length)];
         document.getElementById('detectedDefectName').innerText = currentDetectedDefect.name.toUpperCase();
@@ -82,7 +117,6 @@ function processDefect() {
 }
 
 function showDefectDetails() {
-    if (!currentDetectedDefect) return;
     document.getElementById('detailName').innerText = currentDetectedDefect.name;
     document.getElementById('detailCause').innerText = currentDetectedDefect.cause;
     document.getElementById('detailStorage').innerText = currentDetectedDefect.storage_advice;
@@ -97,4 +131,8 @@ function stopScan() {
 function toggleMenu() {
     document.getElementById('menu-drawer').classList.toggle('open');
     document.getElementById('menu-overlay').classList.toggle('open');
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
 }
