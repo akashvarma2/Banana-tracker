@@ -52,11 +52,20 @@ function switchView(targetId) {
         document.getElementById('appInterface').style.display = 'flex';
         setTimeout(() => document.getElementById('codeIn').focus(), 100);
     } else {
-        document.getElementById(targetId).classList.remove('hidden');
+        const target = document.getElementById(targetId);
+        if (target) target.classList.remove('hidden');
     }
 }
 
 function showHub() { switchView('fruit-hub'); renderFavorites(); }
+
+function openDefectDetection() {
+    switchView('defect-detection-hub');
+}
+
+function startScan(fruit) {
+    alert(`Starting Defect Scan for ${fruit.toUpperCase()}... (Logic coming soon)`);
+}
 
 function openMiddleHub(fruit) {
     activeFruit = fruit;
@@ -116,17 +125,19 @@ function renderFavorites() {
 }
 
 const inputField = document.getElementById('codeIn');
-inputField.addEventListener('input', () => { 
-    document.getElementById('resBox').classList.add('hidden');
-    renderHistory(); 
-});
+if (inputField) {
+    inputField.addEventListener('input', () => { 
+        document.getElementById('resBox').classList.add('hidden');
+        renderHistory(); 
+    });
 
-inputField.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        checkFruit();
-    }
-});
+    inputField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            checkFruit();
+        }
+    });
+}
 
 function handlePostCalculation() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -194,6 +205,7 @@ function saveToHistory(code, days, color) {
 
 function renderHistory() {
     const list = document.getElementById('historyList'), section = document.getElementById('historySection');
+    if (!list || !section) return;
     const boxHidden = document.getElementById('resBox').classList.contains('hidden');
     if (scanHistory.length === 0) { section.style.display = "none"; return; }
     if (window.innerWidth >= 992) {
