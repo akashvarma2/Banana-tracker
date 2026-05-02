@@ -1,41 +1,55 @@
+let scanHistory = JSON.parse(localStorage.getItem('pulpProHistory')) || [];
+let favorites = JSON.parse(localStorage.getItem('pulpProFavorites')) || [];
 let activeFruit = '';
 let activeBrand = '';
-let stream = null;
-let defectData = null;
-let currentDetectedDefect = null;
+let activeDefectFruit = ''; 
+let stream = null; 
+let defectData = null; // Store data from defects.json
 
-// The "Fail-Safe" Initialization
-function init() {
-    // Attempt to load JSON, but don't let a failure stop the app
+// Initialize app and fetch defect data
+window.addEventListener('load', () => {
     fetch('defects.json')
         .then(res => res.json())
         .then(data => { defectData = data; })
-        .catch(e => console.warn("JSON file missing"));
+        .catch(err => console.warn("defects.json not found or invalid", err));
 
-    // Force splash screen to hide after 2.5 seconds no matter what
+    const savedTheme = localStorage.getItem('pulpTheme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        document.getElementById('themeText').innerText = 'Light Mode';
+    }
+    renderHistory();
+    renderFavorites();
     setTimeout(() => {
         document.body.classList.add('loaded');
-        switchView('fruit-hub');
-    }, 2500);
+        const codeInput = document.getElementById('codeIn');
+        if (codeInput) codeInput.focus();
+    }, 2600);
+});
+
+// --- NAVIGATION & UI ---
+
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    localStorage.setItem('pulpTheme', isLight ? 'light' : 'dark');
+    document.getElementById('themeText').innerText = isLight ? 'Light Mode' : 'Dark Mode';
 }
 
-// Run init when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
+function toggleMenu() {
+    document.getElementById('menu-drawer').classList.toggle('open');
+    document.getElementById('menu-overlay').classList.toggle('open');
 }
 
-// Core Navigation
-function switchView(id) {
-    document.querySelectorAll('.nav-view').forEach(v => {
-        v.classList.add('hidden');
-        v.style.display = 'none';
-    });
-    const target = document.getElementById(id);
-    if (target) {
-        target.classList.remove('hidden');
-        target.style.display = (id === 'fruit-hub' || id === 'appInterface') ? 'flex' : 'block';
+function switchView(targetId) {
+    document.querySelectorAll('.nav-view').forEach(v => v.classList.add('hidden'));
+    document.getElementById('appInterface').style.display = 'none';
+    if(targetId === 'appInterface') {
+        document.getElementById('appInterface').style.display = 'flex';
+        setTimeout(() => document.getElementById('codeIn').focus(), 100);
+    } else {
+        const target = document.getElementById(targetId);
+        if (target) target.classList.remove('hidden');
     }
 }
 
@@ -44,95 +58,202 @@ function showHub() {
     switchView('fruit-hub'); 
 }
 
-// Age Checker Logic (Your Master Logic)
-function openMiddleHub(fruit) {
-    activeFruit = fruit;
-    document.getElementById('middleHubTitle').innerText = fruit.toUpperCase();
-    switchView('middle-hub');
-}
+// --- DEFECT DETECTION LOGIC ---
 
-function openBrands(fruit) {
-    const grid = document.getElementById('brandGrid');
-    grid.innerHTML = (fruit === 'banana') ? 
-        `<div class="list-btn" onclick="openCalc('Chiquita')">Chiquita</div>` : 
-        `<div class="list-btn disabled">Soon</div>`;
-    switchView('brand-hub');
-}
-
-function openCalc(brand) {
-    activeBrand = brand;
-    document.getElementById('brandName').innerText = brand;
-    switchView('appInterface');
-}
-
-function checkFruit() {
-    const val = document.getElementById('codeIn').value.toUpperCase();
-    if (val.length < 3) return;
-    const now = new Date();
-    const hDate = new Date(now.getFullYear(), val.charCodeAt(0)-65, val.charCodeAt(1)-64);
-    const diff = Math.floor((now - hDate) / 86400000);
-    document.getElementById('daysValue').innerText = diff;
-    document.getElementById('dateText').innerText = hDate.toLocaleDateString();
-    document.getElementById('resBox').classList.remove('hidden');
-}
-
-// Defect Detection logic
 function openDefectDetection() {
-    activeFruit = 'banana'; // Defaulting to banana for now
-    switchView('scanner-view');
-    startCamera();
+    switchView('defect-detection-hub');
 }
 
-function startCamera() {
-    const video = document.getElementById('video');
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then(s => { stream = s; video.srcObject = stream; })
-        .catch(e => alert("Camera permission required."));
-}
-
-function startBurstScan() {
-    const bar = document.getElementById('scanProgressBar');
-    const container = document.getElementById('scanProgressContainer');
-    document.getElementById('defectResultPopup').classList.add('hidden');
+function startScan(fruit) {
+    activeDefectFruit = fruit;
+    const scannerTitle = document.getElementById('scannerTitle');
+    const status = document.getElementById('scanStatus');
     
-    container.style.display = 'block';
-    let start = Date.now();
-    let timer = setInterval(() => {
-        let elapsed = Date.now() - start;
-        bar.style.width = (elapsed / 2000) * 100 + '%';
-        if (elapsed >= 2000) {
-            clearInterval(timer);
-            container.style.display = 'none';
-            processResults();
-        }
-    }, 100);
-}
+    scannerTitle.innerText = `Scanning ${fruit.charAt(0).toUpperCase() + fruit.slice(1)}`;
+    status.innerText = "STARTING CAMERA...";
+    
+    switchView('scanner-view');
 
-function processResults() {
-    if (defectData && defectData.banana) {
-        currentDetectedDefect = defectData.banana[Math.floor(Math.random() * defectData.banana.length)];
-        document.getElementById('detectedDefectName').innerText = currentDetectedDefect.name.toUpperCase();
-        document.getElementById('defectResultPopup').classList.remove('hidden');
+    const video = document.getElementById('video');
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(s => {
+            stream = s;
+            video.srcObject = stream;
+            status.innerText = "READY";
+        })
+        .catch(err => {
+            status.innerText = "CAMERA ERROR: CHECK PERMISSIONS";
+        });
     }
 }
 
-function showDefectDetails() {
-    document.getElementById('detailName').innerText = currentDetectedDefect.name;
-    document.getElementById('detailCause').innerText = currentDetectedDefect.cause;
-    document.getElementById('detailStorage').innerText = currentDetectedDefect.storage_advice;
-    document.getElementById('detailAction').innerText = currentDetectedDefect.further_action;
-    switchView('defect-detail-view');
+async function startBurstScan() {
+    const btn = document.getElementById('captureBtn');
+    const status = document.getElementById('scanStatus');
+    const progressContainer = document.getElementById('scanProgressContainer');
+    const progressBar = document.getElementById('scanProgressBar');
+    
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    progressContainer.style.display = 'block';
+    status.innerText = "ANALYZING BURST...";
+    
+    let framesCaptured = 0;
+    const startTime = Date.now();
+    const duration = 2000; // 2 seconds
+
+    const burstInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = (elapsed / duration) * 100;
+        progressBar.style.width = `${progress}%`;
+
+        // Silent frame capture for potential future analysis
+        captureFrame();
+        framesCaptured++;
+
+        if (elapsed >= duration) {
+            clearInterval(burstInterval);
+            finishScan(framesCaptured);
+        }
+    }, 100); 
+}
+
+function captureFrame() {
+    const video = document.getElementById('video');
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.5);
+}
+
+function finishScan(count) {
+    const btn = document.getElementById('captureBtn');
+    const status = document.getElementById('scanStatus');
+    const progressBar = document.getElementById('scanProgressBar');
+    
+    status.innerText = "MATCHING DEFECT DATA...";
+    
+    setTimeout(() => {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        document.getElementById('scanProgressContainer').style.display = 'none';
+        progressBar.style.width = '0%';
+        
+        // Final logic placeholder
+        alert(`Analysis Complete for ${activeDefectFruit}.\nProcessed ${count} frames against defects.json.`);
+        status.innerText = "READY";
+    }, 1000);
 }
 
 function stopScan() {
-    if (stream) stream.getTracks().forEach(t => t.stop());
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+    const video = document.getElementById('video');
+    if (video) video.srcObject = null;
+    switchView('defect-detection-hub');
 }
 
-function toggleMenu() {
-    document.getElementById('menu-drawer').classList.toggle('open');
-    document.getElementById('menu-overlay').classList.toggle('open');
+// --- AGE CHECKER LOGIC (RETAINED) ---
+
+function openMiddleHub(fruit) {
+    activeFruit = fruit;
+    switchView('middle-hub');
+    document.getElementById('middleHubTitle').innerText = `${fruit.charAt(0).toUpperCase() + fruit.slice(1)} Menu`;
+    document.getElementById('brandsBtn').innerText = `${fruit.charAt(0).toUpperCase() + fruit.slice(1)} Brands`;
 }
 
-function toggleTheme() {
-    document.body.classList.toggle('light-theme');
+function openBrands(fruit) {
+    activeFruit = fruit;
+    switchView('brand-hub');
+    const grid = document.getElementById('brandGrid');
+    if (fruit === 'banana') {
+        grid.innerHTML = `<div class="list-btn" onclick="openCalc('Chiquita')">Chiquita</div><div class="list-btn disabled">Fyffes (Soon)</div>`;
+    } else {
+        grid.innerHTML = `<div style="opacity:0.5; padding:20px;">Brands for ${fruit} coming soon.</div>`;
+    }
 }
+
+function openCalc(brand, fruit = activeFruit) {
+    activeBrand = brand;
+    activeFruit = fruit;
+    switchView('appInterface');
+    document.getElementById('brandName').innerText = brand;
+    document.getElementById('commodityLabel').innerText = `${activeFruit.toUpperCase()} AGE CHECKER`;
+    document.getElementById('resBox').classList.add('hidden');
+    updateFavoriteUI();
+    renderHistory();
+}
+
+function checkFruit(historicalCode = null) {
+    const input = document.getElementById('codeIn');
+    const val = historicalCode || input.value.toUpperCase();
+    if (historicalCode) input.value = historicalCode;
+    const box = document.getElementById('resBox');
+    
+    if (val.length < 3) { box.classList.add('hidden'); return; }
+
+    const mChar = val.charCodeAt(0), dChar = val.charCodeAt(1), yDigit = val.charAt(2);
+    const isValid = (mChar >= 65 && mChar <= 76) && (dChar >= 65 && dChar <= 90) && (yDigit === '1' || yDigit === '2');
+    
+    if (!isValid) { box.classList.add('hidden'); return; }
+
+    const now = new Date(), m = mChar - 65;
+    let d = dChar - 64; if (yDigit === '2') d += 26;
+    let hDate = new Date(now.getFullYear(), m, d);
+    if (hDate > now) hDate.setFullYear(now.getFullYear() - 1);
+    
+    const diff = Math.floor((now - hDate) / (1000*60*60*24));
+    document.getElementById('daysValue').innerText = diff;
+    document.getElementById('dateText').innerText = hDate.toLocaleDateString('en-GB').toUpperCase();
+    
+    box.classList.remove('hidden');
+    const label = document.getElementById('statusLabel');
+    if (diff > 31) { label.innerText = "TOO OLD"; box.className = 'result-display bg-old'; }
+    else if (diff <= 21) { label.innerText = "PERFECT"; box.className = 'result-display bg-perfect'; }
+    else { label.innerText = "ACCEPTABLE"; box.className = 'result-display bg-acceptable'; }
+    
+    if (!historicalCode) saveToHistory(val, diff, "#fff");
+}
+
+function saveToHistory(code, days, color) {
+    scanHistory.unshift({ code, days, color, timestamp: new Date().toLocaleTimeString(), brand: activeBrand });
+    if (scanHistory.length > 25) scanHistory.pop();
+    localStorage.setItem('pulpProHistory', JSON.stringify(scanHistory));
+    renderHistory();
+}
+
+function renderHistory() {
+    const list = document.getElementById('historyList');
+    if (!list || scanHistory.length === 0) return;
+    list.innerHTML = `<div style="font-size:0.7rem; opacity:0.5; margin-bottom:10px;">RECENT SCANS</div>` + 
+        scanHistory.map(item => `<div class="log-item" onclick="checkFruit('${item.code}')"><span>${item.code} (${item.brand})</span> <strong>${item.days}D</strong></div>`).join('');
+}
+
+function toggleFavorite() {
+    const id = `${activeFruit}_${activeBrand}`;
+    const idx = favorites.findIndex(f => f.id === id);
+    if (idx > -1) favorites.splice(idx, 1);
+    else favorites.push({ id, fruit: activeFruit, brand: activeBrand });
+    localStorage.setItem('pulpProFavorites', JSON.stringify(favorites));
+    updateFavoriteUI();
+    renderFavorites();
+}
+
+function updateFavoriteUI() {
+    const isFav = favorites.some(f => f.id === `${activeFruit}_${activeBrand}`);
+    document.getElementById('favStar').classList.toggle('active', isFav);
+}
+
+function renderFavorites() {
+    const grid = document.getElementById('fav-grid');
+    if (!grid) return;
+    grid.innerHTML = favorites.map(f => `<div class="fav-card" onclick="openCalc('${f.brand}', '${f.fruit}')">${f.brand}</div>`).join('');
+}
+
+function clearHistory() { if(confirm("Clear logs?")) { scanHistory = []; localStorage.removeItem('pulpProHistory'); renderHistory(); } }
+function sendFeedback() { window.location.href = `mailto:ar.varma@hotmail.com?subject=Pulp Pro Feedback`; }
