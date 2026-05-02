@@ -1,15 +1,7 @@
-import {
-    scanHistory,
-    favorites
-} from './state.js';
-
-import {
-    toggleFavorite,
-    isFavorite
-} from './core.js';
+import { getState } from './state.js';
 
 /* -------------------------
-   NAVIGATION HELPERS
+   VIEW SWITCHING
 --------------------------*/
 
 export function switchView(targetId) {
@@ -18,7 +10,10 @@ export function switchView(targetId) {
 
     if (targetId === 'appInterface') {
         document.getElementById('appInterface').style.display = 'flex';
-        setTimeout(() => document.getElementById('codeIn').focus(), 100);
+        setTimeout(() => {
+            const input = document.getElementById('codeIn');
+            if (input) input.focus();
+        }, 100);
     } else {
         document.getElementById(targetId).classList.remove('hidden');
     }
@@ -30,15 +25,17 @@ export function showHub() {
 }
 
 /* -------------------------
-   FAVORITES UI
+   FAVORITES RENDER
 --------------------------*/
 
 export function renderFavorites() {
+    const state = getState();
+
     const section = document.getElementById('favorites-section');
     const grid = document.getElementById('fav-grid');
     const menuList = document.getElementById('menu-fav-list');
 
-    if (!favorites.length) {
+    if (!state.favorites.length) {
         section.classList.add('hidden');
         menuList.innerHTML = `<div style="padding:10px; font-size:0.6rem; opacity:0.3;">NO SAVED FAVS</div>`;
         return;
@@ -46,7 +43,7 @@ export function renderFavorites() {
 
     section.classList.remove('hidden');
 
-    grid.innerHTML = favorites.map(f => `
+    grid.innerHTML = state.favorites.map(f => `
         <div class="fav-card" onclick="openCalc('${f.brand}', '${f.fruit}')">
             <i class="bi bi-star-fill"></i>
             <span>${f.brand}</span>
@@ -54,7 +51,7 @@ export function renderFavorites() {
         </div>
     `).join('');
 
-    menuList.innerHTML = favorites.map(f => `
+    menuList.innerHTML = state.favorites.map(f => `
         <div class="menu-fav-item" onclick="openCalc('${f.brand}', '${f.fruit}'); toggleMenu();">
             ${f.brand}
             <span>(${f.page || 'Age Checker'})</span>
@@ -63,15 +60,17 @@ export function renderFavorites() {
 }
 
 /* -------------------------
-   HISTORY UI
+   HISTORY RENDER
 --------------------------*/
 
 export function renderHistory() {
+    const state = getState();
+
     const list = document.getElementById('historyList');
     const section = document.getElementById('historySection');
     const boxHidden = document.getElementById('resBox').classList.contains('hidden');
 
-    if (!scanHistory.length) {
+    if (!state.scanHistory.length) {
         section.style.display = "none";
         return;
     }
@@ -86,7 +85,7 @@ export function renderHistory() {
         `<div style="font-size:0.75rem; font-weight:900; color:var(--pulp-lime); margin-bottom:15px; border-bottom:1px solid var(--border-glass); padding-bottom:8px;">
             ARCHIVE
         </div>` +
-        scanHistory.map(item => `
+        state.scanHistory.map(item => `
             <div class="log-item" onclick="checkFruit('${item.code}')">
                 <div class="log-code">
                     ${item.code}
@@ -101,7 +100,7 @@ export function renderHistory() {
 }
 
 /* -------------------------
-   RESULT UI
+   RESULT DISPLAY
 --------------------------*/
 
 export function showResult(result, code) {
@@ -113,6 +112,7 @@ export function showResult(result, code) {
     }
 
     document.getElementById('daysValue').innerText = result.days;
+
     document.getElementById('dateText').innerText =
         result.date.toLocaleDateString('en-GB', {
             day: '2-digit',
