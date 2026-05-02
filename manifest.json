@@ -1,0 +1,21 @@
+{
+  "short_name": "Pulp Pro",
+  "name": "Pulp Pro Age Checker",
+  "icons": [
+    {
+      "src": "edited-image.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "edited-image.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/Pulp/",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "/Pulp/",
+  "theme_color": "#000000"
+}
