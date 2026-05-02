@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pulp Pro</title>
-    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="edited-image.png">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="dark-theme"> <!-- Default to dark to prevent flash -->
 
     <div id="splash-screen">
         <img src="edited-image.png" class="splash-logo">
@@ -34,11 +32,8 @@
         <div class="menu-item" onclick="toggleTheme()"><span>🌓 <span id="themeText">Dark Mode</span></span></div>
         <div class="menu-item" onclick="clearHistory()" style="color:var(--pulp-red);"><span>⚠️ Clear Logs</span></div>
         <div class="menu-item" onclick="sendFeedback()"><span>💬 Send Feedback</span></div>
-        
-        <div id="menu-fav-container">
-            <div class="menu-item" onclick="toggleMenuFavs()"><span>⭐ Favorites</span><i class="bi bi-chevron-down" id="favChevron"></i></div>
-            <div id="menu-fav-list"></div>
-        </div>
+        <div class="menu-item" onclick="toggleMenuFavs()"><span>⭐ Favorites</span><i class="bi bi-chevron-down" id="favChevron"></i></div>
+        <div id="menu-fav-list"></div>
     </div>
     <div id="menu-overlay" onclick="toggleMenu()"></div>
 
@@ -52,10 +47,7 @@
                 <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
                 <div class="selection-card" onclick="openDefectDetection()">
                     <img src="rotten.png" alt="defect detection">
-                    <div class="commodity-name-section">
-                        <span>Defect Detection</span>
-                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(NEW)</span>
-                    </div>
+                    <div class="commodity-name-section"><span>Defect Detection</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(NEW)</span></div>
                 </div>
             </div>
         </div>
@@ -65,87 +57,91 @@
         </div>
     </div>
 
-    <!-- DEFECT SELECTION -->
+    <!-- DEFECT DETECTION HUB -->
     <div id="defect-detection-hub" class="nav-view hidden">
-        <div class="hub-title">Advance Defect Detection system</div>
+        <div class="hub-title">Defect Detection System</div>
         <div class="list-container">
             <div class="list-btn" onclick="startScan('banana')">Scan Banana</div>
             <div class="list-btn" onclick="startScan('mango')">Scan Mango</div>
             <div class="list-btn" onclick="startScan('avocado')">Scan Avocado</div>
         </div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass);" onclick="showHub()">← Back</button>
     </div>
 
     <!-- SCANNER VIEW -->
     <div id="scanner-view" class="nav-view hidden">
         <div class="hub-title" id="scannerTitle">Scanning...</div>
-        <div class="scanner-container" style="position:relative; width:100%; max-width:500px; margin:0 auto; aspect-ratio: 4/3; background:#000; border-radius:15px; overflow:hidden; border:2px solid var(--pulp-lime);">
+        <div class="scanner-container" style="position:relative; width:100%; max-width:500px; margin:0 auto; aspect-ratio:4/3; background:#000; border-radius:15px; overflow:hidden; border:2px solid var(--pulp-lime);">
             <video id="video" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
-            
-            <div id="scanProgressContainer" style="position:absolute; bottom:0; left:0; width:100%; height:8px; background: rgba(255,255,255,0.2); display:none;">
-                <div id="scanProgressBar" style="width:0%; height:100%; background:var(--pulp-lime); transition: width 0.1s linear;"></div>
+            <div id="scanProgressContainer" style="position:absolute; bottom:0; left:0; width:100%; height:8px; background:rgba(255,255,255,0.2); display:none;">
+                <div id="scanProgressBar" style="width:0%; height:100%; background:var(--pulp-lime);"></div>
             </div>
-
-            <!-- Floating Result UI -->
             <div id="defectResultPopup" class="hidden" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.9); padding:20px; border-radius:15px; border:1px solid var(--pulp-lime); width:80%; text-align:center; z-index:10;">
                 <div style="color:var(--pulp-lime); font-size:0.6rem; letter-spacing:2px; font-weight:900;">DEFECT DETECTED</div>
-                <div id="detectedDefectName" style="font-size:1.4rem; font-weight:900; margin:10px 0; color:#fff;">---</div>
+                <div id="detectedDefectName" style="font-size:1.4rem; font-weight:900; margin:10px 0;">---</div>
                 <button class="btn-main" style="margin-top:10px; font-size:0.7rem;" onclick="showDefectDetails()">MORE INFORMATION</button>
             </div>
-            
-            <div class="scan-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; border:2px solid rgba(166, 226, 46, 0.3); pointer-events:none;"></div>
         </div>
-
-        <div id="scanStatus" style="margin-top:20px; font-weight:900; color:var(--pulp-lime); text-align:center; font-size: 0.8rem; height: 20px;">READY</div>
-        
+        <div id="scanStatus" style="margin-top:20px; font-weight:900; color:var(--pulp-lime); text-align:center;">READY</div>
         <div class="button-group" style="display:flex; gap:10px; padding:0 20px; margin-top:30px;">
-            <button id="captureBtn" class="btn-main" style="flex:2; margin-top:0;" onclick="startBurstScan()">START SCAN</button>
-            <button class="btn-main" style="flex:1; margin-top:0; background:var(--pulp-red); border:none;" onclick="stopScan()">Exit</button>
+            <button id="captureBtn" class="btn-main" style="flex:2;" onclick="startBurstScan()">START SCAN</button>
+            <button class="btn-main" style="flex:1; background:var(--pulp-red);" onclick="stopScan()">Exit</button>
         </div>
     </div>
 
-    <!-- DETAILED DEFECT INFO VIEW -->
-    <div id="defect-detail-view" class="nav-view hidden" style="padding: 20px;">
+    <!-- DETAIL VIEW -->
+    <div id="defect-detail-view" class="nav-view hidden">
         <div class="hub-title" style="color:var(--pulp-lime);">Defect Report</div>
-        <div class="app-card" style="text-align:left; padding:25px; max-width:600px; margin:0 auto;">
-            <h2 id="detailName" style="font-weight:900; color:var(--pulp-lime); text-transform:uppercase;">---</h2>
-            <hr style="border-color:var(--border-glass);">
-            
+        <div class="app-card" style="text-align:left; padding:25px;">
+            <h2 id="detailName" style="font-weight:900; color:var(--pulp-lime);">---</h2>
+            <hr>
             <div style="margin-bottom:15px;">
-                <label style="font-size:0.6rem; font-weight:900; opacity:0.5; display:block;">CAUSE</label>
-                <p id="detailCause" style="font-size:0.9rem;">---</p>
+                <label style="font-size:0.6rem; font-weight:900; opacity:0.5;">CAUSE</label>
+                <p id="detailCause">---</p>
             </div>
-
             <div style="margin-bottom:15px;">
-                <label style="font-size:0.6rem; font-weight:900; opacity:0.5; display:block;">STORAGE ADVICE</label>
-                <p id="detailStorage" style="font-size:0.9rem;">---</p>
+                <label style="font-size:0.6rem; font-weight:900; opacity:0.5;">STORAGE ADVICE</label>
+                <p id="detailStorage">---</p>
             </div>
-
             <div style="margin-bottom:15px;">
-                <label style="font-size:0.6rem; font-weight:900; opacity:0.5; display:block;">FURTHER ACTION</label>
-                <p id="detailAction" style="font-size:0.9rem;">---</p>
+                <label style="font-size:0.6rem; font-weight:900; opacity:0.5;">FURTHER ACTION</label>
+                <p id="detailAction">---</p>
             </div>
-
-            <button class="btn-main" style="margin-top:20px; width:100%;" onclick="switchView('scanner-view')">Back to Scanner</button>
+            <button class="btn-main" onclick="switchView('scanner-view')">Return to Scanner</button>
         </div>
     </div>
 
-    <!-- AGE CHECKER INTERFACE -->
-    <div class="app-container" id="appInterface">
-        <div class="app-card" id="appCard">
+    <!-- AGE CHECKER (App Interface) -->
+    <div class="nav-view hidden" id="appInterface" style="display:none; flex-direction:column; align-items:center;">
+        <div class="app-card">
             <i class="bi bi-star-fill fav-toggle" id="favStar" onclick="toggleFavorite()"></i>
-            <img src="edited-image.png" style="width:50px; margin-bottom:10px;">
-            <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">Chiquita</div>
-            <div id="commodityLabel" style="font-weight: 900; letter-spacing: 4px; opacity: 0.5; font-size: 0.7rem; margin-bottom: 25px; color:var(--text-main);">BANANA AGE CHECKER</div>
-            <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3" autofocus></div>
-            <button onclick="checkFruit()" class="btn-main" id="calcBtn">Calculate</button>
+            <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime);">BRAND</div>
+            <div id="commodityLabel" style="font-weight:900; letter-spacing:4px; opacity:0.5; font-size:0.7rem;">BANANA AGE CHECKER</div>
+            <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3"></div>
+            <button onclick="checkFruit()" class="btn-main">Calculate</button>
             <div id="resBox" class="result-display hidden">
-                <div id="statusLabel" style="font-weight:900;">READY</div>
+                <div id="statusLabel">READY</div>
                 <div id="daysValue">--</div>
-                <div id="dateText" style="font-size: 1.3rem; font-weight: 900; margin-top: 10px;">-- -- ----</div>
-                <button class="btn btn-copy" onclick="copyResult()" id="copyBtn"><i class="bi bi-clipboard"></i> **COPY**</button>
+                <div id="dateText">-- -- ----</div>
             </div>
+            <button class="btn-main" style="margin-top:20px; opacity:0.5;" onclick="openBrands(activeFruit)">← Back</button>
         </div>
+    </div>
+
+    <!-- MIDDLE HUB -->
+    <div id="middle-hub" class="nav-view hidden">
+        <div class="hub-title" id="middleHubTitle">Menu</div>
+        <div class="list-container">
+            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Brands</div>
+            <div class="list-btn disabled">Ripening (Soon)</div>
+        </div>
+        <button class="btn-main" onclick="showHub()">← Back</button>
+    </div>
+
+    <div id="brand-hub" class="nav-view hidden">
+        <div class="hub-title" id="brandHubTitle">Select Brand</div>
+        <div id="brandGrid" class="list-container"></div>
+        <button class="btn-main" onclick="openMiddleHub(activeFruit)">← Back</button>
     </div>
 
     <script src="js/master-logic.js"></script>
