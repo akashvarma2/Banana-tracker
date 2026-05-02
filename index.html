@@ -15,7 +15,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
-    <!-- Link to modular CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -49,9 +48,32 @@
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid-container">
             <div class="selection-grid">
-                <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
-                <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
-                <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
+                <div class="selection-card" onclick="openMiddleHub('banana')">
+                    <img src="banana.png" alt="banana">
+                    <div class="commodity-name-section"><span>Banana</span></div>
+                </div>
+                <div class="selection-card" onclick="openMiddleHub('mango')">
+                    <img src="mango.png" alt="mango">
+                    <div class="commodity-name-section">
+                        <span>Mango</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
+                </div>
+                <div class="selection-card" onclick="openMiddleHub('avocado')">
+                    <img src="avocado.png" alt="avocado">
+                    <div class="commodity-name-section">
+                        <span>Avocado</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
+                </div>
+                <!-- New Defect Detections Tile -->
+                <div class="selection-card" onclick="openMiddleHub('defects')">
+                    <img src="rotten.png" alt="defects">
+                    <div class="commodity-name-section">
+                        <span>Defect Detections</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="favorites-section" class="hidden">
@@ -95,7 +117,6 @@
         <div id="historySection" class="history-section"><div id="historyList"></div></div>
     </div>
 
-    <!-- Link to modular JS -->
     <script src="main.js"></script>
 </body>
 </html>
