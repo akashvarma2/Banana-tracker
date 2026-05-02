@@ -1,42 +1,41 @@
 import { initCore, checkCode } from './core.js';
 import { renderHistory, renderFavorites, bindStaticUI } from './ui.js';
 
-/* -------------------------
-   GLOBAL SAFE BRIDGE
-   (needed for onclick + history clicks)
---------------------------*/
+/* =====================================================
+   GLOBAL BRIDGE (for onclick + history reuse)
+===================================================== */
 window.__checkCodeFromHistory = (code) => {
     checkCode(code);
 };
 
-/* -------------------------
+/* =====================================================
    APP INIT
---------------------------*/
+===================================================== */
 function initApp() {
 
-    // 1. Bind static UI handlers (menu, theme, etc.)
+    // Bind UI-only handlers (menu, theme, static UI)
     bindStaticUI();
 
-    // 2. Initialize core logic
+    // Start core logic system
     initCore();
 
-    // 3. Render initial UI state
+    // Initial renders
     renderHistory();
     renderFavorites();
 
-    // 4. Splash screen handling (kept same behavior)
+    // Splash screen timing (same UX as original)
     setTimeout(() => {
         document.body.classList.add('loaded');
     }, 2600);
 
-    // 5. Auto focus input (same UX as before)
+    // Auto-focus input after splash
     const input = document.getElementById('codeIn');
     if (input) {
         setTimeout(() => input.focus(), 2700);
     }
 }
 
-/* -------------------------
-   START APP
---------------------------*/
+/* =====================================================
+   BOOT APP ON LOAD
+===================================================== */
 window.addEventListener('load', initApp);
