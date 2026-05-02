@@ -44,7 +44,6 @@
     </div>
     <div id="menu-overlay" onclick="toggleMenu()"></div>
 
-    <!-- MAIN HUB -->
     <div id="fruit-hub" class="nav-view">
         <div class="hub-title">Select Commodity</div>
         <div class="selection-grid-container">
@@ -76,27 +75,29 @@
                 </div>
             </div>
         </div>
+        <div id="favorites-section" class="hidden">
+            <div class="hub-title" style="color: var(--pulp-amber); font-size: 0.8rem; margin-top:20px;">Saved Favorites</div>
+            <div class="fav-grid" id="fav-grid"></div>
+        </div>
     </div>
 
-    <!-- MIDDLE HUB -->
     <div id="middle-hub" class="nav-view hidden">
-        <div class="hub-title" id="middleHubTitle">Menu</div>
+        <div class="hub-title" id="middleHubTitle">Banana Menu</div>
         <div class="list-container">
-            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Brands</div>
+            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Banana Brands</div>
             <div class="list-btn disabled">Defects (Soon)</div>
             <div class="list-btn disabled">Ripening (Soon)</div>
         </div>
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
-    <!-- BRAND HUB -->
     <div id="brand-hub" class="nav-view hidden">
         <div class="hub-title" id="brandHubTitle">Select Brand</div>
         <div class="list-container" id="brandGrid"></div>
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
     </div>
 
-    <!-- DEFECT HUB -->
+    <!-- New Addition: Defect Detection Hub -->
     <div id="defect-hub" class="nav-view hidden">
         <div class="hub-title">AI Defect Detection Analysis</div>
         <div class="list-container">
@@ -107,44 +108,6 @@
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
-    <!-- SCAN VIEW -->
-    <div id="scan-view" class="nav-view hidden">
-        <div class="hub-title" id="scanTitle">Scan Commodity</div>
-        <div class="camera-container">
-            <div id="camera-preview" class="camera-preview">
-                <i class="bi bi-camera" style="font-size: 3rem; opacity: 0.3;"></i>
-            </div>
-            <div class="scan-controls">
-                <button class="btn-scan" onclick="triggerCapture()">📸 SCAN</button>
-                <button class="btn-upload" onclick="triggerUpload()">📁 UPLOAD</button>
-                <input type="file" id="fileInput" hidden accept="image/*" onchange="handleFileUpload(event)">
-            </div>
-        </div>
-        <div id="mini-result" class="mini-result-card hidden">
-            <div class="defect-header">
-                <span id="defectName">Detecting...</span>
-                <span id="severityBadge" class="badge">--</span>
-            </div>
-            <button class="btn-more-info" onclick="openFullDetails()">More Information</button>
-        </div>
-        <button class="btn-main" style="margin-top:20px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="switchView('defect-hub')">← Back</button>
-    </div>
-
-    <!-- DETAILS VIEW -->
-    <div id="details-view" class="nav-view hidden">
-        <div class="hub-title">Defect Details</div>
-        <div class="details-content app-card">
-            <h3 id="fullDefectName" style="color:var(--pulp-lime); margin-bottom:20px;"></h3>
-            <div style="text-align: left; font-size: 0.9rem; line-height: 1.6;">
-                <p><strong>Cause:</strong> <span id="defectCause"></span></p>
-                <p><strong>Handling:</strong> <span id="defectHandling"></span></p>
-                <p><strong>Action:</strong> <span id="defectAction"></span></p>
-            </div>
-        </div>
-        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="switchView('scan-view')">← Back to Scan</button>
-    </div>
-
-    <!-- BANANA AGE CHECKER INTERFACE -->
     <div class="app-container" id="appInterface">
         <div class="app-card" id="appCard">
             <i class="bi bi-star-fill fav-toggle" id="favStar" onclick="toggleFavorite()"></i>
@@ -161,10 +124,19 @@
             </div>
             <button class="btn-main" style="margin-top:25px; background:transparent; border:none; opacity:0.4; font-size:0.6rem; color:var(--text-main);" onclick="openBrands(activeFruit)">← Back to Brands</button>
         </div>
+        <div id="historySection" class="history-section"><div id="historyList"></div></div>
     </div>
 
-    <!-- Scripts -->
+    <!-- External Logic Files -->
     <script src="js/master-logic.js"></script>
     <script src="js/additions.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
+            });
+        }
+    </script>
 </body>
 </html>
