@@ -1,55 +1,63 @@
 import { getState, setState } from './state.js';
+import * as UI from './ui.js';
+
+export function initApp() {
+    UI.bindStaticUI();
+    UI.renderHistory();
+    UI.renderFavorites();
+
+    const input = document.getElementById('codeIn');
+    if (input) {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkCode();
+        });
+    }
+}
 
 /* -------------------------
-   CALCULATION CORE
+   MAIN LOGIC
 --------------------------*/
 
-export function runCheck(val, UI) {
+export function checkCode(valOverride = null) {
+    const input = document.getElementById('codeIn');
+    const val = (valOverride || input.value).toUpperCase();
+
     if (!val || val.length < 3) {
-        UI.showResult(null);
+        UI.showError();
         return;
     }
 
-    const mChar = val.charCodeAt(0);
-    const dChar = val.charCodeAt(1);
-    const yDigit = val.charAt(2);
+    const m = val.charCodeAt(0);
+    const d = val.charCodeAt(1);
+    const y = val.charAt(2);
 
-    const isValid =
-        (mChar >= 65 && mChar <= 76) &&
-        (dChar >= 65 && dChar <= 90) &&
-        (yDigit === '1' || yDigit === '2');
+    const valid =
+        m >= 65 && m <= 76 &&
+        d >= 65 && d <= 90 &&
+        (y === '1' || y === '2');
 
-    if (!isValid) {
-        UI.showResult(null);
+    if (!valid) {
+        UI.showError();
         return;
     }
 
     const now = new Date();
-    const m = mChar - 65;
+    let day = d - 64;
+    if (y === '2') day += 26;
 
-    let d = dChar - 64;
-    if (yDigit === '2') d += 26;
+    const date = new Date(now.getFullYear(), m - 65, day);
+    if (date > now) date.setFullYear(now.getFullYear() - 1);
 
-    let hDate = new Date(now.getFullYear(), m, d);
-    if (hDate > now) hDate.setFullYear(now.getFullYear() - 1);
+    const diff = Math.floor((now - date) / 86400000);
 
-    const diff = Math.floor((now - hDate) / (1000 * 60 * 60 * 24));
-
-    const result = {
-        days: diff,
-        date: hDate
-    };
-
-    UI.showResult(result, val);
+    UI.showResult(diff, date, val);
 
     const state = getState();
 
     state.scanHistory.unshift({
         code: val,
         days: diff,
-        color: diff > 31 ? "#ff4d4d" : diff <= 21 ? "#a6e22e" : "#ff8c00",
-        timestamp: new Date().toISOString(),
-        brand: state.activeBrand || ''
+        timestamp: new Date().toLocaleString()
     });
 
     if (state.scanHistory.length > 25) state.scanHistory.pop();
@@ -57,48 +65,4 @@ export function runCheck(val, UI) {
     setState({ scanHistory: state.scanHistory });
 
     UI.renderHistory();
-}
-
-/* -------------------------
-   FAVORITES
---------------------------*/
-
-export function toggleFavorite() {
-    const state = getState();
-    const id = `${state.activeFruit}_${state.activeBrand}`;
-
-    const index = state.favorites.findIndex(f => f.id === id);
-
-    if (index > -1) {
-        state.favorites.splice(index, 1);
-    } else {
-        state.favorites.push({
-            id,
-            fruit: state.activeFruit,
-            brand: state.activeBrand,
-            page: 'Age Checker'
-        });
-    }
-
-    setState({ favorites: state.favorites });
-}
-
-export function clearHistory() {
-    setState({ scanHistory: [] });
-}
-
-/* -------------------------
-   COPY RESULT
---------------------------*/
-
-export function copyResult() {
-    const days = document.getElementById('daysValue').innerText;
-    const date = document.getElementById('dateText').innerText;
-    const code = document.getElementById('codeIn').value.toUpperCase();
-
-    if (document.getElementById('resBox').classList.contains('hidden')) return;
-
-    const text = `Pulp Pro Report\nCode: ${code}\nAge: ${days} Days\nHarvest Date: ${date}`;
-
-    navigator.clipboard.writeText(text);
 }
