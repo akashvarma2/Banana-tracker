@@ -1,3 +1,4 @@
+/* --- CORE THEME & LOADING LOGIC --- */
 :root {
     --pulp-lime: #d4ff00;
     --pulp-amber: #ffaa00;
@@ -8,67 +9,190 @@
     --bg-dark: #000000;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
 
 body {
-    margin: 0; background: var(--bg-dark); color: var(--text-main);
-    min-height: 100vh; display: flex; justify-content: center; align-items: center;
+    margin: 0;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Splash Screen & Loading Logic */
+/* Splash Screen Logic */
 #splash-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: black; z-index: 9999; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; transition: 0.5s opacity;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out;
 }
 
-.splash-logo { width: 100px; margin-bottom: 20px; animation: pulse 2s infinite; }
-.splash-text { font-weight: 900; letter-spacing: 5px; color: var(--pulp-lime); }
-
-/* This hides the splash screen when JS adds the 'loaded' class */
+/* This is the critical fix for your 'stuck logo' issue */
 body.loaded #splash-screen {
-    opacity: 0; pointer-events: none; visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
 }
 
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.splash-logo {
+    width: 120px;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
 
-/* Layouts */
-.nav-view { width: 100%; max-width: 400px; padding: 20px; text-align: center; }
+.splash-text {
+    font-weight: 900;
+    letter-spacing: 5px;
+    font-size: 1.2rem;
+    color: var(--pulp-lime);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- NAVIGATION & HUB LAYOUTS --- */
+.nav-view {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    text-align: center;
+}
+
 .hidden { display: none !important; }
-.hub-title { font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
 
-/* Grid & Cards */
-.selection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.hub-title {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.selection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
 .selection-card {
-    background: var(--glass-bg); border: 1px solid var(--border-glass);
-    border-radius: 20px; padding: 20px; transition: 0.3s;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 20px;
+    transition: 0.3s;
 }
-.selection-card img { width: 50px; height: 50px; margin-bottom: 10px; }
 
-/* Buttons & Inputs */
+.selection-card img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* --- APP COMPONENTS --- */
+.app-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Make app visible when loaded */
+body.loaded .app-container {
+    display: flex;
+}
+
+.app-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    border-radius: 30px;
+    padding: 40px 25px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
 .btn-main {
-    width: 100%; background: var(--pulp-lime); border: none;
-    padding: 18px; border-radius: 15px; font-weight: 900;
-}
-.list-btn {
-    width: 100%; padding: 18px; background: var(--glass-bg);
-    border: 1px solid var(--border-glass); border-radius: 15px;
-    margin-bottom: 10px; font-weight: 700; color: white;
-}
-.input-wrapper input {
-    width: 100%; background: transparent; border: none;
-    border-bottom: 2px solid var(--pulp-lime); color: white;
-    font-size: 3rem; font-weight: 900; text-align: center; outline: none;
+    width: 100%;
+    background: var(--pulp-lime);
+    color: black;
+    border: none;
+    padding: 18px;
+    border-radius: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
-/* Defect Specifics */
+.list-btn {
+    width: 100%;
+    padding: 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: 15px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: white;
+}
+
+.input-wrapper input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--pulp-lime);
+    color: white;
+    font-size: 3rem;
+    font-weight: 900;
+    text-align: center;
+    outline: none;
+}
+
+/* --- DEFECT DETECTION ADDITIONS --- */
 .camera-preview {
-    width: 100%; height: 250px; background: rgba(255,255,255,0.05);
-    border: 2px dashed var(--border-glass); border-radius: 15px;
-    display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    width: 100%;
+    height: 250px;
+    background: rgba(255,255,255,0.05);
+    border: 2px dashed var(--border-glass);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
 }
+
 .mini-result-card {
-    background: var(--glass-bg); border: 1px solid var(--pulp-lime);
-    padding: 15px; border-radius: 12px; margin-top: 10px; text-align: left;
+    background: var(--glass-bg);
+    border: 1px solid var(--pulp-lime);
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 10px;
+    text-align: left;
 }
-.badge { padding: 4px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: 900; }
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    border: 1px solid;
+}
