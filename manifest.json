@@ -1,0 +1,21 @@
+{
+  "name": "Pulp Pro",
+  "short_name": "Pulp",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Commodity age checker and tracker app",
+  "icons": [
+    {
+      "src": "edited-image.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "edited-image.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
