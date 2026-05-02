@@ -19,7 +19,6 @@ window.addEventListener('load', () => {
     renderFavorites();
     setTimeout(() => {
         document.body.classList.add('loaded');
-        // Fixed initial focus for desktop
         document.getElementById('codeIn').focus();
     }, 2600);
 });
@@ -58,7 +57,6 @@ function switchView(targetId) {
     document.getElementById('appInterface').style.display = 'none';
     if(targetId === 'appInterface') {
         document.getElementById('appInterface').style.display = 'flex';
-        // Fixed focus when entering calculator
         setTimeout(() => document.getElementById('codeIn').focus(), 100);
     } else {
         document.getElementById(targetId).classList.remove('hidden');
@@ -69,10 +67,20 @@ function showHub() { switchView('fruit-hub'); renderFavorites(); }
 
 function openMiddleHub(fruit) {
     activeFruit = fruit;
+    
+    if (fruit === 'defects') {
+        switchView('defects-hub');
+        return;
+    }
+
     switchView('middle-hub');
     const title = fruit.charAt(0).toUpperCase() + fruit.slice(1);
     document.getElementById('middleHubTitle').innerText = `${title} Menu`;
     document.getElementById('brandsBtn').innerText = `${title} Brands`;
+}
+
+function openDefectScanner(commodity) {
+    alert("Opening scanner for: " + commodity + "\n(Camera module integration coming soon)");
 }
 
 function openBrands(fruit) {
@@ -138,10 +146,8 @@ inputField.addEventListener('keypress', (e) => {
     }
 });
 
-// Modified handlePostCalculation to better handle Desktop vs Mobile
 function handlePostCalculation() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
     if (isMobile) {
         inputField.blur();
         const currentType = inputField.getAttribute('type');
@@ -150,7 +156,6 @@ function handlePostCalculation() {
             inputField.setAttribute('type', currentType);
         }, 100);
     } else {
-        // On desktop, keep input ready for next scan
         inputField.select(); 
         inputField.focus();
     }
@@ -159,44 +164,35 @@ function handlePostCalculation() {
 function checkFruit(historicalCode = null) {
     const val = historicalCode || inputField.value.toUpperCase();
     if (historicalCode) inputField.value = historicalCode;
-    
     const box = document.getElementById('resBox');
-
     if (val.length < 3) {
         box.classList.add('hidden');
         if(!historicalCode) triggerShake();
         return;
     }
-
     const mChar = val.charCodeAt(0), dChar = val.charCodeAt(1), yDigit = val.charAt(2);
     const isValid = (mChar >= 65 && mChar <= 76) && (dChar >= 65 && dChar <= 90) && (yDigit === '1' || yDigit === '2');
-
     if (!isValid) {
         box.classList.add('hidden');
         triggerShake();
         return;
     }
-
     const now = new Date(), m = mChar - 65;
     let d = dChar - 64; if (yDigit === '2') d += 26;
     let hDate = new Date(now.getFullYear(), m, d);
     if (hDate > now) hDate.setFullYear(now.getFullYear() - 1);
     const diff = Math.floor((now - hDate) / (1000*60*60*24));
-
     document.getElementById('daysValue').innerText = diff;
     document.getElementById('dateText').innerText = hDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-
     const label = document.getElementById('statusLabel');
     let statusColor = "";
     box.classList.remove('hidden');
-    
     if (diff > 31) { label.innerText = "TOO OLD"; box.className = 'result-display bg-old'; statusColor = "#ff4d4d"; }
     else if (diff <= 21) { label.innerText = "PERFECT"; box.className = 'result-display bg-perfect'; statusColor = "#a6e22e"; }
     else { label.innerText = "ACCEPTABLE"; box.className = 'result-display bg-acceptable'; statusColor = "#ff8c00"; }
-
     if (!historicalCode) {
         saveToHistory(val, diff, statusColor);
-        handlePostCalculation(); // Fixed interactivity here
+        handlePostCalculation();
     }
     renderHistory();
 }
@@ -218,13 +214,11 @@ function renderHistory() {
     const list = document.getElementById('historyList'), section = document.getElementById('historySection');
     const boxHidden = document.getElementById('resBox').classList.contains('hidden');
     if (scanHistory.length === 0) { section.style.display = "none"; return; }
-    
     if (window.innerWidth >= 992) {
         section.style.display = "block";
     } else {
         section.style.display = boxHidden ? "none" : "block";
     }
-
     list.innerHTML = `<div style="font-size:0.75rem; font-weight:900; color:var(--pulp-lime); margin-bottom:15px; border-bottom:1px solid var(--border-glass); padding-bottom:8px;">ARCHIVE</div>` + scanHistory.map(item => `<div class="log-item" onclick="checkFruit('${item.code}')"><div class="log-code">${item.code} <small style="font-size:0.5rem; opacity:0.6;">${item.brand || ''}</small></div><div class="log-meta" style="text-align:right;"><span style="color:${item.color}; font-weight:900;">${item.days}D</span><span class="log-timestamp">${item.timestamp}</span></div></div>`).join('');
 }
 
@@ -232,37 +226,15 @@ function copyResult() {
     const days = document.getElementById('daysValue').innerText;
     const date = document.getElementById('dateText').innerText;
     const code = document.getElementById('codeIn').value.toUpperCase();
-    
     if (document.getElementById('resBox').classList.contains('hidden')) return;
-
     const plainText = `Pulp Pro Report\nCode: ${code}\nAge: ${days} Days\nHarvest Date: ${date}`;
-
-    const htmlText = `
-        <div style="font-family: sans-serif;">
-            <p><strong>Pulp Pro Report</strong></p>
-            <p>Code: <span style="color: #ff4d4d; font-weight: bold;">${code}</span></p>
-            <p>Age: <span style="color: #ff4d4d; font-weight: bold;">${days} Days</span></p>
-            <p>Harvest Date: ${date}</p>
-        </div>
-    `;
-
+    const htmlText = `<div style="font-family: sans-serif;"><p><strong>Pulp Pro Report</strong></p><p>Code: <span style="color: #ff4d4d; font-weight: bold;">${code}</span></p><p>Age: <span style="color: #ff4d4d; font-weight: bold;">${days} Days</span></p><p>Harvest Date: ${date}</p></div>`;
     try {
         const blobHTML = new Blob([htmlText], { type: 'text/html' });
         const blobText = new Blob([plainText], { type: 'text/plain' });
-        
-        const data = [new ClipboardItem({
-            'text/plain': blobText,
-            'text/html': blobHTML
-        })];
-
-        navigator.clipboard.write(data).then(() => {
-            showCopySuccess();
-        }).catch(() => {
-            navigator.clipboard.writeText(plainText).then(showCopySuccess);
-        });
-    } catch (err) {
-        navigator.clipboard.writeText(plainText).then(showCopySuccess);
-    }
+        const data = [new ClipboardItem({ 'text/plain': blobText, 'text/html': blobHTML })];
+        navigator.clipboard.write(data).then(() => { showCopySuccess(); }).catch(() => { navigator.clipboard.writeText(plainText).then(showCopySuccess); });
+    } catch (err) { navigator.clipboard.writeText(plainText).then(showCopySuccess); }
 }
 
 function showCopySuccess() {
