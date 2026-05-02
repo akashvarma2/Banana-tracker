@@ -66,7 +66,6 @@
                         <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
                     </div>
                 </div>
-                <!-- New Defect Detections Tile -->
                 <div class="selection-card" onclick="openMiddleHub('defects')">
                     <img src="rotten.png" alt="defects">
                     <div class="commodity-name-section">
@@ -80,6 +79,16 @@
             <div class="hub-title" style="color: var(--pulp-amber); font-size: 0.8rem; margin-top:20px;">Saved Favorites</div>
             <div class="fav-grid" id="fav-grid"></div>
         </div>
+    </div>
+
+    <div id="defects-hub" class="nav-view hidden">
+        <div class="hub-title">Smart Defects Detection</div>
+        <div class="list-container">
+            <div class="list-btn" onclick="openDefectScanner('Banana')">1. Scan Banana</div>
+            <div class="list-btn" onclick="openDefectScanner('Mango')">2. Scan Mango</div>
+            <div class="list-btn" onclick="openDefectScanner('Avocado')">3. Scan Avocado</div>
+        </div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
     <div id="middle-hub" class="nav-view hidden">
