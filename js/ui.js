@@ -1,137 +1,90 @@
 import { getState } from './state.js';
 
 /* -------------------------
-   VIEW SWITCHING
+   STATIC UI BINDINGS
 --------------------------*/
 
-export function switchView(targetId) {
-    document.querySelectorAll('.nav-view').forEach(v => v.classList.add('hidden'));
-    document.getElementById('appInterface').style.display = 'none';
+export function bindStaticUI() {
+    window.toggleMenu = () => {
+        document.getElementById('menu-drawer').classList.toggle('open');
+        document.getElementById('menu-overlay').classList.toggle('open');
+    };
 
-    if (targetId === 'appInterface') {
-        document.getElementById('appInterface').style.display = 'flex';
-        setTimeout(() => {
-            const input = document.getElementById('codeIn');
-            if (input) input.focus();
-        }, 100);
-    } else {
-        document.getElementById(targetId).classList.remove('hidden');
-    }
-}
+    window.toggleTheme = () => {
+        document.body.classList.toggle('light-theme');
+    };
 
-export function showHub() {
-    switchView('fruit-hub');
-    renderFavorites();
-}
-
-/* -------------------------
-   FAVORITES RENDER
---------------------------*/
-
-export function renderFavorites() {
-    const state = getState();
-
-    const section = document.getElementById('favorites-section');
-    const grid = document.getElementById('fav-grid');
-    const menuList = document.getElementById('menu-fav-list');
-
-    if (!state.favorites.length) {
-        section.classList.add('hidden');
-        menuList.innerHTML = `<div style="padding:10px; font-size:0.6rem; opacity:0.3;">NO SAVED FAVS</div>`;
-        return;
-    }
-
-    section.classList.remove('hidden');
-
-    grid.innerHTML = state.favorites.map(f => `
-        <div class="fav-card" onclick="openCalc('${f.brand}', '${f.fruit}')">
-            <i class="bi bi-star-fill"></i>
-            <span>${f.brand}</span>
-            <small style="opacity:0.5; font-size:0.55rem;">${f.fruit.toUpperCase()}</small>
-        </div>
-    `).join('');
-
-    menuList.innerHTML = state.favorites.map(f => `
-        <div class="menu-fav-item" onclick="openCalc('${f.brand}', '${f.fruit}'); toggleMenu();">
-            ${f.brand}
-            <span>(${f.page || 'Age Checker'})</span>
-        </div>
-    `).join('');
-}
-
-/* -------------------------
-   HISTORY RENDER
---------------------------*/
-
-export function renderHistory() {
-    const state = getState();
-
-    const list = document.getElementById('historyList');
-    const section = document.getElementById('historySection');
-    const boxHidden = document.getElementById('resBox').classList.contains('hidden');
-
-    if (!state.scanHistory.length) {
-        section.style.display = "none";
-        return;
-    }
-
-    if (window.innerWidth >= 992) {
-        section.style.display = "block";
-    } else {
-        section.style.display = boxHidden ? "none" : "block";
-    }
-
-    list.innerHTML =
-        `<div style="font-size:0.75rem; font-weight:900; color:var(--pulp-lime); margin-bottom:15px; border-bottom:1px solid var(--border-glass); padding-bottom:8px;">
-            ARCHIVE
-        </div>` +
-        state.scanHistory.map(item => `
-            <div class="log-item" onclick="checkFruit('${item.code}')">
-                <div class="log-code">
-                    ${item.code}
-                    <small style="font-size:0.5rem; opacity:0.6;">${item.brand || ''}</small>
-                </div>
-                <div style="text-align:right;">
-                    <span style="color:${item.color}; font-weight:900;">${item.days}D</span>
-                    <span class="log-timestamp">${item.timestamp}</span>
-                </div>
-            </div>
-        `).join('');
+    window.clearHistory = () => {
+        const state = getState();
+        state.scanHistory = [];
+        localStorage.setItem('pulpProHistory', JSON.stringify([]));
+        location.reload();
+    };
 }
 
 /* -------------------------
    RESULT DISPLAY
 --------------------------*/
 
-export function showResult(result, code) {
+export function showResult(days, date, code) {
     const box = document.getElementById('resBox');
 
-    if (!result) {
-        box.classList.add('hidden');
-        return;
-    }
-
-    document.getElementById('daysValue').innerText = result.days;
+    document.getElementById('daysValue').innerText = days;
 
     document.getElementById('dateText').innerText =
-        result.date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-        }).toUpperCase();
-
-    const label = document.getElementById('statusLabel');
+        date.toLocaleDateString('en-GB').toUpperCase();
 
     box.classList.remove('hidden');
 
-    if (result.days > 31) {
+    const label = document.getElementById('statusLabel');
+
+    if (days > 31) {
         label.innerText = "TOO OLD";
-        box.className = 'result-display bg-old';
-    } else if (result.days <= 21) {
+        box.className = "result-display bg-old";
+    } else if (days <= 21) {
         label.innerText = "PERFECT";
-        box.className = 'result-display bg-perfect';
+        box.className = "result-display bg-perfect";
     } else {
         label.innerText = "ACCEPTABLE";
-        box.className = 'result-display bg-acceptable';
+        box.className = "result-display bg-acceptable";
+    }
+}
+
+export function showError() {
+    const box = document.getElementById('resBox');
+    box.classList.add('hidden');
+}
+
+/* -------------------------
+   HISTORY
+--------------------------*/
+
+export function renderHistory() {
+    const state = getState();
+    const list = document.getElementById('historyList');
+
+    if (!state.scanHistory.length) return;
+
+    list.innerHTML = state.scanHistory.map(item => `
+        <div class="log-item" onclick="window.checkCode('${item.code}')">
+            <div>${item.code}</div>
+            <div>${item.days || ''}</div>
+        </div>
+    `).join('');
+}
+
+/* -------------------------
+   FAVORITES (placeholder safe)
+--------------------------*/
+
+export function renderFavorites() {
+    const state = getState();
+    const menu = document.getElementById('menu-fav-list');
+
+    if (!menu) return;
+
+    if (!state.favorites.length) {
+        menu.innerHTML = "<div style='opacity:0.5'>No favorites</div>";
+        return;
     }
 }
