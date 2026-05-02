@@ -1,236 +1,91 @@
 {
-  "banana": {
-    "external_surface": {
-      "anthracnose": {
-        "title": "Anthracnose (Colletotrichum)",
-        "severity": "MAJOR",
-        "summary": "Sunken black lesions with orange spore masses.",
-        "detailed_analysis": "Latent fungal infection that develops as fruit sugar levels rise. Spots coalesce into large necrotic areas.",
-        "causes": ["High humidity", "Field infection", "Inadequate fungicide treatment"],
-        "retail_spec": "Class 1: Zero. Class 2: Max 2 small spots.",
-        "action": "Accelerate sales; prioritize immediate consumption."
-      },
-      "latex_stains": {
-        "title": "Latex Staining",
-        "severity": "COSMETIC",
-        "summary": "Black/brown resinous streaks on the peel.",
-        "detailed_analysis": "Sap oxidation occurs when fruit is de-handed without proper washing. Purely aesthetic but reduces premium value.",
-        "causes": ["Poor harvest handling", "Contaminated wash water"],
-        "retail_spec": "Max 5% surface area for Class 1.",
-        "action": "Downgrade to Class 2/Discount."
-      },
-      "thrips_scarring": {
-        "title": "Rust Thrips Damage",
-        "severity": "MINOR",
-        "summary": "Reddish-brown 'rusty' patches between fingers.",
-        "detailed_analysis": "Feeding damage from Chaetanaphothrips. Skin becomes rough and may crack during ripening.",
-        "causes": ["High field pest pressure", "Lack of bunch bagging"],
-        "retail_spec": "Class 1: Minimal rust allowed.",
-        "action": "Acceptable for general retail."
-      },
-      "mechanical_bruising": {
-        "title": "Mechanical Impact Bruise",
-        "severity": "MAJOR",
-        "summary": "Flat or sunken dark areas on the peel.",
-        "detailed_analysis": "Cellular rupture due to physical impact. Leads to localized softening and accelerated rot.",
-        "causes": ["Rough packing", "Tight carton pressure", "Vibration during transit"],
-        "retail_spec": "Max 2cm² for Class 1.",
-        "action": "Sort and remove heavily bruised fingers."
-      },
-      "sooty_mould": {
-        "title": "Sooty Mould",
-        "severity": "MINOR",
-        "summary": "Black powdery film on skin or crown.",
-        "detailed_analysis": "Superficial fungus growing on insect honeydew. Can be wiped off but looks unappealing.",
-        "causes": ["Aphid/Scale infestation in field"],
-        "retail_spec": "Clean fruit only for premium.",
-        "action": "Wipe with damp cloth or downgrade."
-      },
-      "sunscald": {
-        "title": "Sunscald",
-        "severity": "MAJOR",
-        "summary": "Bleached or bronzed patches on upper fruit.",
-        "detailed_analysis": "Damage to chlorophyll from direct UV exposure. Tissue becomes hard and fails to ripen.",
-        "causes": ["Inadequate leaf cover", "Extreme heat"],
-        "retail_spec": "Reject for premium sales.",
-        "action": "Process for purée."
-      }
+  "last_updated": "2026-05-02",
+  "grading_standard": "International Professional Export Grade (USDA/Codex/UNECE)",
+  "commodities": {
+    "banana": {
+      "name": "Banana",
+      "defects": [
+        {
+          "id": "ban_001",
+          "name": "Cigar End Rot",
+          "severity": "Critical",
+          "description": "Fungus causing dry rot at the flower tip. Affected area is blackened and resembles cigar ash.",
+          "tolerance": "Zero tolerance for Class I; Major defect if infection extends >10mm.",
+          "class_impact": "Reject",
+          "action": "Remove affected clusters immediately to prevent fungal spread.",
+          "visual_key": ["blackened tip", "grey-white ash appearance", "dry rot"]
+        },
+        {
+          "id": "ban_003",
+          "name": "Bruising",
+          "severity": "Major",
+          "description": "Sunken or flat patches on the peel that darken as fruit ripens.",
+          "tolerance": "Major if >6cm² per cluster; Minor if <6cm².",
+          "class_impact": "Class II",
+          "action": "Sort for immediate local ripening; do not use for long-distance transport.",
+          "visual_key": ["flat spots", "sunken peel", "darkening tissue"]
+        },
+        {
+          "id": "ban_005",
+          "name": "Anthracnose",
+          "severity": "Major",
+          "description": "Large brown/black circular spots with salmon-pink spore masses in the center.",
+          "tolerance": "Scored as serious damage if reaching the pulp.",
+          "class_impact": "Reject",
+          "action": "Discard fruit; sanitize storage area to prevent cross-contamination.",
+          "visual_key": ["circular specks", "pink spores", "sunken lesions"]
+        }
+      ]
     },
-    "internal_pathology": {
-      "crown_rot": {
-        "title": "Crown Rot",
-        "severity": "CRITICAL",
-        "summary": "Soft decay at the finger attachment point.",
-        "detailed_analysis": "Fungal complex spreading from the crown into the neck. Risks 'finger drop' and total pack failure.",
-        "causes": ["Poor crown treatment", "Wound infection", "High temperature in transit"],
-        "retail_spec": "Zero tolerance for active rot.",
-        "action": "Quarantine and inspect batch."
-      },
-      "chilling_injury": {
-        "title": "Chilling Injury (Smoky Peel)",
-        "severity": "CRITICAL",
-        "summary": "Internal vascular browning and grey peel.",
-        "detailed_analysis": "Exposure below 13°C destroys cells. Causes smoky/dull appearance and 'hard-core' pulp.",
-        "causes": ["Cold chain failure", "Reefer temperature malfunction"],
-        "retail_spec": "Total rejection.",
-        "action": "Reject shipment; log temperature claim."
-      },
-      "ship_ripe": {
-        "title": "Ship Ripe / Green Ripe",
-        "severity": "CRITICAL",
-        "summary": "Soft fruit that remains green in color.",
-        "detailed_analysis": "Physiological disorder where pulp softens while skin chlorophyll remains stable. High ethylene risk to other fruit.",
-        "causes": ["Ethylene exposure", "Over-maturity at harvest"],
-        "retail_spec": "Zero tolerance in green shipments.",
-        "action": "Remove immediately to save balance of load."
-      },
-      "cigar_end_rot": {
-        "title": "Cigar-End Rot",
-        "severity": "MAJOR",
-        "summary": "Dry, ash-like rot at the flower end.",
-        "detailed_analysis": "Verticillium infection starting at the tip, moving up the pulp. Resembles a burnt cigar tip.",
-        "causes": ["Fungal spores in flowers", "Wet weather during bloom"],
-        "retail_spec": "Max 1cm length for Class 2.",
-        "action": "Trim or discard affected fruit."
-      }
-    }
-  },
-  "mango": {
-    "external_surface": {
-      "sap_burn": {
-        "title": "Sap Burn (Latex Burn)",
-        "severity": "MAJOR",
-        "summary": "Black necrotic streaks caused by fruit sap.",
-        "detailed_analysis": "Caustic sap (terpenes) burns the skin. Highly susceptible to secondary rot.",
-        "causes": ["Harvesting without desapping", "Snap-harvesting"],
-        "retail_spec": "Zero tolerance for premium.",
-        "action": "Sort and sell as second grade."
-      },
-      "bacterial_canker": {
-        "title": "Bacterial Canker (Scab)",
-        "severity": "MAJOR",
-        "summary": "Star-shaped cracks with dark ooze.",
-        "detailed_analysis": "Xanthomonas infection. Causes raised, corky lesions that crack the skin.",
-        "causes": ["Wind-driven rain", "Tree infection"],
-        "retail_spec": "Max 2cm² total for Class 2.",
-        "action": "Divert to processing."
-      },
-      "lenticel_discoloration": {
-        "title": "Lenticel Spotting",
-        "severity": "MINOR",
-        "summary": "Darkened pores across the skin surface.",
-        "detailed_analysis": "Stress response from cold or detergents. Skin pores turn dark, appearing like tiny freckles.",
-        "causes": ["Low temp storage", "Harsh post-harvest wash"],
-        "retail_spec": "Allowed up to 10% surface.",
-        "action": "Market normally; aesthetic only."
-      }
+    "mango": {
+      "name": "Mango",
+      "defects": [
+        {
+          "id": "man_001",
+          "name": "Anthracnose",
+          "severity": "Major",
+          "description": "Small dark spots enlarging to irregular black smears, often starting from the stem.",
+          "tolerance": "Serious damage if affecting >5% of surface or slightly sunken.",
+          "class_impact": "Class II or Reject",
+          "action": "Sort for local immediate sale; prioritize high-turnover retail.",
+          "visual_key": ["black smears", "linear spots", "sunken patches"]
+        },
+        {
+          "id": "man_002",
+          "name": "Sap Burn",
+          "severity": "Major",
+          "description": "Chemical burn from latex causing skin streaking and necrosis.",
+          "tolerance": "Major if >15% of surface area is affected.",
+          "class_impact": "Class II",
+          "action": "Downgrade to Class II; ensure fruit is washed to stop further burning.",
+          "visual_key": ["brown streaks", "sticky residue", "skin necrosis"]
+        }
+      ]
     },
-    "internal_pathology": {
-      "stem_end_rot": {
-        "title": "Stem-End Rot (SER)",
-        "severity": "CRITICAL",
-        "summary": "Internal decay starting at the stem.",
-        "detailed_analysis": "Fungi enter during harvest and remain dormant until ripening. Rapidly turns pulp watery and brown.",
-        "causes": ["Harvesting with short stems", "High humidity"],
-        "retail_spec": "Zero tolerance.",
-        "action": "Reject affected fruit; perform cut tests."
-      },
-      "spongy_tissue": {
-        "title": "Internal Spongy Tissue",
-        "severity": "CRITICAL",
-        "summary": "Non-ripening, white, acidic pulp patches.",
-        "detailed_analysis": "Internal metabolic disorder. Pulp becomes corky/spongy with a fermented odor. Invisible externally.",
-        "causes": ["Convective soil heat", "High orchard temperatures"],
-        "retail_spec": "Zero tolerance.",
-        "action": "Quality claim against grower."
-      },
-      "jelly_seed": {
-        "title": "Jelly Seed",
-        "severity": "MAJOR",
-        "summary": "Glassy, translucent pulp around the stone.",
-        "detailed_analysis": "Premature ripening of the pulp directly around the seed while outer flesh stays firm.",
-        "causes": ["Over-maturity", "High nitrogen fertilization"],
-        "retail_spec": "Reject for premium packs.",
-        "action": "Shorten shelf-life window."
-      },
-      "soft_nose": {
-        "title": "Soft Nose",
-        "severity": "MAJOR",
-        "summary": "Premature softening at the fruit tip (apex).",
-        "detailed_analysis": "Calcium deficiency related. The tip ripens days before the rest of the fruit.",
-        "causes": ["Calcium/Boron imbalance"],
-        "retail_spec": "Max 5% of batch.",
-        "action": "Process immediately."
-      }
-    }
-  },
-  "avocado": {
-    "external_surface": {
-      "thrips_ridging": {
-        "title": "Thrips Scarring",
-        "severity": "COSMETIC",
-        "summary": "Rough, leathery brown skin texture.",
-        "detailed_analysis": "Surface feeding damage. Skin becomes thick and corky but pulp is perfect.",
-        "causes": ["High thrips population during fruit set"],
-        "retail_spec": "Class 1: Max 5%. Class 2: Up to 25%.",
-        "action": "Market as 'Blemished' or 'Value'."
-      },
-      "lenticel_damage": {
-        "title": "Lenticel Blackening",
-        "severity": "MINOR",
-        "summary": "Tiny black spots on green skin.",
-        "detailed_analysis": "Damage to skin pores from abrasion or moisture. Can lead to moisture loss.",
-        "causes": ["Wet harvest", "Rough handling"],
-        "retail_spec": "Standard Class 1 allowed.",
-        "action": "Monitor for dehydration."
-      },
-      "sunburn_corking": {
-        "title": "Sunburn (Corking)",
-        "severity": "MAJOR",
-        "summary": "Yellow or brown hard, woody patches.",
-        "detailed_analysis": "UV damage makes skin brittle and hard. Pulp underneath may become stringy.",
-        "causes": ["Lack of canopy cover"],
-        "retail_spec": "Class 1: Max 2cm².",
-        "action": "Divert to oil production."
-      }
-    },
-    "internal_pathology": {
-      "mesocarp_browning": {
-        "title": "Internal Flesh Browning",
-        "severity": "CRITICAL",
-        "summary": "Diffuse grey/brown patches in the pulp.",
-        "detailed_analysis": "Enzymatic browning of the edible flesh. Caused by cellular stress or old age.",
-        "causes": ["Storage > 4 weeks", "Low calcium"],
-        "retail_spec": "Zero tolerance.",
-        "action": "Reject for Ready-to-Eat programs."
-      },
-      "vascular_browning": {
-        "title": "Vascular Browning (Fibre)",
-        "severity": "MAJOR",
-        "summary": "Dark brown strings/lines in flesh.",
-        "detailed_analysis": "Oxidation of the vascular bundles. Common in late-season fruit.",
-        "causes": ["Over-ripeness", "Cold storage stress"],
-        "retail_spec": "Max 3-5 fibers per fruit.",
-        "action": "Accelerate sales."
-      },
-      "anthracnose_rot": {
-        "title": "Internal Anthracnose",
-        "severity": "CRITICAL",
-        "summary": "Hemispherical rot moving into the seed.",
-        "detailed_analysis": "Skin spots that penetrate the pulp in a 'cone' shape. Flesh turns black and bitter.",
-        "causes": ["Wet weather harvest", "Fungal field pressure"],
-        "retail_spec": "Zero tolerance.",
-        "action": "Dispose of infected fruit immediately."
-      },
-      "seed_cavity_browning": {
-        "title": "Seed Cavity Browning",
-        "severity": "MAJOR",
-        "summary": "Darkening of the space around the stone.",
-        "detailed_analysis": "Common in fruit stored at very low but non-freezing temperatures.",
-        "causes": ["Chilling stress"],
-        "retail_spec": "Reject for premium.",
-        "action": "Divert to guacamole processing."
-      }
+    "avocado": {
+      "name": "Avocado",
+      "defects": [
+        {
+          "id": "avo_001",
+          "name": "Stem-End Rot",
+          "severity": "Critical",
+          "description": "Fungal infection at the stem causing translucent brown flesh and decay.",
+          "tolerance": "Zero tolerance; leads to total internal decay.",
+          "class_impact": "Reject",
+          "action": "Discard immediately; identify harvest source to review sterilization protocols.",
+          "visual_key": ["brown stem-ring", "internal darkening", "soft stem base"]
+        },
+        {
+          "id": "avo_004",
+          "name": "Chilling Injury",
+          "severity": "Major",
+          "description": "Sunken black lesions or vascular browning from improper cooling.",
+          "tolerance": "Serious damage if affecting internal quality or taste.",
+          "class_impact": "Reject",
+          "action": "Audit cold chain logs; check storage temperatures (avoid <13°C for early season).",
+          "visual_key": ["sunken black lesions", "vascular browning", "pitted skin"]
+        }
+      ]
     }
   }
 }
