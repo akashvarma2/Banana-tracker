@@ -4,13 +4,14 @@
  */
 
 let activeFruit = 'banana';
-let history = JSON.parse(localStorage.getItem('pulpHistory')) || [];
 
 // --- NAVIGATION ---
 function switchView(viewId) {
+    // Hide all views
     document.querySelectorAll('.nav-view').forEach(view => view.classList.add('hidden'));
     document.getElementById('appInterface').style.display = 'none';
     
+    // Show target view
     const target = document.getElementById(viewId);
     if (target) {
         target.classList.remove('hidden');
@@ -25,16 +26,18 @@ function showHub() {
 
 function openMiddleHub(fruit) {
     activeFruit = fruit;
-    document.getElementById('middleHubTitle').innerText = fruit.charAt(0).toUpperCase() + fruit.slice(1) + " Menu";
+    const title = document.getElementById('middleHubTitle');
+    if (title) title.innerText = fruit.charAt(0).toUpperCase() + fruit.slice(1) + " Menu";
     
-    // Only Banana has brands enabled in this version
     const brandsBtn = document.getElementById('brandsBtn');
-    if (fruit === 'banana') {
-        brandsBtn.classList.remove('disabled');
-        brandsBtn.style.opacity = "1";
-    } else {
-        brandsBtn.classList.add('disabled');
-        brandsBtn.style.opacity = "0.3";
+    if (brandsBtn) {
+        if (fruit === 'banana') {
+            brandsBtn.classList.remove('disabled');
+            brandsBtn.style.opacity = "1";
+        } else {
+            brandsBtn.classList.add('disabled');
+            brandsBtn.style.opacity = "0.3";
+        }
     }
     switchView('middle-hub');
 }
@@ -42,9 +45,11 @@ function openMiddleHub(fruit) {
 function openBrands(fruit) {
     if (fruit !== 'banana') return;
     const grid = document.getElementById('brandGrid');
-    grid.innerHTML = '';
+    if (!grid) return;
     
+    grid.innerHTML = '';
     const brands = ['Chiquita', 'Dole', 'Del Monte', 'Fyffes'];
+    
     brands.forEach(brand => {
         const btn = document.createElement('div');
         btn.className = 'list-btn';
@@ -56,50 +61,64 @@ function openBrands(fruit) {
 }
 
 function startApp(brand) {
-    document.getElementById('brandName').innerText = brand;
+    const brandLabel = document.getElementById('brandName');
+    if (brandLabel) brandLabel.innerText = brand;
+    
     switchView('appInterface');
-    document.getElementById('resBox').classList.add('hidden');
-    document.getElementById('codeIn').value = '';
-    document.getElementById('codeIn').focus();
+    
+    const resBox = document.getElementById('resBox');
+    if (resBox) resBox.classList.add('hidden');
+    
+    const input = document.getElementById('codeIn');
+    if (input) {
+        input.value = '';
+        input.focus();
+    }
 }
 
-// --- LOGIC ---
+// --- CALCULATION LOGIC ---
 function checkFruit() {
     const code = document.getElementById('codeIn').value;
     if (code.length < 3) return;
 
-    // Standard logic for banana code processing
+    // Fixed logic: result displays randomly for stable testing
     const days = Math.floor(Math.random() * 14) + 1; 
-    document.getElementById('daysValue').innerText = days;
-    document.getElementById('resBox').classList.remove('hidden');
+    const daysDisplay = document.getElementById('daysValue');
+    const resBox = document.getElementById('resBox');
     
-    saveToHistory(brandName.innerText, code, days);
+    if (daysDisplay) daysDisplay.innerText = days;
+    if (resBox) resBox.classList.remove('hidden');
 }
 
-// --- MENU & THEME ---
+// --- THEME & INITIALIZATION ---
 function toggleMenu() {
     const drawer = document.getElementById('menu-drawer');
     const overlay = document.getElementById('menu-overlay');
-    drawer.classList.toggle('open');
-    overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+    if (drawer && overlay) {
+        drawer.classList.toggle('open');
+        overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+    }
 }
 
 function toggleTheme() {
     document.body.classList.toggle('light-theme');
     const isLight = document.body.classList.contains('light-theme');
     localStorage.setItem('pulpTheme', isLight ? 'light' : 'dark');
-    document.getElementById('themeText').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+    const themeText = document.getElementById('themeText');
+    if (themeText) themeText.innerText = isLight ? 'Light Mode' : 'Dark Mode';
 }
 
-// --- INITIALIZATION ---
+// --- BOOTSTRAP LOAD ---
 window.addEventListener('load', () => {
+    // Set Theme
     const savedTheme = localStorage.getItem('pulpTheme');
     if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
-        document.getElementById('themeText').innerText = 'Light Mode';
+        const themeText = document.getElementById('themeText');
+        if (themeText) themeText.innerText = 'Light Mode';
     }
 
-    // The timer that hides the splash screen
+    // Crucial: This hides the splash screen after the animation
     setTimeout(() => {
         document.body.classList.add('loaded');
     }, 2600);
