@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pulp Pro</title>
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="edited-image.png">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark-theme">
+<body>
 
     <div id="splash-screen">
         <img src="edited-image.png" class="splash-logo">
@@ -24,91 +32,95 @@
             <div style="font-weight:900; color:var(--pulp-lime);">PULP PRO</div>
         </div>
         <div class="menu-item" onclick="showHub(); toggleMenu();"><span>🏠 Home</span></div>
-        <div class="menu-item" onclick="toggleTheme()"><span>🌓 Theme</span></div>
+        <div class="settings-label">App Settings</div>
+        <div class="menu-item" onclick="toggleTheme()"><span>🌓 <span id="themeText">Dark Mode</span></span></div>
+        <div class="menu-item" onclick="clearHistory()" style="color:var(--pulp-red);"><span>⚠️ Clear Logs</span></div>
+        <div class="menu-item" onclick="sendFeedback()"><span>💬 Send Feedback</span></div>
+        
+        <div id="menu-fav-container">
+            <div class="menu-item" onclick="toggleMenuFavs()"><span>⭐ Favorites</span><i class="bi bi-chevron-down" id="favChevron"></i></div>
+            <div id="menu-fav-list"></div>
+        </div>
     </div>
     <div id="menu-overlay" onclick="toggleMenu()"></div>
 
-    <!-- MAIN HUB -->
     <div id="fruit-hub" class="nav-view">
         <div class="hub-title">Select Commodity</div>
-        <div class="selection-grid">
-            <!-- Commodity Selection -->
-            <div class="selection-card" onclick="openMiddleHub('banana')">
-                <img src="banana.png" alt="banana">
-                <span>Banana</span>
+        <div class="selection-grid-container">
+            <div class="selection-grid">
+                <div class="selection-card" onclick="openMiddleHub('banana')"><img src="banana.png" alt="banana"><div class="commodity-name-section"><span>Banana</span></div></div>
+                <div class="selection-card" onclick="openMiddleHub('mango')"><img src="mango.png" alt="mango"><div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
+                <div class="selection-card" onclick="openMiddleHub('avocado')"><img src="avocado.png" alt="avocado"><div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div></div>
+                <div class="selection-card" onclick="openDefectDetection()">
+                    <img src="rotten.png" alt="defect detection">
+                    <div class="commodity-name-section">
+                        <span>Defect Detection</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(NEW)</span>
+                    </div>
+                </div>
             </div>
-            <!-- Defect Selection -->
-            <div class="selection-card" onclick="openDefectDetection()">
-                <img src="rotten.png" alt="defects">
-                <span>Defect Detection</span>
-            </div>
+        </div>
+        <div id="favorites-section" class="hidden">
+            <div class="hub-title" style="color: var(--pulp-amber); font-size: 0.8rem; margin-top:20px;">Saved Favorites</div>
+            <div class="fav-grid" id="fav-grid"></div>
         </div>
     </div>
 
-    <!-- SCANNER VIEW -->
-    <div id="scanner-view" class="nav-view hidden">
-        <div class="hub-title" id="scannerTitle">Scanning...</div>
-        <div class="scanner-container" style="position:relative; width:100%; aspect-ratio:4/3; background:#000; border:2px solid var(--pulp-lime); border-radius:15px; overflow:hidden;">
-            <video id="video" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
-            
-            <div id="scanProgressContainer" style="position:absolute; bottom:0; left:0; width:100%; height:8px; background:rgba(255,255,255,0.2); display:none;">
-                <div id="scanProgressBar" style="width:0%; height:100%; background:var(--pulp-lime);"></div>
-            </div>
-
-            <div id="defectResultPopup" class="hidden" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.95); padding:20px; border-radius:15px; border:1px solid var(--pulp-lime); width:85%; text-align:center; z-index:100;">
-                <div style="color:var(--pulp-lime); font-size:0.6rem; font-weight:900;">DEFECT DETECTED</div>
-                <div id="detectedDefectName" style="font-size:1.4rem; font-weight:900; margin:10px 0; color:#fff;">---</div>
-                <button class="btn-main" onclick="showDefectDetails()">MORE INFORMATION</button>
-            </div>
-        </div>
-        <div class="button-group" style="display:flex; gap:10px; padding:20px;">
-            <button id="captureBtn" class="btn-main" style="flex:2;" onclick="startBurstScan()">START SCAN</button>
-            <button class="btn-main" style="flex:1; background:var(--pulp-red);" onclick="showHub()">Exit</button>
-        </div>
-    </div>
-
-    <!-- DEFECT DETAILS -->
-    <div id="defect-detail-view" class="nav-view hidden">
-        <div class="hub-title" style="color:var(--pulp-lime);">Defect Report</div>
-        <div class="app-card" style="text-align:left; padding:25px;">
-            <h2 id="detailName" style="font-weight:900; color:var(--pulp-lime);">---</h2>
-            <hr>
-            <div style="margin-bottom:15px;"><label style="font-size:0.6rem; opacity:0.5;">CAUSE</label><p id="detailCause">---</p></div>
-            <div style="margin-bottom:15px;"><label style="font-size:0.6rem; opacity:0.5;">STORAGE ADVICE</label><p id="detailStorage">---</p></div>
-            <div style="margin-bottom:15px;"><label style="font-size:0.6rem; opacity:0.5;">FURTHER ACTION</label><p id="detailAction">---</p></div>
-            <button class="btn-main" onclick="switchView('scanner-view')">Back to Scanner</button>
-        </div>
-    </div>
-
-    <!-- AGE CHECKER -->
-    <div id="appInterface" class="nav-view hidden">
-        <div class="app-card">
-            <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime);">BRAND</div>
-            <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3"></div>
-            <button onclick="checkFruit()" class="btn-main">Calculate</button>
-            <div id="resBox" class="result-display hidden">
-                <div id="daysValue" style="font-size:3rem; font-weight:900;">--</div>
-                <div id="dateText">-- -- ----</div>
-            </div>
-            <button class="btn-main" style="margin-top:20px; opacity:0.5;" onclick="showHub()">← Back</button>
-        </div>
-    </div>
-
-    <!-- MIDDLE HUB -->
     <div id="middle-hub" class="nav-view hidden">
-        <div class="hub-title" id="middleHubTitle">Menu</div>
+        <div class="hub-title" id="middleHubTitle">Banana Menu</div>
         <div class="list-container">
-            <div class="list-btn" onclick="openBrands(activeFruit)">Brands</div>
+            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Banana Brands</div>
+            <div class="list-btn disabled">Defects (Soon)</div>
+            <div class="list-btn disabled">Ripening (Soon)</div>
         </div>
-        <button class="btn-main" onclick="showHub()">← Back</button>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
+    </div>
+
+    <!-- New Defect Detection Hub -->
+    <div id="defect-detection-hub" class="nav-view hidden">
+        <div class="hub-title">Advance Defect Detection system</div>
+        <div class="list-container">
+            <div class="list-btn" onclick="startScan('banana')">Scan Banana</div>
+            <div class="list-btn" onclick="startScan('mango')">Scan Mango</div>
+            <div class="list-btn" onclick="startScan('avocado')">Scan Avocado</div>
+        </div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
     <div id="brand-hub" class="nav-view hidden">
-        <div class="hub-title">Select Brand</div>
-        <div id="brandGrid" class="list-container"></div>
-        <button class="btn-main" onclick="switchView('middle-hub')">← Back</button>
+        <div class="hub-title" id="brandHubTitle">Select Brand</div>
+        <div class="list-container" id="brandGrid"></div>
+        <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="openMiddleHub(activeFruit)">← Back</button>
     </div>
 
+    <div class="app-container" id="appInterface">
+        <div class="app-card" id="appCard">
+            <i class="bi bi-star-fill fav-toggle" id="favStar" onclick="toggleFavorite()"></i>
+            <img src="edited-image.png" style="width:50px; margin-bottom:10px;">
+            <div id="brandName" style="font-size: 1.4rem; font-weight: 900; color: var(--pulp-lime); text-transform: uppercase;">Chiquita</div>
+            <div id="commodityLabel" style="font-weight: 900; letter-spacing: 4px; opacity: 0.5; font-size: 0.7rem; margin-bottom: 25px; color:var(--text-main);">BANANA AGE CHECKER</div>
+            <div class="input-wrapper"><input type="text" id="codeIn" placeholder="---" maxlength="3" autofocus></div>
+            <button onclick="checkFruit()" class="btn-main" id="calcBtn">Calculate</button>
+            <div id="resBox" class="result-display hidden">
+                <div id="statusLabel" style="font-weight:900;">READY</div>
+                <div id="daysValue">--</div>
+                <div id="dateText" style="font-size: 1.3rem; font-weight: 900; margin-top: 10px;">-- -- ----</div>
+                <button class="btn btn-copy" onclick="copyResult()" id="copyBtn"><i class="bi bi-clipboard"></i> **COPY**</button>
+            </div>
+            <button class="btn-main" style="margin-top:25px; background:transparent; border:none; opacity:0.4; font-size:0.6rem; color:var(--text-main);" onclick="openBrands(activeFruit)">← Back to Brands</button>
+        </div>
+        <div id="historySection" class="history-section"><div id="historyList"></div></div>
+    </div>
+
+    <!-- External Logic Files -->
     <script src="js/master-logic.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
+            });
+        }
+    </script>
 </body>
 </html>
