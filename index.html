@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pulp Pro</title>
+    
     <link rel="manifest" href="manifest.json">
+    
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="edited-image.png">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -32,6 +36,7 @@
         <div class="menu-item" onclick="toggleTheme()"><span>🌓 <span id="themeText">Dark Mode</span></span></div>
         <div class="menu-item" onclick="clearHistory()" style="color:var(--pulp-red);"><span>⚠️ Clear Logs</span></div>
         <div class="menu-item" onclick="sendFeedback()"><span>💬 Send Feedback</span></div>
+        
         <div id="menu-fav-container">
             <div class="menu-item" onclick="toggleMenuFavs()"><span>⭐ Favorites</span><i class="bi bi-chevron-down" id="favChevron"></i></div>
             <div id="menu-fav-list"></div>
@@ -49,15 +54,24 @@
                 </div>
                 <div class="selection-card" onclick="openMiddleHub('mango')">
                     <img src="mango.png" alt="mango">
-                    <div class="commodity-name-section"><span>Mango</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div>
+                    <div class="commodity-name-section">
+                        <span>Mango</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
                 </div>
                 <div class="selection-card" onclick="openMiddleHub('avocado')">
                     <img src="avocado.png" alt="avocado">
-                    <div class="commodity-name-section"><span>Avocado</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div>
+                    <div class="commodity-name-section">
+                        <span>Avocado</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
                 </div>
                 <div class="selection-card" onclick="openMiddleHub('defects')">
                     <img src="rotten.png" alt="defects">
-                    <div class="commodity-name-section"><span>Defect Detections</span><span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span></div>
+                    <div class="commodity-name-section">
+                        <span>Defect Detections</span>
+                        <span style="color:var(--pulp-amber); font-size:0.6rem; letter-spacing:1px;">(SOON)</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,37 +91,10 @@
         <button class="btn-main" style="margin-top:40px; background:transparent; border:1px solid var(--border-glass); color:var(--text-main);" onclick="showHub()">← Back</button>
     </div>
 
-    <!-- NEW: Scanner Interface -->
-    <div id="scanner-view" class="nav-view hidden">
-        <div class="scanner-container">
-            <div class="scanner-header">
-                <span id="scanner-title">SCANNING</span>
-                <div class="scanner-status" id="scan-status">READY</div>
-            </div>
-            <div class="viewfinder">
-                <video id="scanner-video" autoplay playsinline></video>
-                <div class="scan-overlay">
-                    <div class="scan-line"></div>
-                    <div class="corners"></div>
-                </div>
-                <div id="burst-count" class="hidden">
-                    <div class="burst-dots">
-                        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                    </div>
-                    <div class="burst-label">ANALYZING BURST...</div>
-                </div>
-            </div>
-            <div class="scanner-controls">
-                <button class="btn-scan-trigger" onclick="startBurstScan()"><div class="inner-circle"></div></button>
-                <button class="btn-main" style="background:transparent; border:1px solid var(--border-glass);" onclick="closeScanner()">CANCEL</button>
-            </div>
-        </div>
-    </div>
-
     <div id="middle-hub" class="nav-view hidden">
-        <div class="hub-title" id="middleHubTitle">Menu</div>
+        <div class="hub-title" id="middleHubTitle">Banana Menu</div>
         <div class="list-container">
-            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Brands</div>
+            <div class="list-btn" id="brandsBtn" onclick="openBrands(activeFruit)">Banana Brands</div>
             <div class="list-btn disabled">Defects (Soon)</div>
             <div class="list-btn disabled">Ripening (Soon)</div>
         </div>
