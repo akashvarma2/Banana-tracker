@@ -1,3 +1,4 @@
+import './bridge.js';
 import {
     scanHistory
 } from './state.js';
