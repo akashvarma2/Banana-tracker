@@ -2,6 +2,8 @@ let scanHistory = JSON.parse(localStorage.getItem('pulpProHistory')) || [];
 let favorites = JSON.parse(localStorage.getItem('pulpProFavorites')) || [];
 let activeFruit = '';
 let activeBrand = '';
+let activeDefectFruit = ''; // Track which fruit we are scanning for
+let stream = null; // Store the camera stream to stop it later
 
 window.addEventListener('load', () => {
     const savedTheme = localStorage.getItem('pulpTheme');
@@ -13,7 +15,8 @@ window.addEventListener('load', () => {
     renderFavorites();
     setTimeout(() => {
         document.body.classList.add('loaded');
-        document.getElementById('codeIn').focus();
+        const codeInput = document.getElementById('codeIn');
+        if (codeInput) codeInput.focus();
     }, 2600);
 });
 
@@ -57,14 +60,50 @@ function switchView(targetId) {
     }
 }
 
-function showHub() { switchView('fruit-hub'); renderFavorites(); }
+function showHub() { 
+    stopScan(); // Ensure camera is off when returning home
+    switchView('fruit-hub'); 
+    renderFavorites(); 
+}
 
 function openDefectDetection() {
     switchView('defect-detection-hub');
 }
 
 function startScan(fruit) {
-    alert(`Starting Defect Scan for ${fruit.toUpperCase()}... (Logic coming soon)`);
+    activeDefectFruit = fruit;
+    const scannerTitle = document.getElementById('scannerTitle');
+    const scanStatus = document.getElementById('scanStatus');
+    
+    scannerTitle.innerText = `Scanning ${fruit.charAt(0).toUpperCase() + fruit.slice(1)}`;
+    scanStatus.innerText = "REQUESTING CAMERA PERMISSION...";
+    
+    switchView('scanner-view');
+
+    const video = document.getElementById('video');
+    navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+    })
+    .then(s => {
+        stream = s;
+        video.srcObject = stream;
+        scanStatus.innerText = `READY: POINT AT ${fruit.toUpperCase()}`;
+    })
+    .catch(err => {
+        console.error("Camera error: ", err);
+        scanStatus.innerText = "CAMERA ERROR: PLEASE CHECK PERMISSIONS";
+    });
+}
+
+function stopScan() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+    const video = document.getElementById('video');
+    if (video) video.srcObject = null;
+    
+    switchView('defect-detection-hub');
 }
 
 function openMiddleHub(fruit) {
@@ -92,7 +131,8 @@ function openCalc(brand, fruit = activeFruit) {
     switchView('appInterface');
     document.getElementById('brandName').innerText = brand;
     document.getElementById('commodityLabel').innerText = `${activeFruit.toUpperCase()} AGE CHECKER`;
-    document.getElementById('codeIn').value = '';
+    const input = document.getElementById('codeIn');
+    if (input) input.value = '';
     document.getElementById('resBox').classList.add('hidden');
     updateFavoriteUI();
     renderHistory();
@@ -111,14 +151,21 @@ function toggleFavorite() {
 function updateFavoriteUI() {
     const id = `${activeFruit}_${activeBrand}`;
     const isFav = favorites.some(f => f.id === id);
-    document.getElementById('favStar').classList.toggle('active', isFav);
+    const star = document.getElementById('favStar');
+    if (star) star.classList.toggle('active', isFav);
 }
 
 function renderFavorites() {
     const section = document.getElementById('favorites-section');
     const grid = document.getElementById('fav-grid');
     const menuList = document.getElementById('menu-fav-list');
-    if (favorites.length === 0) { section.classList.add('hidden'); menuList.innerHTML = `<div style="padding:10px; font-size:0.6rem; opacity:0.3;">NO SAVED FAVS</div>`; return; }
+    if (!section || !grid || !menuList) return;
+
+    if (favorites.length === 0) { 
+        section.classList.add('hidden'); 
+        menuList.innerHTML = `<div style="padding:10px; font-size:0.6rem; opacity:0.3;">NO SAVED FAVS</div>`; 
+        return; 
+    }
     section.classList.remove('hidden');
     grid.innerHTML = favorites.map(f => `<div class="fav-card" onclick="openCalc('${f.brand}', '${f.fruit}')"><i class="bi bi-star-fill"></i><span>${f.brand}</span><small style="opacity:0.5; font-size:0.55rem; font-weight:800; color:var(--text-main);">${f.fruit.toUpperCase()}</small></div>`).join('');
     menuList.innerHTML = favorites.map(f => `<div class="menu-fav-item" onclick="openCalc('${f.brand}', '${f.fruit}'); toggleMenu();">${f.brand}<span>(${f.page || 'Age Checker'})</span></div>`).join('');
@@ -191,8 +238,11 @@ function checkFruit(historicalCode = null) {
 }
 
 function triggerShake() {
-    document.getElementById('appCard').classList.add('shake');
-    setTimeout(()=>document.getElementById('appCard').classList.remove('shake'), 400);
+    const card = document.getElementById('appCard');
+    if (card) {
+        card.classList.add('shake');
+        setTimeout(()=> card.classList.remove('shake'), 400);
+    }
 }
 
 function saveToHistory(code, days, color) {
